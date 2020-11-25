@@ -15,14 +15,18 @@ var partials = require('express-partials');
 var passport = require('passport');
 const User = require("./models/user");
 const mongoose=require("mongoose");
+// require('dotenv').config()
+
+// console.log(process.env);
 
 passport.serializeUser(function(user, done) {
   //console.log(user.username);
   done(null, user.username);
 });
 
-passport.deserializeUser(function(id, done) {
-  User.findById(id,function(err,user){
+passport.deserializeUser(function(user, done) {
+  //console.log(user);
+  User.findOne({userName:user},function(err,user){
     done(null, user);
   });
   
@@ -34,6 +38,7 @@ passport.use(new GitHubStrategy({
   callbackURL: "http://localhost:3000/signin"
 },
 function(access_token, refreshToken, profile, done) {
+
   // asynchronous verification, for effect...
   process.nextTick(function () {
     
@@ -42,7 +47,7 @@ function(access_token, refreshToken, profile, done) {
     // to associate the GitHub account with a user record in your database,
     // and return that user instead.
     //console.log(User);
-    User.findOne({username:profile.username},function(err,foundUser){
+    User.findOne({userName:profile.username},function(err,foundUser){
       if(foundUser!=null){
         //console.log(foundUser);
         //return done(err, foundUser);
@@ -76,14 +81,16 @@ mongoose.connect("mongodb://localhost:27017/collab", {
 });
 app.use(partials());
 app.use(methodOverride());
+app.use(session({ secret: 'secret' ,resave:false,saveUninitialized:false,name:"sid",
+store: store,cookie: { maxAge: 1000 }}));
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(session({ secret: 'secret' ,resave:false,saveUninitialized:false,name:"sid"}));
+//app.use(session({ secret: 'secret' ,resave:false,saveUninitialized:false,name:"sid"}));
 
 app.get("/",function(req,res){
     //onst {userID}=req.session;
     //console.log( req.session);
-    res.render('index',{client_id: clientID});
+    res.render('index');
 });
 
 app.get('/auth/github',
@@ -94,12 +101,13 @@ app.get('/auth/github',
   });
 
 app.get('/signin', 
-  passport.authenticate('github', { failureRedirect: '/login' }),
+  passport.authenticate('github', { failureRedirect: '/' }),
   function(req, res) {
+    //console.log(req.session.passport.user);
     res.redirect('/dashboard');
   });
 
-app.get('/dashboard',ensureAuthenticated, function(req, res) {
+app.get('/dashboard', ensureAuthenticated,function(req, res) {
 
 
     User.findOne({userName:req.session.passport.user},function(err,foundUser){
@@ -111,14 +119,29 @@ app.get('/dashboard',ensureAuthenticated, function(req, res) {
     //res.render('dashboard');
   });
 
-  app.get('/logout', function(req, res){
+   app.get('/logout', function(req, res){
+
+    // req.session.destroy(function (err) {
+    //   res.clearCookie('connect.sid');
+    //   
+    //   res.redirect('/'); 
+    // });
     req.logout();
+    req.session.destroy();
+    //cookie.Expires = DateTime.Now.AddDays(-1);
+    console.log(req.cookie);
     res.redirect('/');
   });
+  
+
 
   function ensureAuthenticated(req, res, next) {
+    //console.log(req.session.passport.user);
     if (req.isAuthenticated()) { return next(); }
     res.redirect('/');
+    // if (req.session.passport.user) { return next(); }
+    // res.redirect('/');
+    
   }
 app.listen(3000,function(){
     console.log("server started");
