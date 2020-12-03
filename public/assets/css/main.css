@@ -25,6 +25,10 @@ section, summary, time, mark, audio, video {
 	font: inherit;
 	vertical-align: baseline;}
 
+.large{
+	margin-left: 5px;
+	font-size: large;
+}
 article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
 	display: block;}
@@ -101,9 +105,12 @@ input, select, textarea {
 	body {
 		background-color: #2e3141;
 		background-image: linear-gradient(to top, rgba(46, 49, 65, 0.8), rgba(46, 49, 65, 0.8)), url("../../images/bg.jpg");
-		background-size: auto, cover;
-		background-attachment: fixed, fixed;
-		background-position: center, center;
+		background-size: auto,
+ cover;
+		background-attachment: fixed,
+ fixed;
+		background-position: center,
+ center;
 	}
 
 		body.is-preload *, body.is-preload *:before, body.is-preload *:after {
@@ -179,7 +186,7 @@ input, select, textarea {
 
 		a:hover {
 			border-bottom-color: transparent;
-			color: #ffffff !important;
+			/* color: #ffffff !important; */
 		}
 
 		a.special:not(.button) {
@@ -3078,7 +3085,7 @@ input, select, textarea {
 		left: 0;
 		line-height: 3.5em;
 		padding: 0 1.25em;
-		position: fixed;
+		/* position: fixed; */
 		top: 0;
 		width: 100%;
 		z-index: 10000;
@@ -3103,7 +3110,6 @@ input, select, textarea {
 		#header nav {
 			font-family: Raleway, Helvetica, sans-serif;
 			font-size: 0.8em;
-			font-weight: 700;
 			height: 3em;
 			letter-spacing: 0.1em;
 			line-height: 3em;
@@ -3114,15 +3120,39 @@ input, select, textarea {
 		}
 
 			#header nav a {
-				border: 0;
 				display: inline-block;
 				padding: 0 1em;
+				transform: translate(-50px, 50px);
+				border: 2px solid white;
+				border-radius: 8px;
+				font-weight: 800;
+				background-color: rgba(255,255,255,0);
+				/* position: relative; */
+				overflow: hidden;
+				z-index: 1;
+				transition: all 0.3s;
+			}
+			#header nav a:hover{
+				color: #2e3141;
 			}
 
-				#header nav a:before {
-					float: right;
-					margin-left: 0.75em;
+				#header nav a::before {
+					content: '';
+					position: absolute;
+					top: 0;
+					left: 0;
+					background-color:rgba(255,255,255,0.3);
+					width: 100%;
+					height: 100%;
+					transform: translateX(-100%);
+					transition: all 0.6s;
 				}
+				#header nav a:hover:before{
+					transform: translateX(0);
+					z-index: -1;
+					
+				}
+				
 
 				#header nav a[href="#menu"] {
 					text-decoration: none;
@@ -3464,8 +3494,10 @@ input, select, textarea {
 				padding: 7em 0 8.25em 0 ;
 				background-color: #2e3141;
 				background-image: linear-gradient(to top, rgba(46, 49, 65, 0.8), rgba(46, 49, 65, 0.8)), url("../../images/bg.jpg");
-				background-size: auto, cover;
-				background-position: center, center;
+				background-size: auto,
+ cover;
+				background-position: center,
+ center;
 				margin-bottom: -6.5em;
 			}
 
@@ -3574,8 +3606,10 @@ input, select, textarea {
 			padding: 9em 0 6.25em 0 ;
 			background-color: #2e3141;
 			background-image: linear-gradient(to top, rgba(46, 49, 65, 0.8), rgba(46, 49, 65, 0.8)), url("../../images/bg.jpg");
-			background-size: auto, cover;
-			background-position: center, 0% 30%;
+			background-size: auto,
+ cover;
+			background-position: center,
+ 0% 30%;
 			margin-bottom: -6.5em;
 		}
 
@@ -3585,8 +3619,10 @@ input, select, textarea {
 
 		#wrapper > header {
 			padding: 11em 3em 7.375em 3em ;
-			background-size: auto, cover;
-			background-position: center, 0% 0%;
+			background-size: auto,
+ cover;
+			background-position: center,
+ 0% 0%;
 			margin-bottom: -4.75em;
 		}
 
@@ -3600,7 +3636,8 @@ input, select, textarea {
 
 		#wrapper > header {
 			padding: 6.5em 2em 3em 2em ;
-			background-size: auto, 125%;
+			background-size: auto,
+ 125%;
 			margin-bottom: -2.5em;
 		}
 
@@ -4062,8 +4099,10 @@ input, select, textarea {
 		#footer {
 			background-color: #2e3141;
 			background-image: linear-gradient(to top, rgba(46, 49, 65, 0.8), rgba(46, 49, 65, 0.8)), url("../../images/bg.jpg");
-			background-size: auto, cover;
-			background-position: center, center;
+			background-size: auto,
+ cover;
+			background-position: center,
+ center;
 			margin-top: -6.5em;
 			padding-top: 6.5em;
 		}

@@ -9,14 +9,14 @@ var partials = require('express-partials');
 var passport = require('passport');
 const mongoose=require("mongoose");
 require('dotenv').config()
-
+console.log(process.env);
 // requiring from different files
 const User = require("../models/user");
 
 
 //env variables
-const clientID=process.env.CLIENT_ID;
-const clientSecret=process.env.CLIENT_Secret;
+const clientID="ea870420606678b49849";
+const clientSecret="80b21123dec51d57d458e044235c68ea659e636e";
 
 //passport used for github login authentication
 passport.serializeUser(function(user, done) {

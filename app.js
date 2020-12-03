@@ -18,8 +18,8 @@ var store=new MongoDBStore( require("./config/database"));
 const users=require("./routes/users");
 
 //env variables
-const clientID=process.env.CLIENT_ID;
-const clientSecret=process.env.CLIENT_Secret;
+const clientID="ea870420606678b49849";
+const clientSecret="80b21123dec51d57d458e044235c68ea659e636e";
 
 //middleware
 app.use(bodyParser.json())
