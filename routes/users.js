@@ -94,7 +94,7 @@ router.get('/signin',
     res.redirect('/dashboard');
   });
 
-router.get('/dashboard', ensureAuthenticated,function(req, res) {
+router.get('/dashboard',ensureAuthenticated, function(req, res) {
 
 
     User.findOne({userName:req.session.passport.user},function(err,foundUser){
@@ -103,8 +103,22 @@ router.get('/dashboard', ensureAuthenticated,function(req, res) {
         res.render("dashboard",{username:foundUser.userName});
       }
     });
-    //res.render('dashboard');
+    
   });
+
+  router.post("/dashboard",ensureAuthenticated, function(req,res){
+    console.log("hi");
+    console.log(req.body);
+    User.findOne({userName:req.session.passport.user},function(err,foundUser){
+      //console.log(foundUser);
+      if(foundUser)
+      {
+        foundUser.image=req.body.filepond;
+        //console.log(foundUser.image);
+        res.render("dashboard",{username:foundUser.userName});
+      }
+    });
+  })
 
    router.get('/logout', function(req, res){
 

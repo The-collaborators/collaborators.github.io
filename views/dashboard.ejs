@@ -37,11 +37,19 @@
             margin: 0 auto;
         }
     </style>
+    <script>
+        function submitform()
+        {
+        document.getElementById("myForm").submit();
+        alert("your form submitted");
+        }
+        </script>
 </head>
 
 <body>
-  <form action="/dashboard" method="POST">
-    <input type="file" class="filepond" name="filepond" accept="image/png, image/jpeg, image/gif" />
+  <form  action="/dashboard" method="post" role="form" enctype="multipart/form-data" id="myForm">
+    <input type="file" class="filepond" name="filepond" accept="image/png, image/jpeg, image/gif" >
+    
   </form>
     
     <script src="https://unpkg.com/filepond-plugin-file-encode/dist/filepond-plugin-file-encode.min.js"></script>
@@ -56,8 +64,22 @@
     <a href="/logout" class="btn btn-info btn-lg">
       <span class="glyphicon glyphicon-log-out"></span> Log out
     </a>
+    <script>
+        const lat=1;
+        const long=2;
+        const data=new FormData(document.getElementById("myForm"));
+        const options={
+            method:'POST',
+            
+            body: data
+        }
+        fetch("/dashboard",options);
+        
+    </script>
+    
 </body>
 <script>
+
     /*
     We need to register the required plugins to do image manipulation and previewing.
     */
@@ -100,6 +122,7 @@
             styleButtonRemoveItemPosition: 'center bottom'
         }
     );
+    
 </script>
 
 </html>
