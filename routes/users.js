@@ -1,6 +1,7 @@
 const express= require("express");
 const router = express.Router();
 const ejs=require("ejs");
+const cookieParser = require('cookie-parser');
 const session      = require('express-session');
 const MongoDBStore = require('connect-mongodb-session')(session);
 var methodOverride = require('method-override');
@@ -8,15 +9,29 @@ var GitHubStrategy = require('passport-github2').Strategy;
 var partials = require('express-partials');
 var passport = require('passport');
 const mongoose=require("mongoose");
+var store=new MongoDBStore( require("../config/database"));
 require('dotenv').config()
 //console.log(process.env);
 // requiring from different files
 const User = require("../models/user");
-
+// file upload
+const multer=require("multer"); 
 
 //env variables
 const clientID=process.env.CLIENT_ID;
 const clientSecret=process.env.CLIENT_Secret;
+
+//used for multer
+var storage=multer.diskStorage({
+  destination:"./public/uploads/",
+  filename:(req,file,cb)=>{
+      cb(null,file.filename+"_"+Date.now()+path.extname(file.originalname));
+  }
+});
+
+var upload=multer({
+  storage:storage
+}).single("file");
 
 //passport used for github login authentication
 passport.serializeUser(function(user, done) {
@@ -56,7 +71,8 @@ function(access_token, refreshToken, profile, done) {
         let newUser = new User({
           email: null,
           userName: profile.username,
-          domain: null
+          domain: null,
+          image:"default-image-png.png"
         });
         newUser.save();
         //console.log(newUser);
@@ -73,6 +89,17 @@ router.use(partials());
 router.use(methodOverride());
 router.use(passport.initialize());
 router.use(passport.session());
+router.use(cookieParser());
+router.use(session({ secret: 'secret' ,resave:true,saveUninitialized:true,name:"sid",
+cookie:
+{
+    path:"/",
+    maxAge:60*60*60*2,
+    sameSite:true,
+    secure:"production"
+},
+store:store
+}));
 
 router.get("/",function(req,res){
     //onst {userID}=req.session;
@@ -100,25 +127,42 @@ router.get('/dashboard',ensureAuthenticated, function(req, res) {
     User.findOne({userName:req.session.passport.user},function(err,foundUser){
       if(foundUser)
       {
-        res.render("dashboard",{username:foundUser.userName});
+        //console.log(foundUser.image);
+        res.render("dashboard",{username:foundUser.userName,img_name:foundUser.image,img_error:""});
       }
     });
     
   });
 
-  router.post("/dashboard",ensureAuthenticated, function(req,res){
+  router.post("/dashboard",upload,function(req,res){
     console.log("hi");
-    console.log(req.body);
+    let img=req.file;
+    var flag =0;
+    if(img!=undefined)
+    {
+      img=req.file.filename;
+      flag=1;
+    }
     User.findOne({userName:req.session.passport.user},function(err,foundUser){
       //console.log(foundUser);
       if(foundUser)
       {
-        foundUser.image=req.body.filepond;
+        //foundUser.image=req.body.filepond;
         //console.log(foundUser.image);
-        res.render("dashboard",{username:foundUser.userName});
+        if(req.body.upload==="Upload" && flag===1) 
+        {
+          foundUser.image=img;
+          foundUser.save(function(err){
+            if(err)
+            {
+                throw err;
+            }
+          });
+        }
+        res.render("dashboard",{username:foundUser.userName,img_name:foundUser.image,img_error:""});
       }
     });
-  })
+  });
 
    router.get('/logout', function(req, res){
 
