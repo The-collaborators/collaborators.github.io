@@ -7,40 +7,16 @@
     <title>GitHub Authorisation</title>
     <link rel="stylesheet" href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css">
     <link rel="stylesheet" href="https://unpkg.com/filepond/dist/filepond.min.css">
-    <style>
-        /*
- * FilePond Custom Styles
- */
-
-        .filepond--drop-label {
-            color: #4c4e53;
-        }
-
-        .filepond--label-action {
-            text-decoration-color: #babdc0;
-        }
-
-        .filepond--panel-root {
-            background-color: #edf0f4;
-        }
-
-
-        /**
- * Page Styles
- */
-        html {
-            padding: 20vh 0 0;
-        }
-
-        .filepond--root {
-            width: 300px;
-            margin: 0 auto;
-        }
-    </style>
+    <link rel="stylesheet" href="/css/dashcss.css">
+   
 </head>
 
 <body>
-    <input type="file" class="filepond" name="filepond" accept="image/png, image/jpeg, image/gif" />
+  <!-- <form  action="/dashboard" method="post" role="form" enctype="multipart/form-data" id="myForm">
+    <input type="file" class="filepond" name="filepond" accept="image/png, image/jpeg, image/gif" >
+    
+  </form>
+    
     <script src="https://unpkg.com/filepond-plugin-file-encode/dist/filepond-plugin-file-encode.min.js"></script>
     <script src="https://unpkg.com/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.min.js"></script>
     <script src="https://unpkg.com/filepond-plugin-image-exif-orientation/dist/filepond-plugin-image-exif-orientation.min.js"></script>
@@ -48,9 +24,56 @@
     <script src="https://unpkg.com/filepond-plugin-image-resize/dist/filepond-plugin-image-resize.min.js"></script>
     <script src="https://unpkg.com/filepond-plugin-image-transform/dist/filepond-plugin-image-transform.min.js"></script>
     <script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.js"></script>
-    <script src="https://unpkg.com/filepond/dist/filepond.min.js"></script>
+    <script src="https://unpkg.com/filepond/dist/filepond.min.js"></script> 
+    <h4>hello  </h4>
+    <a href="/logout" class="btn btn-info btn-lg">
+      <span class="glyphicon glyphicon-log-out"></span> Log out
+    </a>
+    <script>
+        const lat=1;
+        const long=2;
+        const data=new FormData(document.getElementById("myForm"));
+        const options={
+            method:'POST',
+            
+            body: data
+        }
+        console.log(options);
+        fetch("/dashboard",options);
+        
+    </script> -->
+    <h4>hello <%= username %> </h4>
+    <div class="menu">
+    <form onsubmit="checkextension()" action="/users/dashboard"  method="post"  role="form" enctype="multipart/form-data">
+                                     
+                                          
+      <div class="form-group">
+          <img id="resize" src="/uploads/<%=img_name%>" alt="<%=img_name%>" >
+          <!-- <label for="file" >Upload File</label> -->
+          <p style="color: aliceblue; font-size: 1rem;">* Valid file types are :.png, .jpeg, .jpg, .gif</p>
+          <div >
+              <input type="file" class="form-control bg" name="file" id="fUpload"  required/>
+          </div>
+      </div>
+      
+  
+      <div class="form-group">
+          <!-- Button -->                                        
+          <div >
+          <input type="submit" name="upload" value="Upload" id="shiftupload" class="btn1"> 
+           
+          </div>
+          <%=img_error%>
+      </div>
+      
+      
+      
+      
+  </form>
+    
 </body>
-<script>
+<!-- <script>
+
     /*
     We need to register the required plugins to do image manipulation and previewing.
     */
@@ -93,6 +116,14 @@
             styleButtonRemoveItemPosition: 'center bottom'
         }
     );
-</script>
+    
+</script> -->
+
+<script>
+    function checkextension() {
+      var file = document.querySelector("#fUpload");
+      if ( /\.(jpe?g|png|gif)$/i.test(file.files[0].name) === false ) { alert("not an image!"); }
+    }
+    </script>
 
 </html>
