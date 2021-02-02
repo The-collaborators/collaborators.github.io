@@ -9,7 +9,7 @@ passport.use(new GithubStrategy({
 
 }, (access_token, refreshToken, profile, done) => {
     process.nextTick(() => {
-        User.findOne({username: profile.username}, (err, foundUser) => {
+        User.findOne({userName: profile.username}, (err, foundUser) => {
             if(err){
                 return (err, null);
             }
@@ -18,7 +18,7 @@ passport.use(new GithubStrategy({
             }
             let newUser = new User({
                 email: null,
-                username: profile.username,
+                userName: profile.username,
                 domain: null,
                 image: "default-image-png.png"
             });
@@ -34,7 +34,7 @@ passport.serializeUser((user, done) => {
 })
 
 passport.deserializeUser((user, done) => {
-    User.findOne({userName: user}, (err, user) => {
+    User.findOne({userName: user.username}, (err, user) => {
         done(null, user);
     })
 })

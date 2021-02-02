@@ -11,11 +11,11 @@ var passport = require('passport');
 const mongoose=require("mongoose");
 var store=new MongoDBStore( require("../config/database"));
 require('dotenv').config()
-//console.log(process.env);
-// requiring from different files
 const User = require("../models/user");
-// file upload
+// file 
+const path = require('path');
 const multer=require("multer"); 
+const user = require("../models/user");
 
 //env variables
 const clientID=process.env.CLIENT_ID;
@@ -50,7 +50,7 @@ passport.deserializeUser(function(user, done) {
 passport.use(new GitHubStrategy({
   clientID: clientID,
   clientSecret: clientSecret,
-  callbackURL: "http://localhost:3000/signin"
+  callbackURL: "http://localhost:3000/auth/github/callback"
 },
 function(access_token, refreshToken, profile, done) {
 
@@ -100,6 +100,7 @@ cookie:
 },
 store:store
 }));
+//router.use(ensureAuthenticated);
 
 router.get("/",function(req,res){
     //onst {userID}=req.session;
@@ -123,7 +124,7 @@ router.get('/signin',
 
 router.get('/dashboard',ensureAuthenticated, function(req, res) {
 
-
+    console.log(User);
     User.findOne({userName:req.session.passport.user},function(err,foundUser){
       if(foundUser)
       {
@@ -134,8 +135,9 @@ router.get('/dashboard',ensureAuthenticated, function(req, res) {
     
   });
 
-  router.post("/dashboard",upload,function(req,res){
+  router.post("/dashboard",ensureAuthenticated,function(req,res){
     console.log("hi");
+    console.log(req.session);
     let img=req.file;
     var flag =0;
     if(img!=undefined)
@@ -143,10 +145,13 @@ router.get('/dashboard',ensureAuthenticated, function(req, res) {
       img=req.file.filename;
       flag=1;
     }
+    //console.log(img);
+    //console.log(req.session.userID);
     User.findOne({userName:req.session.passport.user},function(err,foundUser){
-      //console.log(foundUser);
+      console.log(foundUser);
       if(foundUser)
       {
+        //console.log("hello");
         //foundUser.image=req.body.filepond;
         //console.log(foundUser.image);
         if(req.body.upload==="Upload" && flag===1) 
@@ -182,7 +187,9 @@ router.get('/dashboard',ensureAuthenticated, function(req, res) {
 
 function ensureAuthenticated(req, res, next) {
     //console.log(req.session.passport.user);
-    if (req.isAuthenticated()) { return next(); }
+    if (req.isAuthenticated()) { 
+      //console.log(next());
+      return next(); }
     res.redirect('/');
     // if (req.session.passport.user) { return next(); }
     // res.redirect('/');

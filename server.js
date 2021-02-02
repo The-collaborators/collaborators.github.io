@@ -7,8 +7,8 @@ require('./passport');
 const ejs = require('ejs');
 const session = require('express-session');
 const MongoDBStore = require('connect-mongodb-session')(session);
-
 const store = new MongoDBStore({uri: database});
+
 
 const app = express();
 app.use(express.raw());
