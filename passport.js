@@ -7,26 +7,27 @@ passport.use(new GithubStrategy({
     clientSecret: process.env.CLIENT_Secret,
     callbackURL: 'http://localhost:3000/auth/github/callback'
 
-}, (access_token, refreshToken, profile, done) => {
-    process.nextTick(() => {
-        User.findOne({userName: profile.username}, (err, foundUser) => {
-            if(err){
-                return (err, null);
-            }
-            if(foundUser != null){
-                return done(null, foundUser);
-            }
-            let newUser = new User({
-                email: null,
-                userName: profile.username,
-                domain: null,
-                image: "default-image-png.png"
-            });
-            newUser.save();
+}, async(access_token, refreshToken, profile, done) => {
+    let username = profile.username
 
-            return done(null, newUser);
-        })
-    })
+    try {
+        let user = await User.findOne({username: username});
+        console.log(user)
+        if(user){
+            return done(null, user);
+        }
+        let nUser = await User.create({
+            email: null,
+            username: profile.username,
+            domain: null,
+            image: "default-image-png.png"
+        });
+        nUser.save();
+        return done(null,nUser);
+
+    } catch (error) {
+        done(error);
+    }
 }));
 
 passport.serializeUser((user, done) => {
@@ -34,7 +35,7 @@ passport.serializeUser((user, done) => {
 })
 
 passport.deserializeUser((user, done) => {
-    User.findOne({userName: user.username}, (err, user) => {
+    User.findOne({username: user.username}, (err, user) => {
         done(null, user);
     })
 })

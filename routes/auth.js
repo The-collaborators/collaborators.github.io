@@ -6,7 +6,7 @@ router.get('/github', passport.authenticate('github', {scope: ['user:email']}));
 router.get('/github/callback', passport.authenticate('github', {scope: ['user:email']}), (req, res) => {
     //console.log("hi");
     //console.log(req.user.userName);
-    req.session.username = req.user.userName;
+    req.session.username = req.user.username;
     req.session.image = req.user.image;
     req.session.login=true;
     res.redirect('/dashboard');

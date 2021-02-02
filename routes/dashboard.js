@@ -13,15 +13,15 @@ var upload=multer({
     storage:storage
 }).single("file");
 
-router.get('/',ensureAuthenticated, (req,res) => {
+router.get('/', (req,res) => {
     //console.log(req.session);
     res.render('dashboard', {username: req.session.username, img_name: req.session.image, img_error: ''});
 })
 
 router.post('/',[upload],(req,res)=>{
     console.log("hello");
-    req.session.username=req.body.username;
-    console.log(req.body.username);
+    //req.session.username=req.body.username;
+    console.log(req.session.username);
     let img=req.file;
     var flag =0;
     if(img!=undefined)
