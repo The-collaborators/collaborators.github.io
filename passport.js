@@ -12,7 +12,6 @@ passport.use(new GithubStrategy({
 
     try {
         let user = await User.findOne({username: username});
-        console.log(user)
         if(user){
             return done(null, user);
         }

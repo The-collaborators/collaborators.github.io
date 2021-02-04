@@ -6,9 +6,10 @@ const passport = require('passport');
 require('./passport');
 const ejs = require('ejs');
 const session = require('express-session');
-const MongoDBStore = require('connect-mongodb-session')(session);
-const store = new MongoDBStore({uri: database});
+const MongoStore = require('connect-mongo')(session);
 const cookieParser=require('cookie-parser');
+const cookieSession = require('cookie-session');
+
 
 const app = express();
 app.use(express.raw());
@@ -18,16 +19,17 @@ app.use(passport.initialize());
 app.set('view engine', 'ejs');
 app.use(express.static("public"));
 app.use(cookieParser());
-app.use(session({
-    secret: 'secret',
-    resave: false,
-    saveUninitialized: false,
-    name: "sid", store: store, 
-    cookie: { maxAge: 1000 }
-}));
+// app.use(session({
+//     secret: 'secret',
+//     resave: false,
+//     saveUninitialized: false,
+//     name: "sid", store: new MongoStore({mongooseConnection: mongoose.connection}), 
+//     cookie: { maxAge: 1000 }
+// }));
+app.use(cookieSession({keys: ['secret']}))
 
 app.get('/', (req, res) => {
-    console.log(req.sessionID);
+    // console.log(req.sessionID);
     res.render('index');
 })
 
