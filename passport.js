@@ -22,6 +22,7 @@ passport.use(new GithubStrategy({
             domain: null,
             image: "default-image-png.png"
         });
+        nUser.save();
         return done(null,nUser);
 
     } catch (error) {
@@ -34,7 +35,7 @@ passport.serializeUser((user, done) => {
 })
 
 passport.deserializeUser((user, done) => {
-    User.findOne({userName: user}, (err, user) => {
+    User.findOne({username: user.username}, (err, user) => {
         done(null, user);
     })
 })

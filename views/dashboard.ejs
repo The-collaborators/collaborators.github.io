@@ -44,7 +44,7 @@
     </script> -->
     <h4>hello <%= username %> </h4>
     <div class="menu">
-    <form onsubmit="checkextension()" action="/users/dashboard"  method="post"  role="form" enctype="multipart/form-data">
+    <form onsubmit="checkextension()"  method="post"  role="form" enctype="multipart/form-data">
                                      
                                           
       <div class="form-group">
@@ -123,6 +123,12 @@
     function checkextension() {
       var file = document.querySelector("#fUpload");
       if ( /\.(jpe?g|png|gif)$/i.test(file.files[0].name) === false ) { alert("not an image!"); }
+      else{
+        fetch('localhost:3000/dashboard')
+        .then(response => response.json())
+        .then(data => console.log(data));
+
+      }
     }
     </script>
 
