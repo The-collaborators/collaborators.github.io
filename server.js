@@ -8,7 +8,7 @@ const ejs = require('ejs');
 const session = require('express-session');
 const MongoDBStore = require('connect-mongodb-session')(session);
 const store = new MongoDBStore({uri: database});
-
+const cookieParser=require('cookie-parser');
 
 const app = express();
 app.use(express.raw());
@@ -17,6 +17,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(passport.initialize());
 app.set('view engine', 'ejs');
 app.use(express.static("public"));
+app.use(cookieParser());
 app.use(session({
     secret: 'secret',
     resave: false,
