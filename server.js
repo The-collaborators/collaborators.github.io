@@ -26,7 +26,7 @@ app.use(cookieParser());
 //     name: "sid", store: new MongoStore({mongooseConnection: mongoose.connection}), 
 //     cookie: { maxAge: 1000 }
 // }));
-app.use(cookieSession({keys: ['secret']}))
+app.use(cookieSession({keys: ['secret'],name:"sid"}));
 
 app.get('/', (req, res) => {
     // console.log(req.sessionID);

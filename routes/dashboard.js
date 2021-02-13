@@ -13,7 +13,7 @@ var upload=multer({
     storage:storage
 }).single("file");
 
-router.get('/', (req,res) => {
+router.get('/',ensureAuthenticated, (req,res) => {
     res.render('dashboard', {username: req.session.username, img_name: req.session.image, img_error: ''});
 })
 
@@ -29,12 +29,18 @@ router.post('/',[upload],(req,res)=>{
     if(req.body.upload==="Upload" && flag===1) 
     {
         req.session.image=img;
-        // foundUser.save(function(err){
-        //     if(err)
-        //     {
-        //         throw err;
-        //     }
-        // });
+        User.findOne({username:req.session.username},function(err,found){
+            if(found)
+            {
+                found.image=req.session.image;
+                found.save(function(err){
+                    if(err)
+                    {
+                        throw err;
+                    }
+                })
+            }
+        })
 
     }
     res.render("dashboard",{username:req.session.username,img_name:req.session.image,img_error:""});
@@ -59,6 +65,30 @@ router.post('/',[upload],(req,res)=>{
     //   }
     // });
 })
+router.get('/mail',ensureAuthenticated, function(req,res,next){
+    res.render('mail',{username:req.session.username});
+})
+router.get('/logout', function(req, res, next) {
+    // if (req.session) {
+    //   // delete session object
+    //   req.session.destroy(function(err) {
+    //     if(err) {
+    //       return next(err);
+    //     } else {
+    //         res.clearCookie("sid");
+    //         return res.render('index');
+    //     }
+    //   });
+    req.logout();
+
+    // destroy session data
+    req.session = null;
+  
+    // redirect to homepage
+    //res.redirect('/');
+    res.render('index');
+  });
+
 function ensureAuthenticated(req, res, next) {
     if(req.session.login===true)
    {

@@ -12,36 +12,7 @@
 </head>
 
 <body>
-  <!-- <form  action="/dashboard" method="post" role="form" enctype="multipart/form-data" id="myForm">
-    <input type="file" class="filepond" name="filepond" accept="image/png, image/jpeg, image/gif" >
-    
-  </form>
-    
-    <script src="https://unpkg.com/filepond-plugin-file-encode/dist/filepond-plugin-file-encode.min.js"></script>
-    <script src="https://unpkg.com/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.min.js"></script>
-    <script src="https://unpkg.com/filepond-plugin-image-exif-orientation/dist/filepond-plugin-image-exif-orientation.min.js"></script>
-    <script src="https://unpkg.com/filepond-plugin-image-crop/dist/filepond-plugin-image-crop.min.js"></script>
-    <script src="https://unpkg.com/filepond-plugin-image-resize/dist/filepond-plugin-image-resize.min.js"></script>
-    <script src="https://unpkg.com/filepond-plugin-image-transform/dist/filepond-plugin-image-transform.min.js"></script>
-    <script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.js"></script>
-    <script src="https://unpkg.com/filepond/dist/filepond.min.js"></script> 
-    <h4>hello  </h4>
-    <a href="/logout" class="btn btn-info btn-lg">
-      <span class="glyphicon glyphicon-log-out"></span> Log out
-    </a>
-    <script>
-        const lat=1;
-        const long=2;
-        const data=new FormData(document.getElementById("myForm"));
-        const options={
-            method:'POST',
-            
-            body: data
-        }
-        console.log(options);
-        fetch("/dashboard",options);
-        
-    </script> -->
+
     <h4>hello <%= username %> </h4>
     <div class="menu">
     <form onsubmit="checkextension()"  method="post"  role="form" enctype="multipart/form-data">
@@ -65,59 +36,23 @@
           </div>
           <%=img_error%>
       </div>
+
+      
       
       
       
       
   </form>
+  <form action="/dashboard/logout" method="GET">
+    <button  type="submit" >LOG OUT</button>
+  </form>
+
+  <form action="/dashboard/mail" method="GET">
+    <button  type="submit" >MAIL</button>
+  </form>
     
 </body>
-<!-- <script>
 
-    /*
-    We need to register the required plugins to do image manipulation and previewing.
-    */
-    FilePond.registerPlugin(
-        // encodes the file as base64 data
-        FilePondPluginFileEncode,
-
-        // validates files based on input type
-        FilePondPluginFileValidateType,
-
-        // corrects mobile image orientation
-        FilePondPluginImageExifOrientation,
-
-        // previews the image
-        FilePondPluginImagePreview,
-
-        // crops the image to a certain aspect ratio
-        FilePondPluginImageCrop,
-
-        // resizes the image to fit a certain size
-        FilePondPluginImageResize,
-
-        // applies crop and resize information on the client
-        FilePondPluginImageTransform
-    );
-
-    // Select the file input and use create() to turn it into a pond
-    // in this example we pass properties along with the create method
-    // we could have also put these on the file input element itself
-    FilePond.create(
-        document.querySelector('input'),
-        {
-            labelIdle: `Drag & Drop your picture or <span class="filepond--label-action">Browse</span>`,
-            imagePreviewHeight: 170,
-            imageCropAspectRatio: '1:1',
-            imageResizeTargetWidth: 200,
-            imageResizeTargetHeight: 200,
-            stylePanelLayout: 'compact circle',
-            styleLoadIndicatorPosition: 'center bottom',
-            styleButtonRemoveItemPosition: 'center bottom'
-        }
-    );
-    
-</script> -->
 
 <script>
     function checkextension() {
