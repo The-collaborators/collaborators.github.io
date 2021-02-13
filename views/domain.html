@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>domain</title>
+    <style>
+        *,
+        *::after,
+        *::before {
+            box-sizing: border-box;
+        }
+
+        .mainbutton {
+            cursor: pointer;
+            padding: 10px 15px;
+            border: none;
+            outline: none;
+            background-color: paleturquoise;
+            margin: 30px;
+            font-weight: bolder;
+        }
+
+        .modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            transition: 200ms ease-in-out;
+            border: 1px solid black;
+            border-radius: 10px;
+            z-index: 10;
+            background-color: white;
+            width: 250px;
+            max-width: 80%;
+        }
+
+        .modal.active {
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .modal-header {
+            padding: 10px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid black;
+        }
+
+        .modal-header .title {
+            font-size: 1.25rem;
+            font-weight: bold;
+        }
+
+        .modal-header .close-button {
+            cursor: pointer;
+            border: none;
+            outline: none;
+            background: none;
+            font-size: 1.25rem;
+            font-weight: bold;
+        }
+
+        .modal-body {
+            padding: 10px 15px;
+        }
+
+        #overlay {
+            position: fixed;
+            opacity: 0;
+            transition: 200ms ease-in-out;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, .5);
+            pointer-events: none;
+        }
+
+        #overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        select {
+            cursor: pointer;
+            margin-left: 60px;
+            border: 1px solid lightgrey;
+            padding: 5px 10px;
+            outline: none;
+            border-radius: 8px;
+        }
+
+        .removable {
+            background-color: rgb(235, 210, 163);
+            width: 300px;
+            height: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 10px 0;
+            padding-left: 10px;
+        }
+
+        .removable button {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            border: none;
+            outline: none;
+            background: none;
+            background-color: rgba(255,165,0,0.3);
+            padding: 5px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        .removable button:hover{
+            background-color:rgba(255,165,0,1);
+        }
+    </style>
+</head>
+
+<body>
+    <button class="mainbutton" data-modal-target="#modal">Edit Domain</button>
+    <div class="modal" id="modal">
+        <div class="modal-header">
+            <div class="title">Choose a domain</div>
+            <button data-close-button class="close-button">&times;</button>
+        </div>
+        <div class="modal-body">
+            <select id="list" onchange="getSelectValue();">
+                <option value="JavaScript">JavaScript</option>
+                <option value="Python">Python</option>
+                <option value="HTML">HTML</option>
+                <option value="CSS">CSS</option>
+                <option value="C++">C++</option>
+            </select>
+        </div>
+    </div>
+    <ul id="myDomain"></ul>
+    <div id="overlay"></div>
+</body>
+<script>
+    const openModalButtons = document.querySelectorAll('[data-modal-target]')
+    const closeModalButtons = document.querySelectorAll('[data-close-button]')
+    const overlay = document.getElementById('overlay')
+
+    openModalButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const modal = document.querySelector(button.dataset.modalTarget)
+            openModal(modal)
+        })
+    })
+
+    overlay.addEventListener('click', () => {
+        const modals = document.querySelectorAll('.modal.active')
+        modals.forEach(modal => {
+            closeModal(modal)
+        })
+    })
+
+    closeModalButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const modal = button.closest('.modal')
+            closeModal(modal)
+        })
+    })
+
+    function openModal(modal) {
+        if (modal == null) return
+        modal.classList.add('active')
+        overlay.classList.add('active')
+    }
+
+    function closeModal(modal) {
+        if (modal == null) return
+        modal.classList.remove('active')
+        overlay.classList.remove('active')
+    }
+
+    function getSelectValue() {
+        var val = document.getElementById('list');
+        var items = document.getElementById("myDomain");
+        var itemList = items.getElementsByTagName("li");
+        var selectValue = val.value;
+        console.log(itemList);
+        var flag = 1;
+        for (var i = 0; i < itemList.length; i++) {
+            var text = itemList[i].innerHTML;
+            var len = itemList[i].innerHTML.length;
+            var finalText = text.substring(0, len - 33);
+            if (finalText == selectValue) {
+                flag = 0;
+                break;
+            }
+        }
+        if (flag == 1) {
+            var node = document.createElement("LI");
+            var textnode = document.createTextNode(selectValue);
+            var button = document.createElement("button");
+            button.classList.add('closex');
+            button.innerHTML = "x";
+            node.appendChild(textnode);
+            node.appendChild(button);
+            node.classList.add('removable');
+            items.appendChild(node);
+            button.addEventListener("click", function () {
+                items.removeChild(button.parentElement);
+            });
+        }
+        else
+            alert(finalText + " is Already Added");
+    }
+</script>
+
+</html>
