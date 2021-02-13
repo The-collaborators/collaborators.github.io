@@ -86,8 +86,8 @@ router.post('/mail',[ensureAuthenticated,upload.array("file",5)], function(req,r
     }
     console.log(fs);
     let mailOptions = {
-        from: 'palviaanoushka@gmail.com', // TODO: email sender
-        to: 'preetipalvia@gmail.com', // TODO: email receiver
+        from: 'aksjain891999@gmail.com', // TODO: email sender
+        to: 'palviaanoushka@gmail.com', // TODO: email receiver
         subject: 'Nodemailer - Test',
         text: 'Wooohooo it works!!',
         attachments:  fs
