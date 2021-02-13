@@ -4,13 +4,266 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- <title>GitHub Authorisation</title> -->
-    <link rel="stylesheet" href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css">
-    <link rel="stylesheet" href="https://unpkg.com/filepond/dist/filepond.min.css">
-    <link rel="stylesheet" href="/css/dashcss.css">
-   
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>File Upload</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body{
+            background-color: #423735;
+        }
+        .outer {
+            width: 100vw;
+            height: 100vh;
+            display: grid;
+            place-items: center;
+        }
+
+        .text_box {
+            width: 50%;
+            border: 2px solid #FFC300;
+            display: flex;
+            flex-direction: column;
+            padding: 25px;
+            border-radius: 10px;
+        }
+        textarea::placeholder{
+            color: white;
+        }
+        textarea {
+            /* padding: 10px; */
+            font-size: 15px;
+            outline: none;
+            border: none;
+            background-color: transparent;
+            color:#FFC300;
+        }
+
+        .file-upload {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+        }
+
+        .file-upload__input {
+            display: none;
+        }
+
+        .file-upload__button {
+            -webkit-appearance: none;
+            background: transparent;
+            border: 2px solid #FFC300;
+            border-radius: 4px;
+            outline: none;
+            padding: 0.5em 0.8em;
+            margin-right: 15px;
+            color: #FFC300;
+            font-size: 1em;
+            font-family: "Quicksand", sans-serif;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.5s;
+        }
+        .file-upload__button:hover{
+            color: #423735;
+            background: #FFC300;
+        }
+        /* .file-upload__button:active {
+            color: #423735;
+            background: #FFC300;
+        } */
+
+        .file-upload__label {
+            max-width: 500px;
+            font-size: 0.95em;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+            font-family: "Quicksand", sans-serif;
+            color: #FFC300;
+        }
+
+        *,
+        *::after,
+        *::before {
+            box-sizing: border-box;
+        }
+
+        .mainbutton {
+            cursor: pointer;
+            padding: 10px 15px;
+            border: none;
+            outline: none;
+            background-color: paleturquoise;
+            margin: 30px;
+            font-weight: bolder;
+        }
+
+        .modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            transition: 200ms ease-in-out;
+            border: 1px solid black;
+            border-radius: 10px;
+            z-index: 10;
+            background-color: white;
+            width: 250px;
+            max-width: 80%;
+        }
+
+        .modal.active {
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .modal-header {
+            padding: 10px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid black;
+        }
+
+        .modal-header .title {
+            font-size: 1.25rem;
+            font-weight: bold;
+        }
+
+        .modal-header .close-button {
+            cursor: pointer;
+            border: none;
+            outline: none;
+            background: none;
+            font-size: 1.25rem;
+            font-weight: bold;
+        }
+
+        .modal-body {
+            padding: 10px 15px;
+        }
+
+        #overlay {
+            position: fixed;
+            opacity: 0;
+            transition: 200ms ease-in-out;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, .5);
+            pointer-events: none;
+        }
+
+        #overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        select {
+            cursor: pointer;
+            margin-left: 60px;
+            border: 1px solid lightgrey;
+            padding: 5px 10px;
+            outline: none;
+            border-radius: 8px;
+        }
+
+        .removable {
+            background-color: rgb(235, 210, 163);
+            width: 300px;
+            height: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 10px 0;
+            padding-left: 10px;
+        }
+
+        .removable button {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            border: none;
+            outline: none;
+            background: none;
+            background-color: rgba(255,165,0,0.3);
+            padding: 5px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        .removable button:hover{
+            background-color:rgba(255,165,0,1);
+        }
+
+        @media screen and (max-width: 630px){
+			.text_box{
+                width:90%;
+            }
+		}
+
+    </style>
 </head>
+
 <body>
     <h4>hello <%= username %> </h4>
+    <form action="/dashboard/mail" method="POST" enctype="multipart/form-data" role="form">
+    <div class="outer">
+        <div class="text_box">
+            <h3>Need collaborators of domain :</h3>
+        </div>
+        
+        <div class="text_box">
+            <textarea name="text" id="" cols="30" rows="5" placeholder="Write something..."></textarea><br>
+            <div class="file-upload">
+                <input class="file-upload__input" type="file" name="file" id="myFile" multiple>
+                <button class="file-upload__button" type="button">Choose File(s)</button>
+                <span class="file-upload__label"></span>
+            </div>
+        </div>
+        <button  type="submit" >Mail it</button>
+    </div>
+    </form>
+    <script type="text/javascript">
+        Array.prototype.forEach.call(
+            document.querySelectorAll(".file-upload__button"),
+            function (button) {
+                const hiddenInput = button.parentElement.querySelector(
+                    ".file-upload__input"
+                );
+                const label = button.parentElement.querySelector(".file-upload__label");
+                const defaultLabelText = "No file(s) selected";
+
+                // Set default text for label
+                label.textContent = defaultLabelText;
+                label.title = defaultLabelText;
+
+                button.addEventListener("click", function () {
+                    hiddenInput.click();
+                });
+
+                hiddenInput.addEventListener("change", function () {
+                    const filenameList = Array.prototype.map.call(hiddenInput.files, function (
+                        file
+                    ) {
+                        return file.name;
+                    });
+
+                    label.textContent = filenameList.join(", ") || defaultLabelText;
+                    label.title = label.textContent;
+                });
+            }
+        );
+
+
+    </script>
 </body>
+
 </html>
