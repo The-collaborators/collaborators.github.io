@@ -181,13 +181,12 @@
         modal.classList.remove('active')
         overlay.classList.remove('active')
     }
-
+    var finalList=[];
     function getSelectValue() {
         var val = document.getElementById('list');
         var items = document.getElementById("myDomain");
         var itemList = items.getElementsByTagName("li");
         var selectValue = val.value;
-        console.log(itemList);
         var flag = 1;
         for (var i = 0; i < itemList.length; i++) {
             var text = itemList[i].innerHTML;
@@ -201,6 +200,7 @@
         if (flag == 1) {
             var node = document.createElement("LI");
             var textnode = document.createTextNode(selectValue);
+            finalList.push(selectValue);
             var button = document.createElement("button");
             button.classList.add('closex');
             button.innerHTML = "x";
@@ -209,6 +209,12 @@
             node.classList.add('removable');
             items.appendChild(node);
             button.addEventListener("click", function () {
+                var l=button.parentElement.innerHTML.length;
+                var val=button.parentElement.innerHTML.substring(0,l-33);
+                var index = finalList.indexOf(val);
+                if (index > -1) {
+                    finalList.splice(index, 1);
+                }
                 items.removeChild(button.parentElement);
             });
         }
