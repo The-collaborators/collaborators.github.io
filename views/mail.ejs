@@ -220,23 +220,27 @@
             <button data-close-button class="close-button">&times;</button>
         </div>
         <div class="modal-body">
-            <select id="list" onchange="getSelectValue();">
-                <option value="JavaScript">JavaScript</option>
-                <option value="Python">Python</option>
-                <option value="HTML">HTML</option>
-                <option value="CSS">CSS</option>
-                <option value="C++">C++</option>
+            <select id="list" name="list" onchange="getSelectValue();">
+                <option value="JavaScript" name="JavaScript">JavaScript</option>
+                <option value="Python" name="Python">Python</option>
+                <option value="HTML" name="HTML">HTML</option>
+                <option value="CSS" name="CSS">CSS</option>
+                <option value="C++" name="C">C++</option>
             </select>
         </div>
     </div>
     
+    
     <div id="overlay"></div>
+    
     <div class="outer">
         <div class="text_box">
             <h3>Need collaborators of domain :</h3>
             <button class="mainbutton" data-modal-target="#modal">Edit Domain</button>
+            
             <ul id="myDomain"></ul>
         </div>
+    <form action="/dashboard/mail" method="POST">
         <div class="text_box">
             <textarea name="" id="" cols="30" rows="5" placeholder="Write something..."></textarea><br>
             <div class="file-upload">
@@ -245,7 +249,12 @@
                 <span class="file-upload__label"></span>
             </div>
         </div>
+        
+        <button type="submit">MAIL IT</button>
+        
     </div>
+    </form>
+    
 </body>
 <script>
     const openModalButtons = document.querySelectorAll('[data-modal-target]')
@@ -284,11 +293,11 @@
         modal.classList.remove('active')
         overlay.classList.remove('active')
     }
-
+    var itemList;
     function getSelectValue() {
         var val = document.getElementById('list');
         var items = document.getElementById("myDomain");
-        var itemList = items.getElementsByTagName("li");
+         itemList = items.getElementsByTagName("li");
         var selectValue = val.value;
         console.log(itemList);
         var flag = 1;
@@ -318,7 +327,7 @@
         else
             alert(finalText + " is Already Added");
     }
-
+    //console.log(itemList);
     Array.prototype.forEach.call(
             document.querySelectorAll(".file-upload__button"),
             function (button) {

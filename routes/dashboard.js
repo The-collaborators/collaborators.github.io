@@ -68,8 +68,44 @@ router.get('/mail',[ensureAuthenticated],function(req,res,next){
 
 router.post('/mail',[ensureAuthenticated,upload.array("file",5)], function(req,res,next){
     
-    console.log(req.files);
+    //console.log(req.files);
+    //console.log(req.body.Javascript);
+    var mailList=[];
+    const arr = [];
+    console.log("hello "+req.body.values);
+    if(req.body.Javascript!=undefined)
+    {
+        arr.push("JavaScript");
+        console.log("1");
+    }
+    if(req.body.HTML!=undefined)
+    {
+        arr.push("HTML");
+    }
+    if(req.body.CSS!=undefined)
+    {
+        arr.push("CSS");
+        console.log("1");
+    }
+    if((req.body.C)!=undefined)
+    {
+        arr.push("C++");
+        //console.log("1 "+req.body.C++);
+    }
+    if(req.body.Python!=undefined)
+    {
+        arr.push("Python");
+    }
+    console.log(arr+"hi");
+    // const checker = value =>
+    // arr.some(element => value.includes(element));
 
+    // User.find({},function(err,found){
+    //     if(found.domain.filter(checker)!=undefined)
+    //     {
+    //         mailList.push(found.email);
+    //     }
+    // })
     let transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
@@ -80,14 +116,17 @@ router.post('/mail',[ensureAuthenticated,upload.array("file",5)], function(req,r
     
     // Step 2
     var fs=[];
-    for (var i=0;i<req.files.length;i++)
+    if(req.files!=undefined)
     {
-        fs.push({filename:req.files[i].filename,path:"./public/uploads/"+req.files[i].filename});
+        for (var i=0;i<req.files.length;i++)
+        {
+            fs.push({filename:req.files[i].filename,path:"./public/uploads/"+req.files[i].filename});
+        }
     }
-    console.log(fs);
+    //console.log(fs);
     let mailOptions = {
-        from: 'aksjain891999@gmail.com', // TODO: email sender
-        to: 'palviaanoushka@gmail.com', // TODO: email receiver
+        from: 'palviaanoushka@gmail.com', // TODO: email sender
+        to: 'preetipalvia@gmail.com', // TODO: email receiver
         subject: 'Nodemailer - Test',
         text: 'Wooohooo it works!!',
         attachments:  fs
