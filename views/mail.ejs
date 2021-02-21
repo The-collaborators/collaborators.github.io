@@ -240,7 +240,7 @@
             
             <ul id="myDomain"></ul>
         </div>
-    <form action="/dashboard/mail" method="POST">
+    <form onsubmit="func()" method="POST">
         <div class="text_box">
             <textarea name="" id="" cols="30" rows="5" placeholder="Write something..."></textarea><br>
             <div class="file-upload">
@@ -294,6 +294,7 @@
         overlay.classList.remove('active')
     }
     var itemList;
+    var finalList=[];
     function getSelectValue() {
         var val = document.getElementById('list');
         var items = document.getElementById("myDomain");
@@ -313,6 +314,7 @@
         if (flag == 1) {
             var node = document.createElement("LI");
             var textnode = document.createTextNode(selectValue);
+            finalList.push(selectValue);
             var button = document.createElement("button");
             button.classList.add('closex');
             button.innerHTML = "x";
@@ -321,12 +323,51 @@
             node.classList.add('removable');
             items.appendChild(node);
             button.addEventListener("click", function () {
+                var l=button.parentElement.innerHTML.length;
+                var val=button.parentElement.innerHTML.substring(0,l-33);
+                var index = finalList.indexOf(val);
+                if (index > -1) {
+                    finalList.splice(index, 1);
+                }
                 items.removeChild(button.parentElement);
             });
         }
         else
             alert(finalText + " is Already Added");
     }
+
+    function func()
+    {
+        // fetch("localhost:3000/dashboard/mail", { 
+        
+        // // Adding method type 
+        // method: "POST", 
+            
+        // // Adding body or contents to send 
+        // body: JSON.stringify({ 
+        //     title: "foo", 
+        //     body: finalList, 
+        //     userId: 1 
+        // }), 
+            
+        // Adding headers to the request 
+        // headers: { 
+        //     "Content-type": "application/json; charset=UTF-8"
+        // } 
+
+        let nodesArray = [1,2,3];
+        let body = JSON.stringify({net:nodesArray});
+        fetch("localhost:3000/dashboard/mail",
+        {method:"post", 
+            body:body,
+            headers: {
+            'Content-Type': 'application/json'
+            }}) .then(response => response.json())
+        .then(data => console.log(data));
+    } 
+        
+    // Converting to JSON 
+    
     //console.log(itemList);
     Array.prototype.forEach.call(
             document.querySelectorAll(".file-upload__button"),

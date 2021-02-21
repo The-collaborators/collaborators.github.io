@@ -1,7 +1,17 @@
 const router = require('express').Router();
+const bodyParser=require('body-parser');
 const multer=require('multer');
 const path=require('path');
 const nodemailer = require('nodemailer');
+const flash=require('connect-flash');
+
+router.use(bodyParser.json());
+router.use(bodyParser.urlencoded({extended: true}));
+router.use(flash());
+router.use(function(req, res, next){
+    res.locals.message = req.flash();
+    next();
+});
 //used for multer
 var storage=multer.diskStorage({
     destination:"./public/uploads/",
@@ -23,13 +33,17 @@ var upload=multer({
 
 
 
+
 // var upload1=multer({
 //     storage:storage1
 // }).single("myFile");
 
 
 router.get('/',ensureAuthenticated, (req,res) => {
-    res.render('dashboard', {username: req.session.username, img_name: req.session.image, img_error: ''});
+    //res.send(req.flash('message'));
+    
+    console.log("hello "+res.locals.message);
+    res.render('dashboard', {username: req.session.username, img_name: req.session.image});
 })
 
 router.post('/',[upload.single("file")],(req,res)=>{
@@ -59,7 +73,7 @@ router.post('/',[upload.single("file")],(req,res)=>{
         })
 
     }
-    res.render("dashboard",{username:req.session.username,img_name:req.session.image,img_error:""});
+    res.render("dashboard",{username:req.session.username,img_name:req.session.image});
 
 })
 router.get('/mail',[ensureAuthenticated],function(req,res,next){
@@ -72,7 +86,7 @@ router.post('/mail',[ensureAuthenticated,upload.array("file",5)], function(req,r
     //console.log(req.body.Javascript);
     var mailList=[];
     const arr = [];
-    console.log("hello "+req.body.values);
+    console.log("hello "+JSON.parse(req.body.net));
     if(req.body.Javascript!=undefined)
     {
         arr.push("JavaScript");
@@ -146,6 +160,75 @@ router.post('/mail',[ensureAuthenticated,upload.array("file",5)], function(req,r
     //res.render("dashboard",{username:req.session.username,img_name:req.session.image,img_error:""});
     res.render('mail',{username:req.session.username});
 })
+
+router.get("/search",function(req,res,next){
+    
+    var x=req.query["term"];
+    var regex=new RegExp("^"+x);
+    //console.log(x);
+    //x="/^"+x+"/";
+    //console.log("hi" +regex);
+    //console.log(User);
+    if(x!=undefined)
+    {
+        //console.log("hi" +regex);
+        var userFilter=User.find({username: { $regex: regex, $options: 'i' }}).sort({"updated_at":-1}).sort({"created_at":-1}).limit(20);
+        //console.log(userFilter);
+        userFilter.exec(function(err,data){
+            //console.log("hi "+data);
+            var result=[];
+            
+            if(!err){
+                if(data && data.length && data.length>0)
+                {
+                    data.forEach(foundUser => {
+                        let obj={
+                            id:foundUser._id,
+                            label:foundUser.username
+                        };
+                        //console.log(foundUser.username);
+                        result.push(obj);
+                    });
+                    
+                }
+                res.jsonp(result);
+                
+            }
+            else{
+                console.log(err);
+            }
+        });
+    }
+})
+
+router.post('/search',function(req,res,next){
+    var name=req.body.filtername;
+    console.log("name"+ name);
+    if(name===req.session.username)
+    {
+        res.render("dashboard",{username:req.session.username,img_name:req.session.image});
+    }
+    else
+    {
+        User.findOne({username:name},function(err,found){
+            if(found)
+            {
+                res.render("searchUserDashboard",{username:found.username,img_name:found.image,error:req.session.error});
+            }
+            else{
+                req.flash('message', 'user not found'); 
+                //console.log(found);
+                //req.session.error="user not found ";
+                //import {alert} from 'node-popup';
+                //alert('Hello World!');
+                //res.redirect({username:req.session.username,img_name:req.session.image,error:"user doesn't exists"},"/dashboard");
+                //res.render("dashboard",{username:req.session.username,img_name:req.session.image,error:"user doesn't exists"});
+                res.redirect("/dashboard");
+            }
+        })
+    }
+});
+
 router.get('/logout', function(req, res, next) {
     // if (req.session) {
     //   // delete session object

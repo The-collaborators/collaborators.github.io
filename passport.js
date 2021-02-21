@@ -13,9 +13,9 @@ passport.use(new GithubStrategy({
     try {
         let user = await User.findOne({username: username});
         if(user){
-            console.log(user);
             return done(null, user);
         }
+        
         let nUser = await User.create({
             email: "03anoushkapalvia@gmail.com",
             username: profile.username,

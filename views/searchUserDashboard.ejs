@@ -14,22 +14,15 @@
 </head>
 
 <body>
-    
-      <%=message.message%>
-    
-    
-    <h4>hello <%= username %> </h4>
+
+    <h4><%= username %> </h4>
     <div class="menu">
-      
-      <form action="/dashboard/search" method="POST" role="form" >
+      <!-- <form action="/dashboard/search" method="GET" role="form">
        
-        <input type="search" class="form-control" id="searchName" name="filtername" placeholder="Enter name">
-        <button  type="submit" id="search" >SEARCH</button>
+        <input type="text" class="form-control" id="searchName" name="filtername" placeholder="Enter name">
+        
        
       </form>
-      <!-- <form action="/dashboard/search" method="POST" role="form"> -->
-        <!-- <button  type="submit" >SEARCH</button> -->
-      <!-- </form> -->
       <script>
         $(function(){
           $('#searchName').autocomplete({
@@ -45,12 +38,8 @@
                   },
                   error:function(err){
                     console.log(err.status);
-                    alert("user doesn't exists");
                   }
                 });
-                //console.log(req);
-
-                //res(req);
               },
 
               minLength:1,
@@ -62,54 +51,53 @@
               }
           });
           });
-
-          
-
-      </script>
-    <form onsubmit="checkextension()"  method="post"  role="form" enctype="multipart/form-data">
+      </script> -->
+    <!-- <form onsubmit="checkextension()"  method="post"  role="form" enctype="multipart/form-data"> -->
                                      
                                           
       <div class="form-group">
           <img id="resize" src="/uploads/<%=img_name%>" alt="<%=img_name%>" >
           <!-- <label for="file" >Upload File</label> -->
-          <p style="color: aliceblue; font-size: 1rem;">* Valid file types are :.png, .jpeg, .jpg, .gif</p>
+          <!-- <p style="color: aliceblue; font-size: 1rem;">* Valid file types are :.png, .jpeg, .jpg, .gif</p>
           <div >
               <input type="file" class="form-control bg" name="file" id="fUpload"  required/>
-          </div>
+          </div> -->
       </div>
-      
+      <form action="/dashboard" method="GET" role="form">
+        <button type="submit"> HOME</button>
+      </form>
   
-      <div class="form-group">
-          <!-- Button -->                                        
+      <!-- <div class="form-group">
+          Button                                        
           <div >
           <input type="submit" name="upload" value="Upload" id="shiftupload" class="btn1"> 
            
           </div>
-          
-      </div>
-  </form>
-  <form action="/dashboard/logout" method="GET">
+         
+      </div> -->
+  <!-- </form> -->
+  <!-- <form action="/dashboard/logout" method="GET">
     <button  type="submit" >LOG OUT</button>
-  </form>
+  </form> -->
 
-  <form action="/dashboard/mail" method="GET">
+  <!-- <form action="/dashboard/mail" method="GET">
     <button  type="submit" >MAIL</button>
-  </form>
+  </form> -->
     
 </body>
 
 
 <script>
-    function checkextension() {
-      var file = document.querySelector("#fUpload");
-      if ( /\.(jpe?g|png|gif)$/i.test(file.files[0].name) === false ) { alert("not an image!"); }
-      else{
-        fetch('localhost:3000/dashboard')
-        .then(response => response.json())
-        .then(data => console.log(data));
+    // function checkextension() {
+    //   var file = document.querySelector("#fUpload");
+    //   if ( /\.(jpe?g|png|gif)$/i.test(file.files[0].name) === false ) { alert("not an image!"); }
+    //   else{
+    //     fetch('localhost:3000/dashboard')
+    //     .then(response => response.json())
+    //     .then(data => console.log(data));
 
-      }
-    }
+    //   }
+    // }
     
 </script>
 

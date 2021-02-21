@@ -9,6 +9,7 @@ const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
 const cookieParser=require('cookie-parser');
 const cookieSession = require('cookie-session');
+const User = require('./models/user');
 
 
 const app = express();
@@ -21,12 +22,12 @@ app.use(express.static("public"));
 app.use(cookieParser());
 // app.use(session({
 //     secret: 'secret',
-//     resave: false,
-//     saveUninitialized: false,
-//     name: "sid", store: new MongoStore({mongooseConnection: mongoose.connection}), 
-//     cookie: { maxAge: 1000 }
+//     resave: true,
+//     saveUninitialized: true,
+    
 // }));
 app.use(cookieSession({keys: ['secret'],name:"sid"}));
+
 
 app.get('/', (req, res) => {
     // console.log(req.sessionID);
