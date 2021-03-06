@@ -24,12 +24,7 @@ app.use(passport.initialize());
 app.set('view engine', 'ejs');
 app.use(express.static("public"));
 app.use(cookieParser());
-// app.use(session({
-//     secret: 'secret',
-//     resave: true,
-//     saveUninitialized: true,
-    
-// }));
+//socket
 app.set('socketio',io);
 io.on('connection', (socket) => {
     console.log('a user connected');

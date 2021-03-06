@@ -270,17 +270,7 @@ router.get("/search/chat/:searchUserID",function(req,res,next){
                         }
                     }
                 });
-                // chat.insert({user:user,message:message},function(){
-                //     io.emit('output',[data]);
-                    
-                // });
-
-                // sendStatus({
-                //     message:"message sent",
-                //     clear:true
-                // });
-            
-    
+               
         })
 
     
