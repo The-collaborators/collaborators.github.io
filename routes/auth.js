@@ -9,6 +9,7 @@ router.get('/github/callback', passport.authenticate('github', {scope: ['user:em
     req.session.username = req.user.username;
     req.session.image = req.user.image;
     req.session.login=true;
+    req.session.userID=req.user._id;
     res.redirect('/dashboard');
 })
 

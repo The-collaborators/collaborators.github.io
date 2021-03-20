@@ -4,6 +4,11 @@ const multer=require('multer');
 const path=require('path');
 const nodemailer = require('nodemailer');
 const flash=require('connect-flash');
+//const http = require('http').createServer(router)
+//const io = require('socket.io')(http);
+const chatDetail = require("../models/chatDetail");
+const chat = require("../models/chats");
+//const io = req.app.get('socketio') 
 
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({extended: true}));
@@ -31,12 +36,6 @@ var upload=multer({
     storage:storage
 });
 
-
-
-
-// var upload1=multer({
-//     storage:storage1
-// }).single("myFile");
 
 
 router.get('/',ensureAuthenticated, (req,res) => {
@@ -111,15 +110,7 @@ router.post('/mail',[ensureAuthenticated,upload.array("file",5)], function(req,r
         arr.push("Python");
     }
     console.log(arr+"hi");
-    // const checker = value =>
-    // arr.some(element => value.includes(element));
 
-    // User.find({},function(err,found){
-    //     if(found.domain.filter(checker)!=undefined)
-    //     {
-    //         mailList.push(found.email);
-    //     }
-    // })
     let transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
@@ -165,15 +156,11 @@ router.get("/search",function(req,res,next){
     
     var x=req.query["term"];
     var regex=new RegExp("^"+x);
-    //console.log(x);
-    //x="/^"+x+"/";
-    //console.log("hi" +regex);
-    //console.log(User);
     if(x!=undefined)
     {
-        //console.log("hi" +regex);
+        
         var userFilter=User.find({username: { $regex: regex, $options: 'i' }}).sort({"updated_at":-1}).sort({"created_at":-1}).limit(20);
-        //console.log(userFilter);
+        
         userFilter.exec(function(err,data){
             //console.log("hi "+data);
             var result=[];
@@ -213,33 +200,86 @@ router.post('/search',function(req,res,next){
         User.findOne({username:name},function(err,found){
             if(found)
             {
-                res.render("searchUserDashboard",{username:found.username,img_name:found.image,error:req.session.error});
+                res.render("searchUserDashboard",{username:found.username,img_name:found.image,searchUserID:found._id});
             }
             else{
                 req.flash('message', 'user not found'); 
-                //console.log(found);
-                //req.session.error="user not found ";
-                //import {alert} from 'node-popup';
-                //alert('Hello World!');
-                //res.redirect({username:req.session.username,img_name:req.session.image,error:"user doesn't exists"},"/dashboard");
-                //res.render("dashboard",{username:req.session.username,img_name:req.session.image,error:"user doesn't exists"});
                 res.redirect("/dashboard");
             }
         })
     }
 });
 
+router.get("/search/chat/:searchUserID",function(req,res,next){
+        
+        const io = req.app.get('socketio') 
+        let min,max;
+        if(req.params.searchUserID>req.session.userID)
+        {
+            min=req.session.userID;
+            max=req.params.searchUserID;
+        }
+        else{
+            max=req.session.userID;
+            min=req.params.searchUserID;
+        }
+        //console.log(min+" "+max);
+        chat.find({user1:min,user2:max},function(err,found){
+            if(err)
+            {
+                throw err;
+            }
+            else{
+                User.findOne({_id:req.params.searchUserID},function(err,foundUser){
+                    if(err)
+                    {
+                        throw err;
+                    }
+                    else{
+                        //foundUser=foundUser.toObject();
+                        //console.log("chat "+foundUser.username+" "+req.session.username);
+                        io.emit('output',found,req.session.username,foundUser.username);
+                    }
+                })
+                
+            }
+        })
+        // //handle input events
+        io.on('input',function(data){
+            console.log(data);
+            chat.find({user1:min,user2:max},function(err,found){
+                    if(err)
+                    {
+                        throw err;
+                    }
+                    else{
+                        if(found)
+                        {
+                            console.log(data);
+                            found.conversation.push(data);
+                        }
+                        else{
+                            chat.insert({user1:min,user2:max,conversation:data});
+                        }
+                        if(min===req.session.username)
+                        {
+                            io.emit('output',[data],req.session.username,max);
+                        }
+                        else{
+                            io.emit('output',[data],req.session.username,min);
+                        }
+                    }
+                });
+               
+        })
+
+    
+    
+    res.render('chat');
+})
+
 router.get('/logout', function(req, res, next) {
-    // if (req.session) {
-    //   // delete session object
-    //   req.session.destroy(function(err) {
-    //     if(err) {
-    //       return next(err);
-    //     } else {
-    //         res.clearCookie("sid");
-    //         return res.render('index');
-    //     }
-    //   });
+
     req.logout();
 
     // destroy session data
