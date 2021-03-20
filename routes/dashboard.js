@@ -83,7 +83,7 @@ router.get('/mail',[ensureAuthenticated],function(req,res,next){
 router.post('/mail',[ensureAuthenticated,upload.array("file",5)], function(req,res,next){
     
     //console.log(req.files);
-    //console.log(req.body.Javascript);
+    console.log(req.body);
     var mailList=[];
     const arr = [];
     console.log("hello "+JSON.parse(req.body.net));

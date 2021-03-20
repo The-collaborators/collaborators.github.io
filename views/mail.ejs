@@ -255,7 +255,8 @@
     </div>
     </form>
     
-</body>
+    <button onclick="sendJSON();">Send JSON</button>
+
 <script>
     const openModalButtons = document.querySelectorAll('[data-modal-target]')
     const closeModalButtons = document.querySelectorAll('[data-close-button]')
@@ -336,6 +337,32 @@
             alert(finalText + " is Already Added");
     }
 
+    
+
+
+
+        function sendJSON(){ 
+
+            var myJSON = JSON.stringify(Object.assign({},finalList));
+            console.log(myJSON);
+               // Creating a XHR object 
+               let xhr = new XMLHttpRequest(); 
+               let url = "localhost:3000/dashboard/mail"; //jahan catch krna h
+           
+               // open a connection 
+               xhr.open("POST", url, true); 
+     
+               // Set the request header i.e. which type of content you are sending 
+               xhr.setRequestHeader("Content-Type", "application/json"); 
+     
+     
+               // Sending data with the request 
+               xhr.send(myJSON); 
+           } 
+
+           
+    
+
     function func()
     {
         // fetch("localhost:3000/dashboard/mail", { 
@@ -355,17 +382,23 @@
         //     "Content-type": "application/json; charset=UTF-8"
         // } 
 
-        let nodesArray = [1,2,3];
-        let body = JSON.stringify({net:nodesArray});
-        fetch("localhost:3000/dashboard/mail",
-        {method:"post", 
-            body:body,
-            headers: {
-            'Content-Type': 'application/json'
-            }}) .then(response => response.json())
-        .then(data => console.log(data));
+        
+
+        // let nodesArray = [1,2,3];
+        // let body = JSON.stringify({net:nodesArray});
+        // fetch("localhost:3000/dashboard/mail",
+        // {
+        //     method:"POST", 
+        //     body:body,
+        //     headers: {
+        //     'Content-Type': 'application/json'
+        //     }}) .then(response => response.json())
+        // .then(data => console.log(data));
     } 
         
+    
+
+
     // Converting to JSON 
     
     //console.log(itemList);
@@ -399,5 +432,5 @@
             }
         );
 </script>
-
+</body>
 </html>
