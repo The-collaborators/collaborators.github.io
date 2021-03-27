@@ -9,12 +9,13 @@ const chatSchema = mongoose.Schema({
         type: ObjectId,
         //required: true
     },
+    
     user2: {
         type: ObjectId,
         //required: true
     },
     conversation:{
-        type:[mongoose.Schema.Types.ObjectId],
+        type:mongoose.Schema.Types.ObjectId,
         ref:'chatDetail',
         default:undefined
 

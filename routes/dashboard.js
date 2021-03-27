@@ -8,15 +8,16 @@ const flash=require('connect-flash');
 //const io = require('socket.io')(http);
 const chatDetail = require("../models/chatDetail");
 const chat = require("../models/chats");
-//const io = req.app.get('socketio') 
 
-router.use(bodyParser.json());
-router.use(bodyParser.urlencoded({extended: true}));
+
+
+
 router.use(flash());
 router.use(function(req, res, next){
     res.locals.message = req.flash();
     next();
 });
+//router.use(cors(corsOptions));
 //used for multer
 var storage=multer.diskStorage({
     destination:"./public/uploads/",
@@ -79,37 +80,37 @@ router.get('/mail',[ensureAuthenticated],function(req,res,next){
     res.render('mail',{username:req.session.username});
 })
 
+
 router.post('/mail',[ensureAuthenticated,upload.array("file",5)], function(req,res,next){
     
     //console.log(req.files);
-    console.log(req.body);
-    var mailList=[];
-    const arr = [];
-    console.log("hello "+JSON.parse(req.body.net));
-    if(req.body.Javascript!=undefined)
-    {
-        arr.push("JavaScript");
-        console.log("1");
-    }
-    if(req.body.HTML!=undefined)
-    {
-        arr.push("HTML");
-    }
-    if(req.body.CSS!=undefined)
-    {
-        arr.push("CSS");
-        console.log("1");
-    }
-    if((req.body.C)!=undefined)
-    {
-        arr.push("C++");
-        //console.log("1 "+req.body.C++);
-    }
-    if(req.body.Python!=undefined)
-    {
-        arr.push("Python");
-    }
-    console.log(arr+"hi");
+    
+    var ans=JSON.stringify(req.body);
+    ans=JSON.parse(ans);
+    //console.log(typeof(ans)," yeah");
+    var arr=[];
+    for(var myKey in ans) {
+        if(ans[myKey]==="JavaScript")
+        {
+            arr.push("JavaScript");
+        }
+        else if(ans[myKey]==="HTML")
+        {
+            arr.push("HTML");
+        }
+        else if(ans[myKey]==="CSS")
+        {
+            arr.push("CSS");
+        }
+        else if(ans[myKey]==="C++")
+        {
+            arr.push("C++");
+        }
+        else{
+            arr.push("Python");
+        }
+     }
+     console.log(arr,"domain");
 
     let transporter = nodemailer.createTransport({
         service: 'gmail',
@@ -128,27 +129,39 @@ router.post('/mail',[ensureAuthenticated,upload.array("file",5)], function(req,r
             fs.push({filename:req.files[i].filename,path:"./public/uploads/"+req.files[i].filename});
         }
     }
-    //console.log(fs);
-    let mailOptions = {
-        from: 'palviaanoushka@gmail.com', // TODO: email sender
-        to: 'preetipalvia@gmail.com', // TODO: email receiver
-        subject: 'Nodemailer - Test',
-        text: 'Wooohooo it works!!',
-        attachments:  fs
+    var mailList=[];
+    User.find({},function(err,found){
+        for(var i=0;i<found.length;i++)
+        {
+            if(found[i].domain.some(item => arr.includes(item))===true)
+            {
+                //console.log(found[i].email,"mail");
+                mailList.push(found[i].email);
+                console.log(mailList,"mail1");
+            }
+            //console.log(found[i]["domain"],found[i]["username"]);
+            
+        }
+        console.log(mailList,"mail");
+        mailList.push("18bcs2152@cuchd.in");
+        let mailOptions = {
+            from: 'palviaanoushka@gmail.com', // TODO: email sender
+            to: mailList, // TODO: email receiver
+            subject: 'Nodemailer - Test',
+            text: 'Wooohooo it works!!',
+            attachments:  fs
             // { filename: 'uploads/profile.JPG', path: './images/profile.JPG' },
             // { filename: 'images/coder girl.JPG', path: './images/coder girl.JPG' } // TODO: replace it with your own image
         
-    };
-    
-    // Step 3
-    transporter.sendMail(mailOptions, (err, data) => {
-        if (err) {
-            console.log(err);
-            //return log('Error occurs');
-        }
-        console.log('Email sent!!!');
+        };
+        transporter.sendMail(mailOptions, (err, data) => {
+            if (err) {
+                console.log(err);
+                //return log('Error occurs');
+            }
+            console.log('Email sent!!!');
+        });
     });
-    //res.render("dashboard",{username:req.session.username,img_name:req.session.image,img_error:""});
     res.render('mail',{username:req.session.username});
 })
 
@@ -212,8 +225,12 @@ router.post('/search',function(req,res,next){
 
 router.get("/search/chat/:searchUserID",function(req,res,next){
         
-        const io = req.app.get('socketio') 
-        let min,max;
+        const io = req.io;
+        let min,max,searchUser;
+        User.findById(req.params.searchUserID,function(err,found){
+            searchUser=found.username;
+        })
+        //console.log("userID",req.params.searchUserID);
         if(req.params.searchUserID>req.session.userID)
         {
             min=req.session.userID;
@@ -223,59 +240,54 @@ router.get("/search/chat/:searchUserID",function(req,res,next){
             max=req.session.userID;
             min=req.params.searchUserID;
         }
-        //console.log(min+" "+max);
-        chat.find({user1:min,user2:max},function(err,found){
-            if(err)
-            {
-                throw err;
-            }
-            else{
-                User.findOne({_id:req.params.searchUserID},function(err,foundUser){
-                    if(err)
-                    {
-                        throw err;
-                    }
-                    else{
-                        //foundUser=foundUser.toObject();
-                        //console.log("chat "+foundUser.username+" "+req.session.username);
-                        io.emit('output',found,req.session.username,foundUser.username);
-                    }
+        //console.log("io",io);
+        io.on('connection', (socket) => {
+    
+            console.log('a user connected');
+            //console.log("hi",typeof(msg));
+            socket.on("input",msg=>{
+                msg.from=req.session.userID;
+                let nChatDetail=new chatDetail({
+                    from:req.session.userID,
+                    talk:msg.talk
                 })
                 
-            }
-        })
-        // //handle input events
-        io.on('input',function(data){
-            console.log(data);
-            chat.find({user1:min,user2:max},function(err,found){
-                    if(err)
-                    {
-                        throw err;
-                    }
-                    else{
-                        if(found)
-                        {
-                            console.log(data);
-                            found.conversation.push(data);
-                        }
-                        else{
-                            chat.insert({user1:min,user2:max,conversation:data});
-                        }
-                        if(min===req.session.username)
-                        {
-                            io.emit('output',[data],req.session.username,max);
-                        }
-                        else{
-                            io.emit('output',[data],req.session.username,min);
-                        }
-                    }
+                let nChat = new chat({
+                    user1:min,
+                    user2:max,
+                    conversation:nChatDetail
                 });
-               
-        })
+                nChat.save();
+                nChatDetail.save();
+                console.log(typeof(msg));
+            });
+            let chatArr=[];
+            chat.find({user1:min,user2:max},function(err,found){
+                for(let i=0;i<found.length;i++)
+                {
+                    chatDetail.findById(found[i].conversation,function(err,foundUser){
+                        //console.log("found",foundUser);
+                        if(foundUser!=null)
+                        {
+                            chatArr.push(foundUser);
+                        }
+                        
+                        
+                    })
+                }
+                console.log("chat",chatArr);
+                socket.emit("output",(chatArr,req.session.userID,req.params.searchUserID));
+            })
+            socket.on('disconnect', () => {
+              console.log('user disconnected');
+            });
+        });
+
+        
 
     
     
-    res.render('chat');
+    res.render('chat',{searchUser:searchUser,user:req.session.username});
 })
 
 router.get('/logout', function(req, res, next) {

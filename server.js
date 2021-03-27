@@ -12,11 +12,12 @@ const MongoStore = require('connect-mongo')(session);
 const cookieParser=require('cookie-parser');
 const cookieSession = require('cookie-session');
 const User = require('./models/user');
+const cors=require('cors');
 
 //socket
-const io = require('socket.io')(http);
 
 
+app.use(cors());
 app.use(express.raw());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -24,15 +25,26 @@ app.use(passport.initialize());
 app.set('view engine', 'ejs');
 app.use(express.static("public"));
 app.use(cookieParser());
+
+var listen=app.listen(3000, () => {
+    console.log("server started at port ");
+})
 //socket
-app.set('socketio',io);
-io.on('connection', (socket) => {
-    console.log('a user connected');
-  
-    socket.on('disconnect', () => {
-      console.log('user disconnected');
-    });
-  });
+const io = require('socket.io')(listen);
+app.use((req, res, next) => {
+    req.io = io;
+    next();
+});
+// io.on('connection', (socket) => {
+//     app.set("socketio",socket);
+//     console.log('a user connected');
+//     // socket.on("input",msg=>{
+//     //     console.log(msg);
+//     // })
+//     socket.on('disconnect', () => {
+//       console.log('user disconnected');
+//     });
+//   });
 
 app.use(cookieSession({keys: ['secret'],name:"sid"}));
 
@@ -53,9 +65,7 @@ app.use('/dashboard', dashboardRoutes);
 mongoose.connect(database, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => {
         console.log("database connected");
-        http.listen(3000, () => {
-            console.log(`server started at port ${3000}`);
-        })
+        
     }).catch(err => {
         console.err(err);
     })

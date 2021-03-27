@@ -344,10 +344,10 @@
         function sendJSON(){ 
 
             var myJSON = JSON.stringify(Object.assign({},finalList));
-            console.log(myJSON);
+                console.log(myJSON);
                // Creating a XHR object 
                let xhr = new XMLHttpRequest(); 
-               let url = "localhost:3000/dashboard/mail"; //jahan catch krna h
+               let url = "http://localhost:3000/dashboard/mail"; //jahan catch krna h
            
                // open a connection 
                xhr.open("POST", url, true); 

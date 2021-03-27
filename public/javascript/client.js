@@ -1,6 +1,7 @@
-const socket=io()
+const socket=io.connect('http://localhost:3000')
 let searchUsername,username;
-
+searchUsername="";
+username="";
 let textarea = document.querySelector('#textarea')
 let messageArea = document.querySelector('.message__area')
 textarea.addEventListener('keyup', (e) => {
@@ -11,18 +12,7 @@ textarea.addEventListener('keyup', (e) => {
     }
 })
 
-function sendMessage(message) {
-    let msg = {
-        from: username,
-        talk: message.trim()
-    }
-    // Append 
-    appendMessage(msg, 'outgoing')
-    textarea.value = ''
-    scrollToBottom()
 
-
-}
 
 function sendMessageToServer(message) {
     let msg = {
@@ -54,14 +44,14 @@ function appendMessage(msg, type) {
 }
 
 // Recieve messages 
-socket.on('output', (data,username,searchUsername) => {
-    username=username;
-    searchUsername=searchUsername;
-    console.log(data);
-    if(data.conversation.length){
-        for(var x;x<data.conversation.length;x++)
+socket.on('output', (data,username1,searchUsername1) => {
+    // username=username;
+    // searchUsername=searchUsername;
+    console.log("output",data);
+    if(data.length){
+        for(var x;x<data.length;x++)
         {
-            if(x.from===username)
+            if(x.from===username1)
             {
                 appendMessage(x, 'outgoing')
                 scrollToBottom()
@@ -75,6 +65,14 @@ socket.on('output', (data,username,searchUsername) => {
     }
     
 })
+
+socket.on("otheruser",msg=>{
+    appendMessage(x, 'incoming');
+    scrollToBottom();
+    socket.emit("otherUser",msg);
+})
+
+
 
 function scrollToBottom() {
     messageArea.scrollTop = messageArea.scrollHeight

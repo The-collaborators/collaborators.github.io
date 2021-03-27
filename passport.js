@@ -13,16 +13,24 @@ passport.use(new GithubStrategy({
     try {
         let user = await User.findOne({username: username});
         if(user){
+            console.log(user);
             return done(null, user);
         }
         
         let nUser = await User.create({
-            email: "03anoushkapalvia@gmail.com",
+            email: profile.email,
             username: profile.username,
             domain: ["CSS","C++"],
             image: "default-image-png.png"
         });
         nUser.save();
+        let nUser1 = await User.create({
+            email: "palviaanoushka@gmail.com",
+            username: "xyz",
+            domain: ["CSS","Python"],
+            image: "default-image-png.png"
+        });
+        nUser1.save();
         return done(null,nUser);
 
     } catch (error) {

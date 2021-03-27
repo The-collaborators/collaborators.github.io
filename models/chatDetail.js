@@ -1,4 +1,5 @@
 //const { ObjectId } = require("mongodb");
+const { ObjectId } = require("bson");
 const mongoose = require("mongoose");
 
 
@@ -6,7 +7,7 @@ const mongoose = require("mongoose");
 const chatDetailSchema = mongoose.Schema({
     
     from: {
-        type: String,
+        type: ObjectId,
         //required: true
     },
     talk: {
