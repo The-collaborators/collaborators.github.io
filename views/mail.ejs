@@ -250,12 +250,12 @@
             </div>
         </div>
         
-        <button type="submit">MAIL IT</button>
+        <button type="submit" onclick="sendJSON();">MAIL IT</button>
         
     </div>
     </form>
     
-    <button onclick="sendJSON();">Send JSON</button>
+    <!-- <button onclick="sendJSON();">Send JSON</button> -->
 
 <script>
     const openModalButtons = document.querySelectorAll('[data-modal-target]')
@@ -301,7 +301,7 @@
         var items = document.getElementById("myDomain");
          itemList = items.getElementsByTagName("li");
         var selectValue = val.value;
-        console.log(itemList);
+        // console.log(itemList);
         var flag = 1;
         for (var i = 0; i < itemList.length; i++) {
             var text = itemList[i].innerHTML;
