@@ -87,7 +87,7 @@ router.post('/mail',[ensureAuthenticated,upload.array("file",5)], function(req,r
     
     var ans=JSON.stringify(req.body);
     ans=JSON.parse(ans);
-    //console.log(typeof(ans)," yeah");
+    // console.log(req.body,"body");
     var arr=[];
     for(var myKey in ans) {
         if(ans[myKey]==="JavaScript")
@@ -140,7 +140,6 @@ router.post('/mail',[ensureAuthenticated,upload.array("file",5)], function(req,r
                 console.log(mailList,"mail1");
             }
             //console.log(found[i]["domain"],found[i]["username"]);
-            
         }
         console.log(mailList,"mail");
         mailList.push("18bcs2152@cuchd.in");
