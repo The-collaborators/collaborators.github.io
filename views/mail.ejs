@@ -240,17 +240,17 @@
             
             <ul id="myDomain"></ul>
         </div>
-    <form onsubmit="func()" method="POST">
+    <form action="/dashboard/mail" method="POST" role="form" enctype="multipart/form-data">
         <div class="text_box">
             <textarea name="" id="" cols="30" rows="5" placeholder="Write something..."></textarea><br>
             <div class="file-upload">
-                <input class="file-upload__input" type="file" name="myFile[]" id="myFile" multiple>
+                <input class="file-upload__input" type="file" name="file" id="myFile" multiple>
                 <button class="file-upload__button" type="button">Choose File(s)</button>
                 <span class="file-upload__label"></span>
             </div>
         </div>
         
-        <button type="submit" onclick="sendJSON();">MAIL IT</button>
+        <button type="submit" >MAIL IT</button>
         
     </div>
     </form>
