@@ -145,23 +145,27 @@ router.post('/mail',[ensureAuthenticated,upload.array("file",5)], function(req,r
         // }
         console.log(mailList,"mail");
         mailList.push("18bcs2152@cuchd.in");
-        let mailOptions = {
-            from: 'palviaanoushka@gmail.com', // TODO: email sender
-            to: mailList, // TODO: email receiver
-            subject: 'Nodemailer - Test',
-            text: 'Wooohooo it works!!',
-            attachments:  fs
-            // { filename: 'uploads/profile.JPG', path: './images/profile.JPG' },
-            // { filename: 'images/coder girl.JPG', path: './images/coder girl.JPG' } // TODO: replace it with your own image
+        if(req.body.mail==="mail it")
+        {
+            let mailOptions = {
+                from: 'palviaanoushka@gmail.com', // TODO: email sender
+                to: mailList, // TODO: email receiver
+                subject: 'Nodemailer - Test',
+                text: 'Wooohooo it works!!',
+                attachments:  fs
+                // { filename: 'uploads/profile.JPG', path: './images/profile.JPG' },
+                // { filename: 'images/coder girl.JPG', path: './images/coder girl.JPG' } // TODO: replace it with your own image
+            
+            };
+            transporter.sendMail(mailOptions, (err, data) => {
+                if (err) {
+                    console.log(err);
+                    //return log('Error occurs');
+                }
+                console.log('Email sent!!!');
+            });
+        }
         
-        };
-        transporter.sendMail(mailOptions, (err, data) => {
-            if (err) {
-                console.log(err);
-                //return log('Error occurs');
-            }
-            console.log('Email sent!!!');
-        });
     });
     res.render('mail',{username:req.session.username});
 })
