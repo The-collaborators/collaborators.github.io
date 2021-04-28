@@ -86,32 +86,32 @@ router.post('/mail',[ensureAuthenticated,upload.array("file",5)], function(req,r
     
     //console.log(req.files);
     
-    var ans=JSON.stringify(req.body);
-    ans=JSON.parse(ans);
-    // console.log(req.body,"body");
-    var arr=[];
-    for(var myKey in ans) {
-        if(ans[myKey]==="JavaScript")
-        {
-            arr.push("JavaScript");
-        }
-        else if(ans[myKey]==="HTML")
-        {
-            arr.push("HTML");
-        }
-        else if(ans[myKey]==="CSS")
-        {
-            arr.push("CSS");
-        }
-        else if(ans[myKey]==="C++")
-        {
-            arr.push("C++");
-        }
-        else{
-            arr.push("Python");
-        }
-     }
-     console.log(arr,"domain");
+    // var ans=JSON.stringify(req.body);
+    // ans=JSON.parse(ans);
+    // //console.log(typeof(ans)," yeah");
+    // var arr=[];
+    // for(var myKey in ans) {
+    //     if(ans[myKey]==="JavaScript")
+    //     {
+    //         arr.push("JavaScript");
+    //     }
+    //     else if(ans[myKey]==="HTML")
+    //     {
+    //         arr.push("HTML");
+    //     }
+    //     else if(ans[myKey]==="CSS")
+    //     {
+    //         arr.push("CSS");
+    //     }
+    //     else if(ans[myKey]==="C++")
+    //     {
+    //         arr.push("C++");
+    //     }
+    //     else{
+    //         arr.push("Python");
+    //     }
+    //  }
+    //  console.log(arr,"domain");
 
     let transporter = nodemailer.createTransport({
         service: 'gmail',
@@ -130,7 +130,11 @@ router.post('/mail',[ensureAuthenticated,upload.array("file",5)], function(req,r
             fs.push({filename:req.files[i].filename,path:"./public/uploads/"+req.files[i].filename});
         }
     }
+<<<<<<< HEAD
     console.log(fs);
+=======
+    console.log(req.files,"files");
+>>>>>>> b0332838c772c3b8f24b31bdf775c412caf0d18a
     var mailList=[];
     User.find({},function(err,found){
         // for(var i=0;i<found.length;i++)
@@ -141,6 +145,7 @@ router.post('/mail',[ensureAuthenticated,upload.array("file",5)], function(req,r
         //         mailList.push(found[i].email);
         //         console.log(mailList,"mail1");
         //     }
+<<<<<<< HEAD
         //     console.log(found[i]["domain"],found[i]["username"]);
         // }
         console.log(mailList,"mail");
@@ -153,15 +158,34 @@ router.post('/mail',[ensureAuthenticated,upload.array("file",5)], function(req,r
             attachments:fs
             // { filename: 'uploads/profile.JPG', path: './images/profile.JPG' },
             // { filename: 'images/coder girl.JPG', path: './images/coder girl.JPG' } // TODO: replace it with your own image
+=======
+        //     //console.log(found[i]["domain"],found[i]["username"]);
+            
+        // }
+        console.log(mailList,"mail");
+        mailList.push("18bcs2152@cuchd.in");
+        if(req.body.mail==="mail it")
+        {
+            let mailOptions = {
+                from: 'palviaanoushka@gmail.com', // TODO: email sender
+                to: mailList, // TODO: email receiver
+                subject: 'Nodemailer - Test',
+                text: 'Wooohooo it works!!',
+                attachments:  fs
+                // { filename: 'uploads/profile.JPG', path: './images/profile.JPG' },
+                // { filename: 'images/coder girl.JPG', path: './images/coder girl.JPG' } // TODO: replace it with your own image
+            
+            };
+            transporter.sendMail(mailOptions, (err, data) => {
+                if (err) {
+                    console.log(err);
+                    //return log('Error occurs');
+                }
+                console.log('Email sent!!!');
+            });
+        }
+>>>>>>> b0332838c772c3b8f24b31bdf775c412caf0d18a
         
-        };
-        transporter.sendMail(mailOptions, (err, data) => {
-            if (err) {
-                console.log(err);
-                //return log('Error occurs');
-            }
-            console.log('Email sent!!!');
-        });
     });
     res.render('mail',{username:req.session.username});
 })
@@ -225,7 +249,6 @@ router.post('/search',function(req,res,next){
 });
 
 router.get("/search/chat/:searchUserID",function(req,res,next){
-        
         const io = req.io;
         let min,max,searchUser;
         User.findById(req.params.searchUserID,function(err,found){
@@ -246,39 +269,60 @@ router.get("/search/chat/:searchUserID",function(req,res,next){
     
             console.log('a user connected');
             //console.log("hi",typeof(msg));
+            const chatArr=[];
+            chat.find({user1:min,user2:max},function(err,found){
+                
+                for(let i=0;i<found.length;i++)
+                {
+                    chatDetail.findById(found[i].conversation,function(err,foundUser){
+                        
+                        
+                            if(foundUser!=null)
+                            {
+                                chatArr.push(foundUser);
+                                
+                            }
+                        
+                    });
+                    console.log("chat",chatArr);
+                }
+                //console.log("chat",chatArr);
+                //socket.emit("output",(chatArr,req.session.userID,req.params.searchUserID));
+            });
             socket.on("input",msg=>{
                 msg.from=req.session.userID;
                 let nChatDetail=new chatDetail({
                     from:req.session.userID,
                     talk:msg.talk
-                })
-                
+                });
+                nChatDetail.save(function(err){
+                    if(err)
+                    {
+                        console.log("error chatdeatil");
+                    }
+                    else{
+                        console.log("chatdetail saved",nChatDetail);
+                    }
+                });
                 let nChat = new chat({
                     user1:min,
                     user2:max,
-                    conversation:nChatDetail
+                    conversation:nChatDetail._id
                 });
-                nChat.save();
-                nChatDetail.save();
-                console.log(typeof(msg));
+                nChat.save(function(err){
+                    if(err)
+                    {
+                        console.log("error chat");
+                    }
+                    else{
+                        console.log("chat saved",nChat);
+                    }
+                });
+                
+                //nChatDetail.save();
+                //console.log(typeof(msg));
             });
-            let chatArr=[];
-            chat.find({user1:min,user2:max},function(err,found){
-                for(let i=0;i<found.length;i++)
-                {
-                    chatDetail.findById(found[i].conversation,function(err,foundUser){
-                        //console.log("found",foundUser);
-                        if(foundUser!=null)
-                        {
-                            chatArr.push(foundUser);
-                        }
-                        
-                        
-                    })
-                }
-                console.log("chat",chatArr);
-                socket.emit("output",(chatArr,req.session.userID,req.params.searchUserID));
-            })
+            
             socket.on('disconnect', () => {
               console.log('user disconnected');
             });
