@@ -1,48 +1,108 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab&display=swap" rel="stylesheet">
     <title>domain</title>
     <style>
         *,
         *::after,
         *::before {
+            margin:0;
+            padding:0;
             box-sizing: border-box;
+            font-family: 'Roboto Slab', serif;
         }
 
 
-        body{
-            background-color: #423735;
-        }
-        .outer {
+        body {
             width: 100vw;
             height: 100vh;
-            /* display: grid;
-            place-items: center; */
+            background-color:#2e3141;
+            background-image: linear-gradient(rgba(255,255,255,0.2),rgba(255,255,255,0));
         }
 
-        .text_box {
-            width: 50%;
-            border: 2px solid #FFC300;
-            display: flex;
-            flex-direction: column;
-            padding: 25px;
-            border-radius: 10px;
-            margin:100px auto;
+        .username{
+        height:20%;
+        width:100%;
+        font-size:30px;
+        text-transform: uppercase;
+        padding:50px;
+        font-weight: bolder;
+        color: white;
+        letter-spacing: 2px;
+        text-shadow: 4px 3px black;
         }
-        textarea::placeholder{
+        h3{
+            font-size:16px;
+            text-transform: capitalize;
+            font-weight: bolder;
+            color: white;
+            letter-spacing: 2px;
+            text-align: center;
+            text-shadow: 2px 2px navy;
+        }
+
+        .outer {
+            height:54%;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        .text_box1 {
+            width: 30%;
+            /* border: 2px solid white; */
+            float:left;
+            padding: 25px;
+            box-shadow: 0 0 10px 0px white;
+            border-radius: 20px;
+        }
+        .text_box2 {
+            /* border: 2px solid white; */
+            padding:0 30px 30px 30px;
+            box-shadow: 0 0 10px 0px white;
+            border-radius: 20px;
+        }
+        form{
+            width:30%;
+        }
+
+        input[type=submit]{
+            position: absolute;
+            bottom: 100px;
+            left: 50%;
+            padding:8px;
+            background:transparent;
+            border:2px solid white;
+            color:white;
+            transition:0.3s;
+            width:100px;
+            border-radius:10px;
+            cursor:pointer;
+        }
+        input[type=submit]:hover{
+            color:#2e3141;
+            font-weight: bolder;
+            background-color: rgba(255,255,255,0.3);
+        }
+        textarea::placeholder {
             color: white;
         }
+
         textarea {
-            /* padding: 10px; */
-            color: #FFC300;
+            padding: 10px;
+            /* color: #FFC300; */
             font-size: 15px;
             outline: none;
             border: none;
             background-color: transparent;
-            color:#FFC300;
+            color: white;
+            /* padding:10px; */
+            margin:10px 0;
         }
 
         .file-upload {
@@ -57,24 +117,24 @@
         }
 
         .file-upload__button {
-            -webkit-appearance: none;
             background: transparent;
-            border: 2px solid #FFC300;
-            border-radius: 4px;
+            border: 2px solid white;
+            border-radius: 10px;
             outline: none;
             padding: 0.5em 0.8em;
             margin-right: 15px;
-            color: #FFC300;
+            color: white;
             font-size: 1em;
-            font-family: "Quicksand", sans-serif;
             font-weight: bold;
             cursor: pointer;
             transition: 0.5s;
         }
-        .file-upload__button:hover{
-            color: #423735;
-            background: #FFC300;
+
+        .file-upload__button:hover {
+            color: #2e3141;
+            background:rgba(255,255,255,0.3);
         }
+
         /* .file-upload__button:active {
             color: #423735;
             background: #FFC300;
@@ -82,32 +142,39 @@
 
         .file-upload__label {
             max-width: 500px;
-            font-size: 0.95em;
+            font-size: 0.8rem;
             text-overflow: ellipsis;
             overflow: hidden;
             white-space: nowrap;
-            font-family: "Quicksand", sans-serif;
-            color: #FFC300;
+            color: white;
         }
 
-        @media screen and (max-width: 630px){
-			.text_box{
-                width:90%;
+        @media screen and (max-width: 630px) {
+            .text_box {
+                width: 90%;
             }
-		}
+        }
 
 
         .mainbutton {
-            width:40%;
+            width: 40%;
             cursor: pointer;
             padding: 10px 15px;
-            border: none;
+            border: 2px solid white;
             outline: none;
-            background-color: paleturquoise;
-            margin: 0px auto;
-            margin-bottom:0px;
-            font-weight: bolder;
+            background-color: transparent;
+            margin-bottom: 0px;
+            
+            border-radius: 10px;
+            color:white;
+            transition: 0.3s;
         }
+        .mainbutton:hover{
+            color:#2e3141;
+            font-weight: bolder;
+            background-color: rgba(255,255,255,0.3);
+        }
+
 
         .modal {
             position: fixed;
@@ -180,7 +247,7 @@
         }
 
         .removable {
-            background-color: rgb(235, 210, 163);
+            background-color: rgba(255,255,255,0.3);
             width: 40%;
             height: 30px;
             display: flex;
@@ -188,32 +255,28 @@
             align-items: center;
             margin: 10px 27%;
             padding-left: 10px;
+            color: white;
+            font-weight: bolder;
         }
 
         .removable button {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 20px;
-            height: 20px;
             cursor: pointer;
             border: none;
             outline: none;
-            background: none;
-            background-color: rgba(255,165,0,0.3);
-            padding: 5px;
-            border-radius: 50%;
             margin-right: 10px;
-        }
-        .removable button:hover{
-            background-color:rgba(255,165,0,1);
+            background-color: transparent;
+        } 
+
+        .removable button:hover {
+            cursor:pointer;
         }
     </style>
 </head>
 
 <body>
-    <h4>hello <%= username %> </h4>
-    
+    <h4 class="username">hello <%= username %>
+    </h4>
+
     <div class="modal" id="modal">
         <div class="modal-header">
             <div class="title">Choose a domain</div>
@@ -229,123 +292,122 @@
             </select>
         </div>
     </div>
-    
-    
+
+
     <div id="overlay"></div>
-    
+    <h3>Need collaborators of domain :</h3>
     <div class="outer">
-            <div class="text_box">
-                <h3>Need collaborators of domain :</h3>
-                <button class="mainbutton" data-modal-target="#modal">Edit Domain</button>
-                
-                <ul id="myDomain"></ul>
-            </div>
-            <form method="POST">
-            <div class="text_box">
-                <textarea  id="txt" cols="30" rows="5" placeholder="Write something..."></textarea><br>
+        <div class="text_box1">
+            
+            <button class="mainbutton" data-modal-target="#modal">Edit Domain</button>
+
+            <ul id="myDomain"></ul>
+        </div>
+        <form method="POST" onsubmit="return sendJSON()">
+            <div class="text_box2">
+                <textarea id="txt" cols="30" rows="5" placeholder="Write something..."></textarea><br>
                 <div class="file-upload">
                     <input class="file-upload__input" type="file" name="myFile[]" id="myFile" multiple>
                     <button class="file-upload__button" type="button">Choose File(s)</button>
                     <span class="file-upload__label"></span>
                 </div>
             </div>
-            
-            <button type="submit" onclick="sendJSON();">MAIL IT</button>
+            <input type="submit" value="MAIL IT">
+        </form>
             <!-- <button onclick="sendJSON();">check</button> -->
-        </div>
-    </form>
-    
-    <button onclick="sendJSON();">Send JSON</button>
+    </div>
+   
 
-<script>
-    const openModalButtons = document.querySelectorAll('[data-modal-target]')
-    const closeModalButtons = document.querySelectorAll('[data-close-button]')
-    const overlay = document.getElementById('overlay')
+    <!-- <button class="shift" onclick="sendJSON();">Send JSON</button> -->
 
-    openModalButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            const modal = document.querySelector(button.dataset.modalTarget)
-            openModal(modal)
+    <script>
+        const openModalButtons = document.querySelectorAll('[data-modal-target]')
+        const closeModalButtons = document.querySelectorAll('[data-close-button]')
+        const overlay = document.getElementById('overlay')
+
+        openModalButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const modal = document.querySelector(button.dataset.modalTarget)
+                openModal(modal)
+            })
         })
-    })
 
-    overlay.addEventListener('click', () => {
-        const modals = document.querySelectorAll('.modal.active')
-        modals.forEach(modal => {
-            closeModal(modal)
+        overlay.addEventListener('click', () => {
+            const modals = document.querySelectorAll('.modal.active')
+            modals.forEach(modal => {
+                closeModal(modal)
+            })
         })
-    })
 
-    closeModalButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            const modal = button.closest('.modal')
-            closeModal(modal)
+        closeModalButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const modal = button.closest('.modal')
+                closeModal(modal)
+            })
         })
-    })
 
-    function openModal(modal) {
-        if (modal == null) return
-        modal.classList.add('active')
-        overlay.classList.add('active')
-    }
-
-    function closeModal(modal) {
-        if (modal == null) return
-        modal.classList.remove('active')
-        overlay.classList.remove('active')
-    }
-
-    var obj={
-        finalList:[],
-        text:"",
-        fileList:[]
-    }
-
-    var itemList;
-    function getSelectValue() {
-        var val = document.getElementById('list');
-        var items = document.getElementById("myDomain");
-         itemList = items.getElementsByTagName("li");
-        var selectValue = val.value;
-        // console.log(itemList);
-        var flag = 1;
-        for (var i = 0; i < itemList.length; i++) {
-            var text = itemList[i].innerHTML;
-            var len = itemList[i].innerHTML.length;
-            var finalText = text.substring(0, len - 33);
-            if (finalText == selectValue) {
-                flag = 0;
-                break;
-            }
+        function openModal(modal) {
+            if (modal == null) return
+            modal.classList.add('active')
+            overlay.classList.add('active')
         }
-        if (flag == 1) {
-            var node = document.createElement("LI");
-            var textnode = document.createTextNode(selectValue);
-            obj.finalList.push(selectValue);
-            var button = document.createElement("button");
-            button.classList.add('closex');
-            button.innerHTML = "x";
-            node.appendChild(textnode);
-            node.appendChild(button);
-            node.classList.add('removable');
-            items.appendChild(node);
-            button.addEventListener("click", function () {
-                var l=button.parentElement.innerHTML.length;
-                var val=button.parentElement.innerHTML.substring(0,l-33);
-                var index = obj.finalList.indexOf(val);
-                if (index > -1) {
-                    obj.finalList.splice(index, 1);
+
+        function closeModal(modal) {
+            if (modal == null) return
+            modal.classList.remove('active')
+            overlay.classList.remove('active')
+        }
+
+        var obj = {
+            finalList: [],
+            text: "",
+            fileList: []
+        }
+
+        var itemList;
+        function getSelectValue() {
+            var val = document.getElementById('list');
+            var items = document.getElementById("myDomain");
+            itemList = items.getElementsByTagName("li");
+            var selectValue = val.value;
+            var flag = 1;
+            for (var i = 0; i < itemList.length; i++) {
+                var text = itemList[i].innerHTML;
+                var len = itemList[i].innerHTML.length;
+                var finalText = text.substring(0, len - 33);
+                if (finalText == selectValue) {
+                    flag = 0;
+                    break;
                 }
-                items.removeChild(button.parentElement);
-            });
+            }
+            if (flag == 1) {
+                var node = document.createElement("LI");
+                var textnode = document.createTextNode(selectValue);
+                obj.finalList.push(selectValue);
+                var button = document.createElement("button");
+                button.classList.add('closex');
+                button.innerHTML = "❌";
+                node.appendChild(textnode);
+                node.appendChild(button);
+                node.classList.add('removable');
+                items.appendChild(node);
+                button.addEventListener("click", function () {
+                    var l = button.parentElement.innerHTML.length;
+                    var val = button.parentElement.innerHTML.substring(0, l - 33);
+                    var index = obj.finalList.indexOf(val);
+                    if (index > -1) {
+                        obj.finalList.splice(index, 1);
+                    }
+                    items.removeChild(button.parentElement);
+                });
+            }
+            else
+                alert(finalText + " is Already Added");
         }
-        else
-            alert(finalText + " is Already Added");
-    }
 
-    
-    
-    Array.prototype.forEach.call(
+
+
+        Array.prototype.forEach.call(
             document.querySelectorAll(".file-upload__button"),
             function (button) {
                 const hiddenInput = button.parentElement.querySelector(
@@ -366,34 +428,33 @@
                     const filenameList = Array.prototype.map.call(hiddenInput.files, function (
                         file
                     ) {
-                        obj.fileList.push(file.name);
+                        obj.fileList.push(file);
                         return file.name;
                     });
 
                     label.textContent = filenameList.join(", ") || defaultLabelText;
                     label.title = label.textContent;
-                    
+
                 });
             }
         );
 
-        
-        function sendJSON()
-        {
-            obj.text=document.getElementById('txt').value;
+
+        function sendJSON() {
+            obj.text = document.getElementById('txt').value;
             console.log(obj);
-            var myJSON=JSON.stringify({"finalList":obj.finalList,"text":obj.text,"fileList":obj.fileList});
-            console.log(myJSON);
-               let xhr = new XMLHttpRequest(); 
-               let url = "http://localhost:3000/dashboard/mail"; //jahan catch krna h
-           
-               xhr.open("POST", url, true); 
-      
-               xhr.setRequestHeader("Content-Type", "application/json"); 
-     
-      
-               xhr.send(myJSON); 
-        } 
-</script>
+            var myJSON = JSON.stringify({ "finalList": obj.finalList, "text": obj.text, "fileList": obj.fileList });
+            // console.log(myJSON);
+            let xhr = new XMLHttpRequest();
+            let url = "http://localhost:3000/dashboard/mail"; //jahan catch krna h
+
+            xhr.open("POST", url, true);
+
+            xhr.setRequestHeader("Content-Type", "application/json");
+
+            xhr.send(myJSON);
+        }
+    </script>
 </body>
+
 </html>

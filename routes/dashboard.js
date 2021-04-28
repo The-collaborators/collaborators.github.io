@@ -8,6 +8,7 @@ const flash=require('connect-flash');
 //const io = require('socket.io')(http);
 const chatDetail = require("../models/chatDetail");
 const chat = require("../models/chats");
+const { getMaxListeners } = require('../models/chatDetail');
 
 
 
@@ -129,26 +130,27 @@ router.post('/mail',[ensureAuthenticated,upload.array("file",5)], function(req,r
             fs.push({filename:req.files[i].filename,path:"./public/uploads/"+req.files[i].filename});
         }
     }
+    console.log(fs);
     var mailList=[];
     User.find({},function(err,found){
-        for(var i=0;i<found.length;i++)
-        {
-            if(found[i].domain.some(item => arr.includes(item))===true)
-            {
-                //console.log(found[i].email,"mail");
-                mailList.push(found[i].email);
-                console.log(mailList,"mail1");
-            }
-            //console.log(found[i]["domain"],found[i]["username"]);
-        }
+        // for(var i=0;i<found.length;i++)
+        // {
+        //     if(found[i].domain.some(item => arr.includes(item))===true)
+        //     {
+        //         //console.log(found[i].email,"mail");
+        //         mailList.push(found[i].email);
+        //         console.log(mailList,"mail1");
+        //     }
+        //     console.log(found[i]["domain"],found[i]["username"]);
+        // }
         console.log(mailList,"mail");
-        mailList.push("18bcs2152@cuchd.in");
+        mailList.push("akshat.hhc@gmail.com");
         let mailOptions = {
-            from: 'palviaanoushka@gmail.com', // TODO: email sender
-            to: mailList, // TODO: email receiver
+            from: 'aksjain891999@gmail.com', // TODO: email sender
+            to: 'akshat.hhc@gmail.com', // TODO: email receiver
             subject: 'Nodemailer - Test',
             text: 'Wooohooo it works!!',
-            attachments:  fs
+            attachments:fs
             // { filename: 'uploads/profile.JPG', path: './images/profile.JPG' },
             // { filename: 'images/coder girl.JPG', path: './images/coder girl.JPG' } // TODO: replace it with your own image
         
