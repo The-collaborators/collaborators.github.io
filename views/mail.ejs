@@ -71,10 +71,10 @@
             width:30%;
         }
 
-        input[type=submit]{
+        .mailit{
             position: absolute;
             bottom: 100px;
-            left: 50%;
+            left: 47%;
             padding:8px;
             background:transparent;
             border:2px solid white;
@@ -84,7 +84,7 @@
             border-radius:10px;
             cursor:pointer;
         }
-        input[type=submit]:hover{
+        .mailit:hover{
             color:#2e3141;
             font-weight: bolder;
             background-color: rgba(255,255,255,0.3);
@@ -245,6 +245,24 @@
             outline: none;
             border-radius: 8px;
         }
+        .logout{
+            width:125px;
+            padding:8px;
+            position:absolute;
+            right:50px;
+            top:50px;
+            background-color: transparent;
+            border:2px solid white;
+            color:white;
+            border-radius:10px;
+            cursor:pointer;
+            transition:0.3s;
+        }
+        .logout:hover{
+            font-weight: bolder;
+            color:#2e3141;
+            background-color: rgba(255,255,255,0.3);
+        }
 
         .removable {
             background-color: rgba(255,255,255,0.3);
@@ -314,7 +332,7 @@
         </div>
         <!-- <input type="submit" name="mail" value="MAIL IT"> -->
         
-        <button type="submit" name="mail" value="mail it"  >MAIL IT</button>
+        <button class="mailit" type="submit" name="mail" value="mail it"  >MAIL IT</button>
         
     
     </form>

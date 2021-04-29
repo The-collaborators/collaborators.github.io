@@ -147,13 +147,13 @@ router.post('/mail',[ensureAuthenticated,upload.array("file",5)], function(req,r
             
         // }
         
-        mailList.push("18bcs2152@cuchd.in");
+        mailList.push("aksjain891999@gmail.com");
         console.log(mailList,"mail");
         if(req.body.mail==="mail it")
         {
             //console.log(req.body.Write,"text");
             let mailOptions = {
-                from: 'palviaanoushka@gmail.com', // TODO: email sender
+                from: 'aksjain891999@gmail.com', // TODO: email sender
                 to: mailList, // TODO: email receiver
                 subject: 'Nodemailer - Test',
                 text: 'hello',

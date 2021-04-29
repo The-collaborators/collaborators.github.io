@@ -39,7 +39,7 @@
       border: 2px solid grey;
       border-radius: 100%;
       overflow: hidden;
-      margin:50px;
+      margin:50px 50px 20px 50px;
     }
     .username{
       height:20%;
@@ -99,6 +99,11 @@
       cursor:pointer;
       padding:5px;
     }
+    span{
+      color:white;
+      text-transform: uppercase;
+      font-weight: bolder;
+    }
     .bg{
       position: absolute;
     width: 50%;
@@ -127,21 +132,21 @@
         </form>
 
         <form onsubmit="checkextension()" method="post" role="form" enctype="multipart/form-data">
-            <img id="resize" src="/uploads/<%=img_name%>" alt="<%=img_name%>">
+            <img id="resize" src="/uploads/<%=img_name%>" alt="<%=img_name%>"><br>
             <!-- <label for="file" >Upload File</label> -->
             <% if(domain.length==0){%>
-              <p style="color: white; font-size: 0.8rem;">No domain provided</p>
+              <span>No domain provided</span>
             <%}else{%>
-              <p style="color: white; font-size: 0.8rem;">Domain : </p>
+              <span>Domain : </span>
               <%for(let i=0;i<domain.length;i++){%>
-                <p style="color: white; font-size: 0.8rem;"><%=domain[i]%> </p>
+                <span><%=domain[i]%> </span>
                 <%if(i!=domain.length-1){%>
-                  <p style="color: white; font-size: 0.8rem;"> , </p>
+                  <span> , </span>
                 <%}%>
               <%}%>
 
             <% } %> 
-            <p style="color: white; font-size: 0.8rem;">* Valid file types are :.png, .jpeg, .jpg, .gif</p>
+            <p style="color: white; font-size: 0.8rem; margin:15px 0 5px 0;">* Valid file types are :.png, .jpeg, .jpg, .gif</p>
             <input type="file" class="form-control" name="file" id="fUpload" required /><br>
             <input type="submit" name="upload" value="Upload" id="shiftupload" class="btn1">
         </form>
