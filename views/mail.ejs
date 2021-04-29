@@ -70,11 +70,29 @@
         form{
             width:30%;
         }
-
+        .sendjson{
+            width:350px;
+            position: absolute;
+            bottom: 250px;
+            left: 20%;
+            padding:8px;
+            background:transparent;
+            border:2px solid white;
+            color:white;
+            transition:0.3s;
+            width:100px;
+            border-radius:10px;
+            cursor:pointer;
+        }
+        .sendjson:hover{
+            color:#2e3141;
+            font-weight: bolder;
+            background-color: rgba(255,255,255,0.3);
+        }
         .mailit{
             position: absolute;
-            bottom: 100px;
-            left: 47%;
+            bottom: 200px;
+            left: 73%;
             padding:8px;
             background:transparent;
             border:2px solid white;
@@ -315,11 +333,11 @@
     <h3>Need collaborators of domain :</h3>
     <div class="outer">
         <div class="text_box1">
-            <button class="mainbutton" data-modal-target="#modal">Edit Domain</button>
+            <button class="mainbutton" data-modal-target="#modal">Add Domain</button>
             
             <ul id="myDomain"></ul>
         </div>
-    <form action="/dashboard/mail" method="POST" role="form" enctype="multipart/form-data">
+    <form action="/dashboard/mail" method="POST" role="form" enctype="multipart/form-data" onsubmit="return checkempty()">
         <div class="text_box2">
             <textarea name="Write" id="" cols="30" rows="5" placeholder="Write something..."></textarea><br>
             <div class="file-upload">
@@ -332,15 +350,13 @@
         </div>
         <!-- <input type="submit" name="mail" value="MAIL IT"> -->
         
-        <button class="mailit" type="submit" name="mail" value="mail it"  >MAIL IT</button>
-        
-    
+        <button class="mailit" type="submit" name="mail" value="mail it">MAIL IT</button>
     </form>
     </div>
     <form action="/dashboard/logout" method="GET">
         <button class="logout" type="submit">LOG OUT</button>
       </form>
-    <!-- <button onclick="sendJSON();">Send JSON</button> -->
+    <!-- <button class="sendjson" onclick="sendJSON();">Submit Domain</button> -->
 
 <script>
     const openModalButtons = document.querySelectorAll('[data-modal-target]')
@@ -382,8 +398,6 @@
 
         var obj = {
             finalList: [],
-            text: "",
-            fileList: []
         }
 
         var itemList;
@@ -450,7 +464,7 @@
                     const filenameList = Array.prototype.map.call(hiddenInput.files, function (
                         file
                     ) {
-                        obj.fileList.push(file);
+                        // obj.fileList.push(file);
                         return file.name;
                     });
 
@@ -461,12 +475,22 @@
             }
         );
 
+        function checkempty(){
+            if(obj.finalList.length==0){
+                alert("No domains selected... please add the domain");
+                return false;
+            }
+            else{
+                alert("Domains successfully Submitted. Your email will be sent!");
+                sendJSON();
+                return true;
+            }
+        }
 
         function sendJSON() {
-            obj.text = document.getElementById('txt').value;
-            console.log(obj);
-            var myJSON = JSON.stringify({ "finalList": obj.finalList, "text": obj.text, "fileList": obj.fileList });
-            // console.log(myJSON);
+            // console.log(obj);
+            var myJSON = JSON.stringify({ "finalList": obj.finalList});
+            console.log(myJSON);
             let xhr = new XMLHttpRequest();
             let url = "http://localhost:3000/dashboard/mail"; //jahan catch krna h
 
