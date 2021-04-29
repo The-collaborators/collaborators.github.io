@@ -87,32 +87,32 @@ router.post('/mail',[ensureAuthenticated,upload.array("file",5)], function(req,r
     
     //console.log(req.files);
     
-    // var ans=JSON.stringify(req.body);
-    // ans=JSON.parse(ans);
-    // //console.log(typeof(ans)," yeah");
-    // var arr=[];
-    // for(var myKey in ans) {
-    //     if(ans[myKey]==="JavaScript")
-    //     {
-    //         arr.push("JavaScript");
-    //     }
-    //     else if(ans[myKey]==="HTML")
-    //     {
-    //         arr.push("HTML");
-    //     }
-    //     else if(ans[myKey]==="CSS")
-    //     {
-    //         arr.push("CSS");
-    //     }
-    //     else if(ans[myKey]==="C++")
-    //     {
-    //         arr.push("C++");
-    //     }
-    //     else{
-    //         arr.push("Python");
-    //     }
-    //  }
-    //  console.log(arr,"domain");
+    var ans=JSON.stringify(req.body);
+    ans=JSON.parse(ans);
+    //console.log(typeof(ans)," yeah");
+    var arr=[];
+    for(var myKey in ans) {
+        if(ans[myKey]==="JavaScript")
+        {
+            arr.push("JavaScript");
+        }
+        else if(ans[myKey]==="HTML")
+        {
+            arr.push("HTML");
+        }
+        else if(ans[myKey]==="CSS")
+        {
+            arr.push("CSS");
+        }
+        else if(ans[myKey]==="C++")
+        {
+            arr.push("C++");
+        }
+        else{
+            arr.push("Python");
+        }
+     }
+     console.log(arr,"domain");
 
     let transporter = nodemailer.createTransport({
         service: 'gmail',
@@ -147,7 +147,7 @@ router.post('/mail',[ensureAuthenticated,upload.array("file",5)], function(req,r
             
         // }
         
-        mailList.push("aksjain891999@gmail.com");
+        mailList.push("18bcs2152@cuchd.in");
         console.log(mailList,"mail");
         if(req.body.mail==="mail it")
         {
@@ -168,11 +168,13 @@ router.post('/mail',[ensureAuthenticated,upload.array("file",5)], function(req,r
                     console.log(err);
                     //return log('Error occurs');
                 }
+                 
                 console.log('Email sent!!!');
             });
         }
         
     });
+    
     res.render('mail',{username:req.session.username});
 })
 
