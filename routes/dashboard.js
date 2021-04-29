@@ -44,7 +44,8 @@ router.get('/',ensureAuthenticated, (req,res) => {
     //res.send(req.flash('message'));
     
     console.log("hello "+res.locals.message);
-    res.render('dashboard', {username: req.session.username, img_name: req.session.image});
+    console.log(req.session.domain);
+    res.render('dashboard', {username: req.session.username, img_name: req.session.image,domain:req.session.domain});
 })
 
 router.post('/',[upload.single("file")],(req,res)=>{
@@ -74,7 +75,7 @@ router.post('/',[upload.single("file")],(req,res)=>{
         })
 
     }
-    res.render("dashboard",{username:req.session.username,img_name:req.session.image});
+    res.render("dashboard",{username:req.session.username,img_name:req.session.image,domain:req.session.domain});
 
 })
 router.get('/mail',[ensureAuthenticated],function(req,res,next){
@@ -115,6 +116,7 @@ router.post('/mail',[ensureAuthenticated,upload.array("file",5)], function(req,r
 
     let transporter = nodemailer.createTransport({
         service: 'gmail',
+        
         auth: {
             user: process.env.EMAIL , // TODO: your gmail account 
             pass:  process.env.PASSWORD // TODO: your gmail password
@@ -144,15 +146,17 @@ router.post('/mail',[ensureAuthenticated,upload.array("file",5)], function(req,r
         //     //console.log(found[i]["domain"],found[i]["username"]);
             
         // }
-        console.log(mailList,"mail");
+        
         mailList.push("18bcs2152@cuchd.in");
+        console.log(mailList,"mail");
         if(req.body.mail==="mail it")
         {
+            //console.log(req.body.Write,"text");
             let mailOptions = {
                 from: 'palviaanoushka@gmail.com', // TODO: email sender
                 to: mailList, // TODO: email receiver
                 subject: 'Nodemailer - Test',
-                text: 'Wooohooo it works!!',
+                text: 'hello',
                 attachments:  fs
                 // { filename: 'uploads/profile.JPG', path: './images/profile.JPG' },
                 // { filename: 'images/coder girl.JPG', path: './images/coder girl.JPG' } // TODO: replace it with your own image
@@ -160,6 +164,7 @@ router.post('/mail',[ensureAuthenticated,upload.array("file",5)], function(req,r
             };
             transporter.sendMail(mailOptions, (err, data) => {
                 if (err) {
+
                     console.log(err);
                     //return log('Error occurs');
                 }
@@ -212,7 +217,7 @@ router.post('/search',function(req,res,next){
     console.log("name"+ name);
     if(name===req.session.username)
     {
-        res.render("dashboard",{username:req.session.username,img_name:req.session.image});
+        res.render("dashboard",{username:req.session.username,img_name:req.session.image,domain:req.session.domain});
     }
     else
     {
