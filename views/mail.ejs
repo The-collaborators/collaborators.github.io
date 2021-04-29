@@ -274,8 +274,7 @@
 </head>
 
 <body>
-    <h4 class="username">hello <%= username %>
-    </h4>
+    <h4 class="username">hello <%= username %></h4>
 
     <div class="modal" id="modal">
         <div class="modal-header">
@@ -297,66 +296,23 @@
     <div id="overlay"></div>
     <h3>Need collaborators of domain :</h3>
     <div class="outer">
-<<<<<<< HEAD
         <div class="text_box1">
-            
             <button class="mainbutton" data-modal-target="#modal">Edit Domain</button>
-
             <ul id="myDomain"></ul>
         </div>
-        <form method="POST" onsubmit="return sendJSON()">
+        <form action="/dashboard/mail" method="POST" role="form" enctype="multipart/form-data">
             <div class="text_box2">
-                <textarea id="txt" cols="30" rows="5" placeholder="Write something..."></textarea><br>
+                <textarea name="" id="" cols="30" rows="5" placeholder="Write something..."></textarea><br>
                 <div class="file-upload">
-                    <input class="file-upload__input" type="file" name="myFile[]" id="myFile" multiple>
+                    <input class="file-upload__input" type="file" name="file" id="myFile" multiple>
                     <button class="file-upload__button" type="button">Choose File(s)</button>
                     <span class="file-upload__label"></span>
                 </div>
             </div>
-            <input type="submit" value="MAIL IT">
+            <input type="submit" name="mail" value="MAIL IT">
         </form>
-            <!-- <button onclick="sendJSON();">check</button> -->
     </div>
-   
 
-    <!-- <button class="shift" onclick="sendJSON();">Send JSON</button> -->
-
-    <script>
-        const openModalButtons = document.querySelectorAll('[data-modal-target]')
-        const closeModalButtons = document.querySelectorAll('[data-close-button]')
-        const overlay = document.getElementById('overlay')
-
-        openModalButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                const modal = document.querySelector(button.dataset.modalTarget)
-                openModal(modal)
-            })
-=======
-        <div class="text_box">
-            <h3>Need collaborators of domain :</h3>
-            <button class="mainbutton" data-modal-target="#modal">Edit Domain</button>
-            
-            <ul id="myDomain"></ul>
-        </div>
-    <form action="/dashboard/mail" method="POST" role="form" enctype="multipart/form-data">
-        <div class="text_box">
-            <textarea name="" id="" cols="30" rows="5" placeholder="Write something..."></textarea><br>
-            <div class="file-upload">
-                <input class="file-upload__input" type="file" name="file" id="myFile" multiple>
-                <button class="file-upload__button" type="button">Choose File(s)</button>
-                <span class="file-upload__label"></span>
-            </div>
-            
-            <!-- <button type="submit" onclick="sendJSON();">MAIL IT</button> -->
-            <!-- <button onclick="sendJSON();">check</button> -->
-        </div>
-        
-        <button type="submit" name="mail" value="mail it" >MAIL IT</button>
-        
-    </div>
-    </form>
-    
-    <!-- <button onclick="sendJSON();">Send JSON</button> -->
 
 <script>
     const openModalButtons = document.querySelectorAll('[data-modal-target]')
@@ -367,8 +323,8 @@
         button.addEventListener('click', () => {
             const modal = document.querySelector(button.dataset.modalTarget)
             openModal(modal)
->>>>>>> b0332838c772c3b8f24b31bdf775c412caf0d18a
         })
+    })
 
         overlay.addEventListener('click', () => {
             const modals = document.querySelectorAll('.modal.active')
@@ -492,7 +448,7 @@
 
             xhr.send(myJSON);
         }
+
     </script>
 </body>
-
 </html>

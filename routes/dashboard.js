@@ -130,11 +130,7 @@ router.post('/mail',[ensureAuthenticated,upload.array("file",5)], function(req,r
             fs.push({filename:req.files[i].filename,path:"./public/uploads/"+req.files[i].filename});
         }
     }
-<<<<<<< HEAD
-    console.log(fs);
-=======
     console.log(req.files,"files");
->>>>>>> b0332838c772c3b8f24b31bdf775c412caf0d18a
     var mailList=[];
     User.find({},function(err,found){
         // for(var i=0;i<found.length;i++)
@@ -145,20 +141,6 @@ router.post('/mail',[ensureAuthenticated,upload.array("file",5)], function(req,r
         //         mailList.push(found[i].email);
         //         console.log(mailList,"mail1");
         //     }
-<<<<<<< HEAD
-        //     console.log(found[i]["domain"],found[i]["username"]);
-        // }
-        console.log(mailList,"mail");
-        mailList.push("akshat.hhc@gmail.com");
-        let mailOptions = {
-            from: 'aksjain891999@gmail.com', // TODO: email sender
-            to: 'akshat.hhc@gmail.com', // TODO: email receiver
-            subject: 'Nodemailer - Test',
-            text: 'Wooohooo it works!!',
-            attachments:fs
-            // { filename: 'uploads/profile.JPG', path: './images/profile.JPG' },
-            // { filename: 'images/coder girl.JPG', path: './images/coder girl.JPG' } // TODO: replace it with your own image
-=======
         //     //console.log(found[i]["domain"],found[i]["username"]);
             
         // }
@@ -184,7 +166,6 @@ router.post('/mail',[ensureAuthenticated,upload.array("file",5)], function(req,r
                 console.log('Email sent!!!');
             });
         }
->>>>>>> b0332838c772c3b8f24b31bdf775c412caf0d18a
         
     });
     res.render('mail',{username:req.session.username});
