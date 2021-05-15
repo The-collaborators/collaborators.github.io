@@ -31,20 +31,13 @@ var listen=app.listen(3000, () => {
 })
 //socket
 const io = require('socket.io')(listen);
+
+//global.io=require('socket.io')(listen);
 app.use((req, res, next) => {
     req.io = io;
     next();
 });
-// io.on('connection', (socket) => {
-//     app.set("socketio",socket);
-//     console.log('a user connected');
-//     // socket.on("input",msg=>{
-//     //     console.log(msg);
-//     // })
-//     socket.on('disconnect', () => {
-//       console.log('user disconnected');
-//     });
-//   });
+
 
 app.use(cookieSession({keys: ['secret'],name:"sid"}));
 
@@ -65,6 +58,11 @@ app.use('/dashboard', dashboardRoutes);
 mongoose.connect(database, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => {
         console.log("database connected");
+        // const io = require('./socket').init(listen);
+        // io.on('connection', (socket) => {
+        //     console.log('a user connected');
+            
+        // })
         
     }).catch(err => {
         console.err(err);
