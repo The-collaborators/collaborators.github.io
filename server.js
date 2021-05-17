@@ -26,17 +26,17 @@ app.set('view engine', 'ejs');
 app.use(express.static("public"));
 app.use(cookieParser());
 
-var listen=app.listen(3000, () => {
+global.listen=app.listen(3000, () => {
     console.log("server started at port ");
 })
 //socket
-const io = require('socket.io')(listen);
+//const io = require('socket.io')(listen);
 
 //global.io=require('socket.io')(listen);
-app.use((req, res, next) => {
-    req.io = io;
-    next();
-});
+// app.use((req, res, next) => {
+//     req.io = io;
+//     next();
+// });
 
 
 app.use(cookieSession({keys: ['secret'],name:"sid"}));

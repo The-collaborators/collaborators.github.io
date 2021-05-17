@@ -78,3 +78,4 @@ socket.on('output', (data,username1,searchUsername1) => {
 function scrollToBottom() {
     messageArea.scrollTop = messageArea.scrollHeight
 }
+
