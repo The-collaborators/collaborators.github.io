@@ -85,11 +85,10 @@ router.get('/mail',[ensureAuthenticated],function(req,res,next){
 
 router.post('/mail',[ensureAuthenticated,upload.array("file",5)], function(req,res,next){
     
-    //console.log(req.files);
-    
-    // var ans=JSON.stringify(req.body);
-    // ans=JSON.parse(ans);
-    // //console.log(typeof(ans)," yeah");
+    // console.log("Domains: " , req.body);
+    var ans=JSON.stringify(req.body);
+    ans=JSON.parse(ans);
+    console.log(ans," yeah");
     // var arr=[];
     // for(var myKey in ans) {
     //     if(ans[myKey]==="JavaScript")

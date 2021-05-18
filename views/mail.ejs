@@ -306,6 +306,11 @@
         .removable button:hover {
             cursor:pointer;
         }
+
+        #success{
+            color:greenyellow;
+            font-weight: bolder;
+        }
     </style>
 </head>
 
@@ -330,14 +335,15 @@
 
 
     <div id="overlay"></div>
-    <h3>Need collaborators of domain :</h3>
+    <h3>Need Collaborators Of Domain :</h3>
+    <h3 id="success"></h3>
     <div class="outer">
         <div class="text_box1">
             <button class="mainbutton" data-modal-target="#modal">Add Domain</button>
             
             <ul id="myDomain"></ul>
         </div>
-    <form action="/dashboard/mail" method="POST" role="form" enctype="multipart/form-data" onsubmit="return checkempty()">
+    <form action="/dashboard/mail" id="f-submit" method="POST" role="form" enctype="multipart/form-data" onsubmit="return checkempty()">
         <div class="text_box2">
             <textarea name="Write" id="" cols="30" rows="5" placeholder="Write something..."></textarea><br>
             <div class="file-upload">
@@ -349,7 +355,7 @@
             
         </div>
         <!-- <input type="submit" name="mail" value="MAIL IT"> -->
-        
+        Confirm:<input type="checkbox" name="cb" id="cb">
         <button class="mailit" type="submit" name="mail" value="mail it">MAIL IT</button>
     </form>
     </div>
@@ -481,14 +487,24 @@
                 return false;
             }
             else{
-                alert("Domains successfully Submitted. Your email will be sent!");
-                sendJSON();
+                document.getElementById('success').innerHTML="Email has been sent sucessfully!";
+                // alert("Domains successfully Submitted. Your email will be sent!");
                 return true;
             }
         }
 
+        
+
+        document.getElementById("f-submit").addEventListener("submit", function(event){
+            cb=document.getElementById("cb");
+            if(!cb.checked)
+            event.preventDefault();
+            else
+            sendJSON();
+        });
+
         function sendJSON() {
-            // console.log(obj);
+            console.log(obj);
             var myJSON = JSON.stringify({ "finalList": obj.finalList});
             console.log(myJSON);
             let xhr = new XMLHttpRequest();
