@@ -4,8 +4,6 @@ const multer = require("multer");
 const path = require("path");
 const nodemailer = require("nodemailer");
 const flash = require("connect-flash");
-const chatDetail = require("../models/chatDetail");
-const chat = require("../models/chats");
 const chatRoom=require("../models/room")
 const io = require('socket.io')(listen);
 
@@ -235,122 +233,9 @@ router.post("/search", function (req, res, next) {
     });
   }
 });
-
-// router.get("/search/chat/:searchUserID", function (req, res, next) {
-//   //const io = req.io;
-  
-//   let min, max, searchUser;
-//   User.findById(req.params.searchUserID, function (err, found) {
-//     searchUser = found.username;
-//   });
-//   //console.log("userID",req.params.searchUserID);
-//   if (req.params.searchUserID > req.session.userID) {
-//     min = req.session.userID;
-//     max = req.params.searchUserID;
-//   } else {
-//     max = req.session.userID;
-//     min = req.params.searchUserID;
-//   }
-  
-//   io.on("connection", async (socket) => {
-//     console.log("a user connected",socket.id);
-    
-//     let chatArr = [];
-    
-//     try {
-//       const found = await chat.find({ user1: min, user2: max }).exec();
-//       const t = found.map((a) => a.conversation);
-//       chatArr = await chatDetail.find({ _id: { $in: t } }).exec();
-//     } catch (e) {
-//       console.log(e);
-//     }
-//     console.log(chatArr);
-//     try{
-//       console.log("output:");
-//       io.to(user[req.session.username]).emit("output",chatArr,req.session.userID,req.params.searchUserID);
-//       //socket.to()
-//     }
-//     catch (e){
-//         console.log(e,"error");
-//     }
-
-//         socket.on("input",msg=>{
-//             msg.from=req.session.userID;
-            
-            
-//             let nChatDetail=new chatDetail({
-//                 from:req.session.userID,
-//                 talk:msg.talk
-//             });
-//             nChatDetail.save(function(err){
-//                 if(err)
-//                 {
-//                     console.log("error chatdeatil");
-//                 }
-//                 else{
-//                     //console.log("chatdetail saved",nChatDetail);
-//                 }
-//             });
-//             let nChat = new chat({
-//                 user1:min,
-//                 user2:max,
-//                 conversation:nChatDetail._id
-//             });
-//             nChat.save(function(err){
-//                 if(err)
-//                 {
-//                     console.log("error chat");
-//                 }
-//                 else{
-//                     //console.log("chat saved",nChat);
-//                 }
-//             });
-//             let socket_id=user[searchUser];
-//             io.to(socket_id).emit("output",chatArr,req.session.userID,req.params.searchUserID);
-//             //nChatDetail.save();
-//             //console.log(typeof(msg));
-//         });
-
-//         socket.on('disconnect', () => {
-          
-//           console.log('user disconnected');
-          
-//         });
-//   });
-
-//   res.render("chat", { searchUser: searchUser, user: req.session.username });
-// });
-
-//room
-router.get("/chat/:room",(req,res)=>{
-  //console.log("rooms",rooms);
-  // let room=req.params.room;
-  // chatRoom.find({roomName:req.params.room },function(err,found){
-  //   console.log(found[0]);
-  //   if(found[0])
-  //   {
-  //     const chats=found[0].conversation;
-  //     //console.log("yo",found.conversation);
-  //     if(chats!=undefined)
-  //     {
-  //       for(var i=0;i<chats.length;i++)
-  //       {
-  //         if(chats[i].from!=req.session.username)
-  //         {
-  //           //io.to(room).broadcast.emit('chat-message', { message: chats[i].talk, name: chats[i].from })
-  //           io.emit('send-chat-history',{room:room,message:chats[i].talk,from:chats[i].from})
-  //         }
-  //         else{
-  //           let obj={name:"You",message:chats[i].talk};
-  //           io.to(room).broadcast.emit('chat-message', obj)
-  //           //io.emit('send-chat-history',{room:room,message:chats[i].talk,from:chats[i].from})
-  //         }
-  //       }
-  //     }
-      
-  //     res.render("room",{roomName:req.params.room});
-  //   }
-  chatRoom.find({roomName:req.params.room },function(err,found){
+router.get("/chat/:room",ensureAuthenticated, (req,res)=>{
+chatRoom.find({roomName:req.params.room },function(err,found){
+    console.log("foudn data",found," data end");
     if(found[0])
     {
       res.render("room",{roomName:req.params.room,username:req.session.username});
@@ -359,13 +244,14 @@ router.get("/chat/:room",(req,res)=>{
       res.redirect("/");
     }
   })
+})
       
-});
+
 
   
 
 
-router.post("/chat/room",(req,res)=>{
+router.post("/chat/room",ensureAuthenticated, (req,res)=>{
   chatRoom.find({roomName:req.body.room},function(err,found){
     if(err)
     {
@@ -379,9 +265,7 @@ router.post("/chat/room",(req,res)=>{
         console.log("hi");
         return res.redirect('/');
       }
-      // if (rooms[req.body.room] != null) {
-      //   return res.redirect('/')
-      // }
+ 
       let nChat = new chatRoom({
         roomName:req.body.room,
         conversation:[]
@@ -393,20 +277,21 @@ router.post("/chat/room",(req,res)=>{
         }
         else{
           console.log("roomName saved");
+          rooms[req.body.room] = { users: {} }
+          res.redirect(req.body.room)
+          // Send message that new room was created
+          io.emit('room-created', req.body.room)
         }
       })
-      rooms[req.body.room] = { users: {} }
-      res.redirect(req.body.room)
-      // Send message that new room was created
-      io.emit('room-created', req.body.room)
+
     }
   })
   
   
 })
 
-router.get("/chat",(req,res)=>{
-  //console.log("chatRoom");
+router.get("/chat",ensureAuthenticated, (req,res)=>{
+  
   const t=[];
   chatRoom.find({ },function(err,found){
     if(err)
@@ -454,14 +339,14 @@ io.on('connection', socket => {
   socket.on('new-user', (room, name) => {
     socket.join(room)
     name=username
-    //rooms[room].users[username] = name
+    
     socket.to(room).broadcast.emit('user-connected', name)
     chatRoom.find({roomName:room },function(err,found){
       console.log(found[0]);
       if(found[0])
       {
         const chats=found[0].conversation;
-        //console.log("yo",found.conversation);
+        
         if(chats!=undefined)
         {
           for(var i=0;i<chats.length;i++)

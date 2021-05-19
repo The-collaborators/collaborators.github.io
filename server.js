@@ -29,14 +29,7 @@ app.use(cookieParser());
 global.listen=app.listen(3000, () => {
     console.log("server started at port ");
 })
-//socket
-//const io = require('socket.io')(listen);
 
-//global.io=require('socket.io')(listen);
-// app.use((req, res, next) => {
-//     req.io = io;
-//     next();
-// });
 
 
 app.use(cookieSession({keys: ['secret'],name:"sid"}));
