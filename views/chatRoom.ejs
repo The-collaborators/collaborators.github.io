@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Chat App</title>
+  <script defer src="http://localhost:3000/socket.io/socket.io.js"></script>
+  <script defer src="/javascript/script.js"></script>
+</head>
+<body>
+  <h4 id="username">hello <%= username %></h4>
+  <div id="room-container">
+    <%for(let i=0;i<rooms.length;i++){%>
+      <div><%= rooms[i] %></div>
+      <a href="/dashboard/chat/<%= rooms[i] %>">Join</a>
+    <%}%>
+  </div>
+  <form action="/dashboard/chat/room" method="POST">
+    <input name="room" type="text" required>
+    <button type="submit">New Room</button>
+  </form>
+  <form action="/dashboard/logout" method="GET">
+    <button class="logout" type="submit">LOG OUT</button>
+  </form>
+</body>
+</html>

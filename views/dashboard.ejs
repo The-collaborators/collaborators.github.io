@@ -118,7 +118,7 @@
 
 <body>
     
-  <%=message.message%>
+  
     <form action="/dashboard/logout" method="GET">
       <button class="logout" type="submit">LOG OUT</button>
     </form>
@@ -151,8 +151,11 @@
             <input type="submit" name="upload" value="Upload" id="shiftupload" class="btn1">
         </form>
 
-        <form action="/dashboard/mail" method="GET">
+        <form action="/dashboard/domain" method="GET">
           <button type="submit">MAIL</button>
+        </form>
+        <form action="/dashboard/chat" method="GET">
+          <button  type="submit" >CHAT</button>
         </form>
       </div>
 

@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab&display=swap" rel="stylesheet">
-    <title>domain</title>
+    <script src="https://kit.fontawesome.com/87390cb8ac.js" crossorigin="anonymous"></script>
+    <title>Domain</title>
     <style>
         *,
         *::after,
@@ -89,20 +90,20 @@
             font-weight: bolder;
             background-color: rgba(255,255,255,0.3);
         }
-        .mailit{
-            position: absolute;
-            bottom: 200px;
-            left: 73%;
-            padding:8px;
-            background:transparent;
-            border:2px solid white;
-            color:white;
-            transition:0.3s;
-            width:100px;
-            border-radius:10px;
-            cursor:pointer;
+        .confirm_domain{
+            width: 40%;
+            transform: translateX(50%);
+            cursor: pointer;
+            padding: 10px 15px;
+            border: 2px solid white;
+            outline: none;
+            background-color: transparent;
+            margin-bottom: 0px;
+            border-radius: 10px;
+            color: white;
+            transition: 0.3s;
         }
-        .mailit:hover{
+        .confirm_domain:hover{
             color:#2e3141;
             font-weight: bolder;
             background-color: rgba(255,255,255,0.3);
@@ -311,6 +312,27 @@
             color:greenyellow;
             font-weight: bolder;
         }
+        #further{
+            color:white;
+            text-transform: uppercase;
+            position: absolute;
+            bottom:30%;
+            right:15%;
+            text-align: center;
+            opacity: 0;
+        }
+        .proceed{
+            text-decoration: none;
+            text-transform: uppercase;
+            color:#95a2ff;;
+            margin-left:8px;
+            font-weight: bolder;
+            text-shadow: 4px 3px black;
+        }
+        .large{
+            margin-right: 5px;
+            font-size: large;
+        }
     </style>
 </head>
 
@@ -318,25 +340,36 @@
     <%=message.message%>
     <h4 class="username">hello <%= username %></h4>
 
+    <div class="modal" id="modal">
+        <div class="modal-header">
+            <div class="title">Choose a domain</div>
+            <button data-close-button class="close-button">&times;</button>
+        </div>
+        <div class="modal-body">
+            <select id="list" name="list" onchange="getSelectValue();">
+                <option value="JavaScript" name="JavaScript">JavaScript</option>
+                <option value="Python" name="Python">Python</option>
+                <option value="HTML" name="HTML">HTML</option>
+                <option value="CSS" name="CSS">CSS</option>
+                <option value="C++" name="C">C++</option>
+            </select>
+        </div>
+    </div>
+
+
     <div id="overlay"></div>
     <h3>Need Collaborators Of Domain :</h3>
     <h3 id="success"></h3>
-    
-        
-        <div class="outer">
-        <form action="/dashboard/mail" id="f-submit" method="POST" role="form" enctype="multipart/form-data" onsubmit="return checkempty()">
-            <div class="text_box2">
-                <textarea name="Write" id="" cols="30" rows="5" placeholder="Write something..."></textarea><br>
-                <div class="file-upload">
-                    <input class="file-upload__input" type="file" name="file" id="myFile" multiple>
-                    <button class="file-upload__button" type="button">Choose File(s)</button>
-                    <span class="file-upload__label"></span>
-                </div>
-                
-            </div>
-            <!-- <input type="submit" name="mail" value="MAIL IT"> -->
-            <button class="mailit" type="submit" name="mail" value="mail it">MAIL IT</button>
-        </form>
+    <div class="outer">
+        <div class="text_box1">
+            <button class="mainbutton" data-modal-target="#modal">Add Domain</button>
+            <button class="confirm_domain" onclick="sendJSON()">Confirm Domains</button>
+            <ul id="myDomain"></ul>
+
+        </div>
+    </div>
+    <div id="further">
+       your domains are confirmed,<br> to Mail click:<a class="proceed" href="/dashboard/mail"><i class="fas fa-arrow-circle-right large"></i></a>
     </div>
     <form action="/dashboard/logout" method="GET">
         <button class="logout" type="submit">LOG OUT</button>
@@ -344,47 +377,112 @@
     <!-- <button class="sendjson" onclick="sendJSON();">Submit Domain</button> -->
 
 <script>
+    const openModalButtons = document.querySelectorAll('[data-modal-target]')
+    const closeModalButtons = document.querySelectorAll('[data-close-button]')
+    const overlay = document.getElementById('overlay')
 
+    openModalButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const modal = document.querySelector(button.dataset.modalTarget)
+            openModal(modal)
+        })
+    })
 
-        Array.prototype.forEach.call(
-            document.querySelectorAll(".file-upload__button"),
-            function (button) {
-                const hiddenInput = button.parentElement.querySelector(
-                    ".file-upload__input"
-                );
-                const label = button.parentElement.querySelector(".file-upload__label");
-                const defaultLabelText = "No file(s) selected";
+        overlay.addEventListener('click', () => {
+            const modals = document.querySelectorAll('.modal.active')
+            modals.forEach(modal => {
+                closeModal(modal)
+            })
+        })
 
-                // Set default text for label
-                label.textContent = defaultLabelText;
-                label.title = defaultLabelText;
+        closeModalButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const modal = button.closest('.modal')
+                closeModal(modal)
+            })
+        })
 
+        function openModal(modal) {
+            if (modal == null) return
+            modal.classList.add('active')
+            overlay.classList.add('active')
+        }
+
+        function closeModal(modal) {
+            if (modal == null) return
+            modal.classList.remove('active')
+            overlay.classList.remove('active')
+        }
+
+        var obj = {
+            finalList: [],
+        }
+
+        var itemList;
+        function getSelectValue() {
+            var val = document.getElementById('list');
+            var items = document.getElementById("myDomain");
+            itemList = items.getElementsByTagName("li");
+            var selectValue = val.value;
+            var flag = 1;
+            for (var i = 0; i < itemList.length; i++) {
+                var text = itemList[i].innerHTML;
+                var len = itemList[i].innerHTML.length;
+                var finalText = text.substring(0, len - 33);
+                if (finalText == selectValue) {
+                    flag = 0;
+                    break;
+                }
+            }
+            if (flag == 1) {
+                var node = document.createElement("LI");
+                var textnode = document.createTextNode(selectValue);
+                obj.finalList.push(selectValue);
+                var button = document.createElement("button");
+                button.classList.add('closex');
+                button.innerHTML = "❌";
+                node.appendChild(textnode);
+                node.appendChild(button);
+                node.classList.add('removable');
+                items.appendChild(node);
                 button.addEventListener("click", function () {
-                    hiddenInput.click();
-                });
-
-                hiddenInput.addEventListener("change", function () {
-                    const filenameList = Array.prototype.map.call(hiddenInput.files, function (
-                        file
-                    ) {
-                        return file.name;
-                    });
-
-                    label.textContent = filenameList.join(", ") || defaultLabelText;
-                    label.title = label.textContent;
-
+                    var l = button.parentElement.innerHTML.length;
+                    var val = button.parentElement.innerHTML.substring(0, l - 33);
+                    var index = obj.finalList.indexOf(val);
+                    if (index > -1) {
+                        obj.finalList.splice(index, 1);
+                    }
+                    items.removeChild(button.parentElement);
                 });
             }
-        );
-
-        document.getElementById("f-submit").addEventListener("submit", function(event){
-            cb=document.getElementById("cb");
-            if(!cb.checked)
-            event.preventDefault();
             else
-            sendJSON();
-        });
+                alert(finalText + " is Already Added");
+        }
 
+
+
+        function sendJSON() {
+            if(obj.finalList.length==0){
+                alert("No domains selected... please add the domain");
+            }
+            else{
+                console.log(obj);
+                var myJSON = JSON.stringify({ "finalList": obj.finalList});
+                console.log(myJSON);
+                let xhr = new XMLHttpRequest();
+                let url = "http://localhost:3000/dashboard/mail"; //jahan catch krna h
+
+                xhr.open("POST", url, true);
+
+                xhr.setRequestHeader("Content-Type", "application/json");
+
+                xhr.send(myJSON);
+
+                document.getElementById("further").style.opacity=1;
+                document.getElementById("myDomain").style.display="none";
+
+            }   
+        }
     </script>
 </body>
 </html>
