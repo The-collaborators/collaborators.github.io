@@ -377,33 +377,6 @@
             }
         );
 
-<<<<<<< HEAD
-        function checkempty(){
-            if(obj.finalList.length==0){
-                alert("No domains selected... please add the domain");
-                return false;
-            }
-            else{
-                //alert("Domains successfully Submitted. Your email will be sent!");
-                sendJSON();
-                return true;
-            }
-        }
-
-        function sendJSON() {
-            // console.log(obj);
-            var myJSON = JSON.stringify({ "finalList": obj.finalList});
-            console.log(myJSON);
-            let xhr = new XMLHttpRequest();
-            let url = "http://localhost:3000/dashboard/mail"; //jahan catch krna h
-
-            xhr.open("POST", url, true);
-
-            xhr.setRequestHeader("Content-Type", "application/json");
-
-            xhr.send(myJSON);
-        }
-=======
         document.getElementById("f-submit").addEventListener("submit", function(event){
             cb=document.getElementById("cb");
             if(!cb.checked)
@@ -411,7 +384,6 @@
             else
             sendJSON();
         });
->>>>>>> 9ac02dc7f631bcd6438cb97b0f544cccaa58f7c7
 
     </script>
 </body>
