@@ -318,12 +318,32 @@
     <%=message.message%>
     <h4 class="username">hello <%= username %></h4>
 
+    <div class="modal" id="modal">
+        <div class="modal-header">
+            <div class="title">Choose a domain</div>
+            <button data-close-button class="close-button">&times;</button>
+        </div>
+        <div class="modal-body">
+            <select id="list" name="list" onchange="getSelectValue();">
+                <option value="JavaScript" name="JavaScript">JavaScript</option>
+                <option value="Python" name="Python">Python</option>
+                <option value="HTML" name="HTML">HTML</option>
+                <option value="CSS" name="CSS">CSS</option>
+                <option value="C++" name="C">C++</option>
+            </select>
+        </div>
+    </div>
+
+
     <div id="overlay"></div>
     <h3>Need Collaborators Of Domain :</h3>
     <h3 id="success"></h3>
-    
-        
-        <div class="outer">
+    <div class="outer">
+        <div class="text_box1">
+            <button class="mainbutton" data-modal-target="#modal">Add Domain</button>
+            
+            <ul id="myDomain"></ul>
+        </div>
         <form action="/dashboard/mail" id="f-submit" method="POST" role="form" enctype="multipart/form-data" onsubmit="return checkempty()">
             <div class="text_box2">
                 <textarea name="Write" id="" cols="30" rows="5" placeholder="Write something..."></textarea><br>
@@ -333,8 +353,10 @@
                     <span class="file-upload__label"></span>
                 </div>
                 
+                
             </div>
             <!-- <input type="submit" name="mail" value="MAIL IT"> -->
+            Confirm:<input type="checkbox" name="cb" id="cb">
             <button class="mailit" type="submit" name="mail" value="mail it">MAIL IT</button>
         </form>
     </div>
@@ -344,6 +366,88 @@
     <!-- <button class="sendjson" onclick="sendJSON();">Submit Domain</button> -->
 
 <script>
+    const openModalButtons = document.querySelectorAll('[data-modal-target]')
+    const closeModalButtons = document.querySelectorAll('[data-close-button]')
+    const overlay = document.getElementById('overlay')
+
+    openModalButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const modal = document.querySelector(button.dataset.modalTarget)
+            openModal(modal)
+        })
+    })
+
+        overlay.addEventListener('click', () => {
+            const modals = document.querySelectorAll('.modal.active')
+            modals.forEach(modal => {
+                closeModal(modal)
+            })
+        })
+
+        closeModalButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const modal = button.closest('.modal')
+                closeModal(modal)
+            })
+        })
+
+        function openModal(modal) {
+            if (modal == null) return
+            modal.classList.add('active')
+            overlay.classList.add('active')
+        }
+
+        function closeModal(modal) {
+            if (modal == null) return
+            modal.classList.remove('active')
+            overlay.classList.remove('active')
+        }
+
+        var obj = {
+            finalList: [],
+        }
+
+        var itemList;
+        function getSelectValue() {
+            var val = document.getElementById('list');
+            var items = document.getElementById("myDomain");
+            itemList = items.getElementsByTagName("li");
+            var selectValue = val.value;
+            var flag = 1;
+            for (var i = 0; i < itemList.length; i++) {
+                var text = itemList[i].innerHTML;
+                var len = itemList[i].innerHTML.length;
+                var finalText = text.substring(0, len - 33);
+                if (finalText == selectValue) {
+                    flag = 0;
+                    break;
+                }
+            }
+            if (flag == 1) {
+                var node = document.createElement("LI");
+                var textnode = document.createTextNode(selectValue);
+                obj.finalList.push(selectValue);
+                var button = document.createElement("button");
+                button.classList.add('closex');
+                button.innerHTML = "❌";
+                node.appendChild(textnode);
+                node.appendChild(button);
+                node.classList.add('removable');
+                items.appendChild(node);
+                button.addEventListener("click", function () {
+                    var l = button.parentElement.innerHTML.length;
+                    var val = button.parentElement.innerHTML.substring(0, l - 33);
+                    var index = obj.finalList.indexOf(val);
+                    if (index > -1) {
+                        obj.finalList.splice(index, 1);
+                    }
+                    items.removeChild(button.parentElement);
+                });
+            }
+            else
+                alert(finalText + " is Already Added");
+        }
+
 
 
         Array.prototype.forEach.call(
@@ -367,6 +471,7 @@
                     const filenameList = Array.prototype.map.call(hiddenInput.files, function (
                         file
                     ) {
+                        // obj.fileList.push(file);
                         return file.name;
                     });
 
@@ -377,21 +482,30 @@
             }
         );
 
-<<<<<<< HEAD
         function checkempty(){
             if(obj.finalList.length==0){
                 alert("No domains selected... please add the domain");
                 return false;
             }
             else{
-                //alert("Domains successfully Submitted. Your email will be sent!");
-                sendJSON();
+                document.getElementById('success').innerHTML="Email has been sent sucessfully!";
+                // alert("Domains successfully Submitted. Your email will be sent!");
                 return true;
             }
         }
 
+        
+
+        document.getElementById("f-submit").addEventListener("submit", function(event){
+            cb=document.getElementById("cb");
+            if(!cb.checked)
+            event.preventDefault();
+            else
+            sendJSON();
+        });
+
         function sendJSON() {
-            // console.log(obj);
+            console.log(obj);
             var myJSON = JSON.stringify({ "finalList": obj.finalList});
             console.log(myJSON);
             let xhr = new XMLHttpRequest();
@@ -403,15 +517,6 @@
 
             xhr.send(myJSON);
         }
-=======
-        document.getElementById("f-submit").addEventListener("submit", function(event){
-            cb=document.getElementById("cb");
-            if(!cb.checked)
-            event.preventDefault();
-            else
-            sendJSON();
-        });
->>>>>>> 9ac02dc7f631bcd6438cb97b0f544cccaa58f7c7
 
     </script>
 </body>

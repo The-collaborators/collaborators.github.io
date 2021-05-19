@@ -90,9 +90,23 @@ router.post("/", [upload.single("file")], (req, res) => {
     domain: req.session.domain,
   });
 });
+
+router.get("/domain", [ensureAuthenticated], function (req, res, next) {
+    res.render("domain", { username: req.session.username });
+});
+
+router.post("/domain", [ensureAuthenticated], function (req, res, next){
+    var ans = JSON.stringify(req.body);
+    ans = JSON.parse(ans);
+    console.log(ans.finalList, " yeah");
+});
+
+
 router.get("/mail", [ensureAuthenticated], function (req, res, next) {
   res.render("mail", { username: req.session.username });
 });
+
+
 
 router.post("/mail",[ensureAuthenticated, upload.array("file", 5)],
   function (req, res, next) {
@@ -150,7 +164,7 @@ router.post("/mail",[ensureAuthenticated, upload.array("file", 5)],
 
       // }
 
-      mailList.push("18bcs2152@cuchd.in");
+      mailList.push("aksjain891999@gmail.com");
 
       if (req.body.mail === "mail it") {
         console.log(arr, "domain");
