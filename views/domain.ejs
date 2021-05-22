@@ -369,7 +369,7 @@
         </div>
     </div>
     <div id="further">
-       your domains are confirmed,<br> to Mail click:<a class="proceed" href="/dashboard/mail"><i class="fas fa-arrow-circle-right large"></i></a>
+       your domains are confirmed,<br> to Mail click:<a class="proceed" href="/dashboard/domain/mail"><i class="fas fa-arrow-circle-right large"></i></a>
     </div>
     <form action="/dashboard/logout" method="GET">
         <button class="logout" type="submit">LOG OUT</button>
@@ -470,7 +470,7 @@
                 var myJSON = JSON.stringify({ "finalList": obj.finalList});
                 console.log(myJSON);
                 let xhr = new XMLHttpRequest();
-                let url = "http://localhost:3000/dashboard/mail"; //jahan catch krna h
+                let url = "http://localhost:3000/dashboard/domain"; //jahan catch krna h
 
                 xhr.open("POST", url, true);
 

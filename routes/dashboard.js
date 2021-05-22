@@ -6,11 +6,12 @@ const nodemailer = require("nodemailer");
 const flash = require("connect-flash");
 const chatRoom=require("../models/room")
 const io = require('socket.io')(listen);
-
+const prj=require("../models/project");
 
 //try
 const rooms={};
 let username;
+var ans;
 
 router.use(flash());
 router.use(function (req, res, next) {
@@ -44,22 +45,36 @@ var upload = multer({
 });
 
 router.get("/", ensureAuthenticated, (req, res) => {
-  //res.send(req.flash('message'));
-  //io=req.io;
 
-  // io.on('connection', (socket) => {
-  //   user[req.session.username]=socket.id;
-  //   console.log('a user connected');
-    
-  // })
-  // console.log("hello " + res.locals.message);
-  // console.log(req.session.domain);
   username=req.session.username
-  res.render("dashboard", {
-    username: req.session.username,
-    img_name: req.session.image,
-    domain: req.session.domain,
-  });
+  prj.findOne({username:username},function(err,found){
+    if(err)
+    {
+      throw err;
+    }
+    else{
+      if(found===null)
+      {
+        res.render("dashboard", {
+          username: req.session.username,
+          img_name: req.session.image,
+          domain: req.session.domain,
+          project:[],
+          id:[]
+        });
+      }
+      else{
+        res.render("dashboard", {
+          username: req.session.username,
+          img_name: req.session.image,
+          domain: req.session.domain,
+          project:found.project
+        });
+      }
+      
+    }
+  })
+  
 });
 
 router.post("/", [upload.single("file")], (req, res) => {
@@ -84,11 +99,31 @@ router.post("/", [upload.single("file")], (req, res) => {
       }
     });
   }
-  res.render("dashboard", {
-    username: req.session.username,
-    img_name: req.session.image,
-    domain: req.session.domain,
-  });
+  prj.findOne({username:username},function(err,found){
+    if(err)
+    {
+      throw err;
+    }
+    else{
+      if(found===null)
+      {
+        res.render("dashboard", {
+          username: req.session.username,
+          img_name: req.session.image,
+          domain: req.session.domain,
+          project:[]
+        });
+      }
+      else{
+        res.render("dashboard", {
+          username: req.session.username,
+          img_name: req.session.image,
+          domain: req.session.domain,
+          project:found.project
+        });
+      }
+    }
+  })
 });
 
 router.get("/domain", [ensureAuthenticated], function (req, res, next) {
@@ -96,27 +131,26 @@ router.get("/domain", [ensureAuthenticated], function (req, res, next) {
 });
 
 router.post("/domain", [ensureAuthenticated], function (req, res, next){
-    var ans = JSON.stringify(req.body);
+    ans = JSON.stringify(req.body);
     ans = JSON.parse(ans);
-    console.log(ans.finalList, " yeah");
+    ans=ans.finalList;
+    console.log(ans, " yeah");
 });
 
 
-router.get("/mail", [ensureAuthenticated], function (req, res, next) {
+router.get("/domain/mail", [ensureAuthenticated], function (req, res, next) {
   res.render("mail", { username: req.session.username });
 });
 
 
 
-router.post("/mail",[ensureAuthenticated, upload.array("file", 5)],
+router.post("/domain/mail",[ensureAuthenticated, upload.array("file", 5)],
   function (req, res, next) {
-    //console.log(req.files);
 
-    var ans = JSON.stringify(req.body);
-    ans = JSON.parse(ans);
-    console.log(ans.finalList, " yeah");
-    var arr = [];
-    for (var myKey in ans.finalList) {
+
+    var arr=[];
+    console.log("domain",ans);
+    for (var myKey in ans) {
       if (ans[myKey] === "JavaScript") {
         arr.push("JavaScript");
       } else if (ans[myKey] === "HTML") {
@@ -129,7 +163,7 @@ router.post("/mail",[ensureAuthenticated, upload.array("file", 5)],
         arr.push("Python");
       }
     }
-
+    
     let transporter = nodemailer.createTransport({
       service: "gmail",
 
@@ -150,47 +184,150 @@ router.post("/mail",[ensureAuthenticated, upload.array("file", 5)],
       }
     }
 
-    var mailList = [];
-    User.find({}, function (err, found) {
-      // for(var i=0;i<found.length;i++)
-      // {
-      //     if(found[i].domain.some(item => arr.includes(item))===true)
-      //     {
-      //         //console.log(found[i].email,"mail");
-      //         mailList.push(found[i].email);
-      //         console.log(mailList,"mail1");
-      //     }
-      //     //console.log(found[i]["domain"],found[i]["username"]);
-
-      // }
-
-      mailList.push("aksjain891999@gmail.com");
-
-      if (req.body.mail === "mail it") {
-        console.log(arr, "domain");
-        let mailOptions = {
-          from: "aksjain891999@gmail.com", // TODO: email sender
-          to: mailList, // TODO: email receiver
-          subject: "Nodemailer - Test",
-          text: "hello",
-          attachments: fs,
-          // { filename: 'uploads/profile.JPG', path: './images/profile.JPG' },
-          // { filename: 'images/coder girl.JPG', path: './images/coder girl.JPG' } // TODO: replace it with your own image
-        };
-        transporter.sendMail(mailOptions, (err, data) => {
-          if (err) {
-            console.log(err);
-            //return log('Error occurs');
-          }
-
-          console.log("Email sent!!!");
-        });
+    let prj1;
+    prj.findOne({username:req.session.username},function(err,found){
+      if(err)
+      {
+        throw err;
       }
-    });
+      else{
+        if(found===null)
+        {
+          let prjNew=new prj({
+            username:req.session.username,
+            project:{
+              title:req.body.title,
+              description:req.body.Write,
+              files:fs,
+              domain:arr
+            }
+          });
+          prjNew.save(function(err){
+            if(err)
+            {
+              throw err;
+            }
+            else{
+              console.log("project created");
+              var mailList = [];
+              User.find({}, function (err, found) {
+                for(var i=0;i<found.length;i++)
+                {
+                  if(found[i].domain.some(item => arr.includes(item))===true)
+                  {
+                    mailList.push(found[i].email);
+                  }
+                }
+                if (req.body.mail === "mail it") {
+                  let mailOptions = {
+                    from: "aksjain891999@gmail.com", // TODO: email sender
+                    to: mailList, // TODO: email receiver
+                    subject:" Need a collaborator for the project : "+req.body.title,
+                    text: "username : "+req.session.username + "\n "+req.body.Write,
+                    attachments: fs,
+          
+                  };
+                  transporter.sendMail(mailOptions, (err, data) => {
+                    if (err) {
+                      console.log(err);
+                      
+                    }
+                  console.log("Email sent!!!");
+                  });
+                }
+              });
+              console.log("project",prj1);
+              res.render("dashboard", {
+                username: req.session.username,
+                img_name: req.session.image,
+                domain: req.session.domain,
+                project:prj1,
+              });
+            }
+          })
+        }
+        else{
+          prj1=found.project;
+          prj.deleteOne({username:req.session.username},function(err,foundUser){
+            if(err)
+            {
+              throw err;
+            }
+            else{
+              prj1.push({title:req.body.title,description:req.body.Write,files:fs,domain:arr});
+              let prjNew=new prj({
+                username:req.session.username,
+                project:prj1
+              });
+              prjNew.save(function(err){
+                if(err)
+                {
+                  throw err;
+                }
+                else{
+                  console.log("project created");
+                  var mailList = [];
+                  User.find({}, function (err, found) {
+                    for(var i=0;i<found.length;i++)
+                    {
+                      if(found[i].domain.some(item => arr.includes(item))===true)
+                      {
+                        mailList.push(found[i].email);
+                      }
+                    }
+                    if (req.body.mail === "mail it") {
+                      let mailOptions = {
+                        from: "aksjain891999@gmail.com", // TODO: email sender
+                        to: mailList, // TODO: email receiver
+                        subject:" Need a collaborator for the project : "+req.body.title,
+                        text: "username : "+req.session.username + "\n "+req.body.Write,
+                        attachments: fs,
+              
+                      };
+                      transporter.sendMail(mailOptions, (err, data) => {
+                        if (err) {
+                          console.log(err);
+                          
+                        }
+                      console.log("Email sent!!!");
+                      });
+                    }
+                  });
+                  console.log("project",prj1);
+                  res.render("dashboard", {
+                    username: req.session.username,
+                    img_name: req.session.image,
+                    domain: req.session.domain,
+                    project:prj1,
+                  });
+                }
+              })
+            }
+          })
+        }
+      }
+  })
+});
 
-    res.render("mail", { username: req.session.username });
-  }
-);
+router.get("/:username/:title",(req,res)=>{
+  prj.findOne({username:req.session.username},function(err,found){
+    if(err)
+    {
+      throw err;
+    }
+    else{
+      for(var i=0;i<found.project.length;i++)
+      {
+        if(found.project[i].title===req.params.title)
+        {
+          console.log("prj",found.project[i]);
+          res.render("project",{project:found.project[i],username:req.params.username});
+        }
+      }
+    }
+  })
+})
+
 
 router.get("/search", function (req, res, next) {
   var x = req.query["term"];

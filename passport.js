@@ -24,13 +24,13 @@ passport.use(new GithubStrategy({
             image: "default-image-png.png"
         });
         nUser.save();
-        let nUser1 = await User.create({
-            email: "palviaanoushka@gmail.com",
-            username: "xyz",
-            domain: ["CSS","Python"],
-            image: "default-image-png.png"
-        });
-        nUser1.save();
+        // let nUser1 = await User.create({
+        //     email: "palviaanoushka@gmail.com",
+        //     username: "xyz",
+        //     domain: ["CSS","Python"],
+        //     image: "default-image-png.png"
+        // });
+        // nUser1.save();
         return done(null,nUser);
 
     } catch (error) {

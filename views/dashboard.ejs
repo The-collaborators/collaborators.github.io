@@ -157,8 +157,24 @@
         <form action="/dashboard/chat" method="GET">
           <button  type="submit" >CHAT</button>
         </form>
-      </div>
 
+        <h6>work done:</h6>
+
+        
+      </div>
+      <%if(project.length>0)%>
+      <%{%>
+        
+        <%for(var i=0;i<project.length;i++){%>
+          <h1><%=project[i].title%></h1><br>
+          <h4>Domain need are : </h4>
+          <%for(var j=0;j<project[i].domain.length;j++){%>
+            <h5><%=project[i].domain[j]%></h5><br>
+          <%}%>
+          <p id="pp"><%=project[i].description.substring(0,30)%>...<a href="/dashboard/<%=username%>/<%=project[i].title%>">Read more..</a></p>
+          <br>
+        <%}%>
+      <%}%>
 
 
 

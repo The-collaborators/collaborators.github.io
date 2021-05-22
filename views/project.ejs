@@ -317,34 +317,22 @@
 <body>
     <%=message.message%>
     <h4 class="username">hello <%= username %></h4>
+    
+        <h1><%=project.title%></h1><br>
+        <h4>Domain need are : </h4>
+        <%for(var j=0;j<project.domain.length;j++){%>
+          <h5><%=project.domain[j]%></h5><br>
+        <%}%>
+        <p id="pp"><%=project.description%></p>
+        <br>
+        <%for(var j=0;j<project.files.length;j++){%>
+            <h5><img src="/public/uploads/"<%=project.files[j]%>></h5><br>
+        <%}%>
 
-    <div id="overlay"></div>
-    <h3>Need Collaborators Of Domain :</h3>
-    <h3 id="success"></h3>
+    
     
         
-        <div class="outer">
-        <form action="/dashboard/domain/mail" id="f-submit" method="POST" role="form" enctype="multipart/form-data" onsubmit="return checkempty()">
-            <div class="text_box2">
-                <h4>Project Title:</h4><br>
-                <textarea name="title" id="" cols="30" rows="1" placeholder="Write something..."></textarea><br>
-                <h4>Project description:</h4><br>
-                <textarea name="Write" id="" cols="30" rows="5" placeholder="Write something..."></textarea><br>
-                <div class="file-upload">
-                    <input class="file-upload__input" type="file" name="file" id="myFile" multiple>
-                    <button class="file-upload__button" type="button">Choose File(s)</button>
-                    <span class="file-upload__label"></span>
-                </div>
-                
-            </div>
-            <!-- <input type="submit" name="mail" value="MAIL IT"> -->
-            <button class="mailit" type="submit" name="mail" value="mail it">MAIL IT</button>
-        </form>
-    </div>
-    <form action="/dashboard/logout" method="GET">
-        <button class="logout" type="submit">LOG OUT</button>
-    </form>
-    <!-- <button class="sendjson" onclick="sendJSON();">Submit Domain</button> -->
+       
 
 <script>
 
