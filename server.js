@@ -46,7 +46,10 @@ const dashboardRoutes = require('./routes/dashboard');
 app.use('/auth', authRoutes);
 app.use('/dashboard', dashboardRoutes);
 
-
+app.get("/download/:file",(req,res)=>{
+    const f2=`C:\\Users\\03ano\\collab\\collaborators.github.io\\public\\uploads\\${req.params.file}`
+    res.download(f2);
+})
 
 mongoose.connect(database, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => {

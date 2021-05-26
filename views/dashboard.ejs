@@ -101,55 +101,70 @@
                 <h1>None</h1>
             <%}%>
       </div>
-    </div>
+      <%if(project.length>0)%>
+      <%{%>
+        
+        <%for(var i=0;i<project.length;i++){%>
+          <h1><%=project[i].title%></h1><br>
+          <h4>Domain need are : </h4>
+          <%for(var j=0;j<project[i].domain.length;j++){%>
+            <h5><%=project[i].domain[j]%></h5><br>
+          <%}%>
+          <p id="pp"><%=project[i].description.substring(0,30)%>...<a href="/dashboard/username/<%=i%>">Read more..</a></p>
+          <br>
+        <%}%>
+      <%}%>
 
 
 
-
-
-    <script>
-      function checkextension() {
-        var file = document.querySelector("#fUpload");
-        if (/\.(jpe?g|png|gif)$/i.test(file.files[0].name) === false) { alert("not an image!"); }
-        else {
-          fetch('localhost:3000/dashboard')
-            .then(response => response.json())
-            .then(data => console.log(data));
-        }
-      }
-
-    </script>
-    <script>
-      $(function () {
-        $('#searchName').autocomplete({
-          source: function (req, res) {
-            $.ajax({
-              url: "dashboard/search",
-              dataType: "jsonp",
-              type: "GET",
-              data: req,
-              success: function (data) {
-                //console.log(data);
-                res(data);
-              },
-              error: function (err) {
-                console.log(err.status);
-                alert("user doesn't exists");
-              }
-            });
-            //console.log(req);
-
-            //res(req);
-          },
-
-          minLength: 1,
-          select: function (event, ui) {
-            if (ui.item) {
-              $("#searchName").text(ui.item.label);
-            }
+      <script>
+        function checkextension() {
+          var file = document.querySelector("#fUpload");
+          if (/\.(jpe?g|png|gif)$/i.test(file.files[0].name) === false) { alert("not an image!"); }
+          else {
+            fetch('localhost:3000/dashboard')
+              .then(response => response.json())
+              .then(data => console.log(data));
           }
+        }
+        //to reload when it is accessed through back button of browser
+        var perfEntries = performance.getEntriesByType("navigation");
+
+        if (perfEntries[0].type === "back_forward") {
+            location.reload(true);
+        }
+      </script>
+      <script>
+        $(function () {
+          $('#searchName').autocomplete({
+            source: function (req, res) {
+              $.ajax({
+                url: "dashboard/search",
+                dataType: "jsonp",
+                type: "GET",
+                data: req,
+                success: function (data) {
+                  //console.log(data);
+                  res(data);
+                },
+                error: function (err) {
+                  console.log(err.status);
+                  alert("user doesn't exists");
+                }
+              });
+              //console.log(req);
+
+              //res(req);
+            },
+
+            minLength: 1,
+            select: function (event, ui) {
+              if (ui.item) {
+                $("#searchName").text(ui.item.label);
+              }
+            }
+          });
         });
-      });
     </script>
 
 </body>

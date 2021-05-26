@@ -39,7 +39,8 @@
                         <span>Files Sent are:</span><br>
                         <%if(project.files.length!=0){%>
                             <%for(var j=0;j<project.files.length;j++){%>
-                                <a class="files" href="/public/uploads/<%=project.files[j].filename%>" download ><%=(j+1)%>) <%= project.files[j].filename %><span class="iconify" data-icon="el:download-alt" data-inline="false"></span></span> </a>
+                                <!-- <a class="files" href="/public/uploads/<%=project.files[j].filename%>"><%=(j+1)%>) <%= project.files[j].filename %><span class="iconify" data-icon="el:download-alt" data-inline="false"></span></span> </a> -->
+                                <a class="files" href="/dashboard/download/<%= project.files[j].filename %>"> <%=(j+1)%>) <%= project.files[j].filename %><span class="iconify" data-icon="el:download-alt" data-inline="false"></span></span> </a>
                             <%}%>
                         <%}else{%>
                             <span>None</span>
@@ -50,6 +51,14 @@
                     </p>
         </div>
     </div>
+
+    <script>
+        var perfEntries = performance.getEntriesByType("navigation");
+
+            if (perfEntries[0].type === "back_forward") {
+                location.reload(true);
+            }
+    </script>
 
 </body>
 

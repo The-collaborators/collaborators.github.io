@@ -158,6 +158,12 @@
                 document.getElementById("myDomain").style.display="none";
             }   
         }
+        //to reload when it is accessed through back button of browser
+        var perfEntries = performance.getEntriesByType("navigation");
+
+            if (perfEntries[0].type === "back_forward") {
+                    location.reload(true);
+                }
     </script>
 </body>
 </html>

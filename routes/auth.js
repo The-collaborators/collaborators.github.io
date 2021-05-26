@@ -11,6 +11,7 @@ router.get('/github/callback', passport.authenticate('github', {scope: ['user:em
     req.session.login=true;
     req.session.userID=req.user._id;
     req.session.domain=req.user.domain;
+    req.session.email=req.user.email;
     res.redirect('/dashboard');
 })
 

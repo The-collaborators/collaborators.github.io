@@ -7,38 +7,31 @@ const flash = require("connect-flash");
 const chatRoom=require("../models/room")
 const io = require('socket.io')(listen);
 const prj=require("../models/project");
+const fs=require("fs");
 
-//try
 const rooms={};
 let username;
 var ans;
+
 
 router.use(flash());
 router.use(function (req, res, next) {
   res.locals.message = req.flash();
   next();
 });
-//router.use(cors(corsOptions));
+
 //used for multer
 var storage = multer.diskStorage({
   destination: "./public/uploads/",
   filename: (req, file, cb) => {
     cb(
       null,
-      file.filename + "_" + Date.now() + path.extname(file.originalname)
+       file.originalname 
     );
   },
 });
 
-var storage1 = multer.diskStorage({
-  destination: "./public/uploadFile/",
-  filename: (req, file, cb) => {
-    cb(
-      null,
-      file.filename + "_" + Date.now() + path.extname(file.originalname)
-    );
-  },
-});
+
 
 var upload = multer({
   storage: storage,
@@ -46,41 +39,45 @@ var upload = multer({
 
 router.get("/", ensureAuthenticated, (req, res) => {
 
-  username=req.session.username
-  prj.findOne({username:username},function(err,found){
-    if(err)
-    {
-      throw err;
-    }
-    else{
-      if(found===null)
+  
+    prj.findOne({username:req.session.username},function(err,found){
+      if(err)
       {
-        res.render("dashboard", {
-          username: req.session.username,
-          img_name: req.session.image,
-          domain: req.session.domain,
-          project:[],
-          id:[]
-        });
+        throw err;
       }
       else{
-        res.render("dashboard", {
-          username: req.session.username,
-          img_name: req.session.image,
-          domain: req.session.domain,
-          project:found.project
-        });
+        //console.log("prj ",found);
+        if(found===null)
+        {
+          res.render("dashboard", {
+            username: req.session.username,
+            img_name: req.session.image,
+            domain: req.session.domain,
+            project:[],
+            id:[]
+          });
+        }
+        else{
+          console.log("found project",found.project);
+          res.render("dashboard", {
+            username: req.session.username,
+            img_name: req.session.image,
+            domain: req.session.domain,
+            project:found.project
+          });
+        }
+        
       }
-      
-    }
-  })
+    })
+  
+
   
 });
 
 router.post("/", [upload.single("file")], (req, res) => {
-  //console.log(req.session.username)
+  
   let img = req.file;
-  //console.log("hello "+img );
+  
   var flag = 0;
   if (img != undefined) {
     img = req.file.filename;
@@ -144,7 +141,15 @@ router.get("/domain/mail", [ensureAuthenticated], function (req, res, next) {
 
 
 
-router.post("/domain/mail",[ensureAuthenticated, upload.array("file", 5)],
+router.post("/domain/mail",[ensureAuthenticated,(req,res,next)=>{
+  if (req.files != undefined) {
+    for (var i = 0; i < req.files.length; i++) {
+      req.files[i].originalname=Date.now()+"_"+req.files[i].originalname;
+      
+    }
+  }
+  next();
+}, upload.array("file", 5)],
   function (req, res, next) {
 
 
@@ -177,11 +182,14 @@ router.post("/domain/mail",[ensureAuthenticated, upload.array("file", 5)],
 
     // Step 2
     var fs = [];
+    date=Date.now();
+    console.log("files",req.files);
     if (req.files != undefined) {
       for (var i = 0; i < req.files.length; i++) {
+        //req.files[i].originalname=Date.now()+"_"+req.files[i].originalname;
         fs.push({
-          filename: req.files[i].filename,
-          path: "./public/uploads/" + req.files[i].filename,
+          filename: req.files[i].originalname,
+          path: "./public/uploads/" +req.files[i].originalname,
         });
       }
     }
@@ -221,7 +229,7 @@ router.post("/domain/mail",[ensureAuthenticated, upload.array("file", 5)],
                     mailList.push(found[i].email);
                   }
                 }
-                if (req.body.mail === "mail it") {
+                if (req.body.mail === "mail it" && mailList.length>0) {
                   let mailOptions = {
                     from: "aksjain891999@gmail.com", // TODO: email sender
                     to: mailList, // TODO: email receiver
@@ -240,12 +248,13 @@ router.post("/domain/mail",[ensureAuthenticated, upload.array("file", 5)],
                 }
               });
               console.log("project",prj1);
-              res.render("dashboard", {
-                username: req.session.username,
-                img_name: req.session.image,
-                domain: req.session.domain,
-                project:prjNew.project,
-              });
+              // res.render("dashboard", {
+              //   username: req.session.username,
+              //   img_name: req.session.image,
+              //   domain: req.session.domain,
+              //   project:prjNew.project,
+              // });
+              res.redirect("/dashboard");
             }
           })
         }
@@ -298,12 +307,8 @@ router.post("/domain/mail",[ensureAuthenticated, upload.array("file", 5)],
                     }
                   });
                   console.log("project",prj1);
-                  res.render("dashboard", {
-                    username: req.session.username,
-                    img_name: req.session.image,
-                    domain: req.session.domain,
-                    project:prj1,
-                  });
+
+                  res.redirect("/dashboard");
                 }
               })
             }
@@ -313,21 +318,15 @@ router.post("/domain/mail",[ensureAuthenticated, upload.array("file", 5)],
   })
 });
 
-router.get("/username/:title",(req,res)=>{
+router.get("/username/:index",(req,res)=>{
   prj.findOne({username:req.session.username},function(err,found){
     if(err)
     {
       throw err;
     }
     else{
-      for(var i=0;i<found.project.length;i++)
-      {
-        if(found.project[i].title===req.params.title)
-        {
-          console.log("prj",found.project[i]);
-          res.render("project",{project:found.project[i],username:req.session.username});
-        }
-      }
+
+      res.render("project",{project:found.project[req.params.index],username:req.session.username});
     }
   })
 })
@@ -343,7 +342,7 @@ router.get("/search", function (req, res, next) {
       .limit(20);
 
     userFilter.exec(function (err, data) {
-      //console.log("hi "+data);
+     
       var result = [];
 
       if (!err) {
@@ -353,7 +352,7 @@ router.get("/search", function (req, res, next) {
               id: foundUser._id,
               label: foundUser.username,
             };
-            //console.log(foundUser.username);
+            
             result.push(obj);
           });
         }
@@ -388,7 +387,9 @@ router.post("/search", function (req, res, next) {
     });
   }
 });
+
 router.get("/chat/:room",ensureAuthenticated, (req,res)=>{
+  console.log("chat room hello");
 chatRoom.find({roomName:req.params.room },function(err,found){
     console.log("foudn data",found," data end");
     if(found[0])
@@ -418,7 +419,8 @@ router.post("/chat/room",ensureAuthenticated, (req,res)=>{
       if(found.length)
       {
         console.log("hi");
-        return res.redirect('/');
+        req.flash("message", "room already exists");
+        return res.redirect('/dashboard/chat');
       }
  
       let nChat = new chatRoom({
@@ -433,7 +435,9 @@ router.post("/chat/room",ensureAuthenticated, (req,res)=>{
         else{
           console.log("roomName saved");
           rooms[req.body.room] = { users: {} }
+          var url="/dashboard/chat/"+req.body.room;
           res.redirect(req.body.room)
+          
           // Send message that new room was created
           io.emit('room-created', req.body.room)
         }
@@ -445,29 +449,59 @@ router.post("/chat/room",ensureAuthenticated, (req,res)=>{
   
 })
 
+router.get("/download/:file",ensureAuthenticated,(req,res)=>{
+
+  const f2=path.join("C:\\Users\\03ano\\collab\\collaborators.github.io\\public\\uploads",req.params.file);
+  const f="C:\\Users\\03ano\\collab\\collaborators.github.io\\public\\uploads\\1622025519101_graph.png";
+  if(f===f2)
+  {
+    console.log("same");
+  }
+  console.log("f",decodeURI(req.params.file));
+  console.log("f2",decodeURI(f2));
+  console.log("diff",findDiff(f,f2));
+  //res.send({f2,f});
+  res.download(f2);
+
+})
+
+function findDiff(str1, str2){ 
+  let diff= "";
+  str2.split('').forEach(function(val, i){
+    if (val != str1.charAt(i))
+      diff += val ;         
+  });
+  return diff;
+}
+
 router.get("/chat",ensureAuthenticated, (req,res)=>{
   
-  const t=[];
-  chatRoom.find({ },function(err,found){
-    if(err)
-    {
-      throw err;
-    }
-    else{
-      if(found.length)
-      {
-        for(var i=0;i<found.length;i++)
-        {
-          t.push(found[i].roomName);
-        }
-      }
-      
-      res.render("chatRoom",{rooms:t,username:req.session.username});
-    }
-
-  })
   
+      const t=[];
+    chatRoom.find({ },function(err,found){
+      if(err)
+      {
+        throw err;
+      }
+      else{
+        if(found.length)
+        {
+          for(var i=0;i<found.length;i++)
+          {
+            t.push(found[i].roomName);
+          }
+        }
+        
+          res.render("chatRoom",{rooms:t,username:req.session.username,roomName:""});
+        
+        
+        
+      }
+
+    })
 })
+
+
 
 router.get("/logout", function (req, res, next) {
   req.logout();
@@ -493,8 +527,12 @@ function ensureAuthenticated(req, res, next) {
 io.on('connection', socket => {
   socket.on('new-user', (room, name) => {
     socket.join(room)
-    name=username
-    
+    //name=username
+    if(rooms[room]===undefined)
+    {
+      rooms[room] = { users: {} }
+    }
+    rooms[room].users[socket.id] = name
     socket.to(room).broadcast.emit('user-connected', name)
     chatRoom.find({roomName:room },function(err,found){
       console.log(found[0]);
@@ -518,7 +556,7 @@ io.on('connection', socket => {
     chatRoom.find({roomName:room },function(err,found){
       let chat=[];
       chat=found[0].conversation;
-      chat.push({from:username,talk:message});
+      chat.push({from:rooms[room].users[socket.id],talk:message});
       chatRoom.deleteOne({roomName:room},function(err,foundUser){
         if(err)
         {
@@ -540,7 +578,7 @@ io.on('connection', socket => {
           })
         }
       })
-      socket.to(room).broadcast.emit('chat-message', { message: message, name: username })
+      socket.to(room).broadcast.emit('chat-message', { message: message, name: rooms[room].users[socket.id] })
     })
     
     
@@ -549,29 +587,16 @@ io.on('connection', socket => {
 
   socket.on('disconnect', () => {
     getUserRooms(socket).forEach(room => {
-      socket.to(room).broadcast.emit('user-disconnected', username)
-      delete rooms[room].users[username]
+      socket.to(room).broadcast.emit('user-disconnected', rooms[room].users[socket.id])
+      delete rooms[room].users[socket.id]
     })
   })
 })
 
-const updateData=async(roomName,chatData)=>{
-  try{
-    console.log("chatData",chatData);
-    const res=await chatRoom.find({roomName:roomName});
-    res.conversation=chatData;
-    await  res.save(function(){})
-      
-    
-  }
-  catch(err)
-  {
-    console.log(err);
-  }
-}
+
 function getUserRooms(socket) {
   return Object.entries(rooms).reduce((names, [name, room]) => {
-    if (room.users[username] != null) names.push(name)
+    if (room.users[socket.id] != null) names.push(name)
     return names
   }, [])
 }

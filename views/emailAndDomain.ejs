@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/87390cb8ac.js" crossorigin="anonymous"></script>
+    <title>Domain</title>
+    <style>
+        *,
+        *::after,
+        *::before {
+            margin:0;
+            padding:0;
+            box-sizing: border-box;
+            font-family: 'Roboto Slab', serif;
+        }
+
+
+        body {
+            width: 100vw;
+            height: 100vh;
+            background-color:#2e3141;
+            background-image: linear-gradient(rgba(255,255,255,0.2),rgba(255,255,255,0));
+        }
+
+        .username{
+        height:20%;
+        width:100%;
+        font-size:30px;
+        text-transform: uppercase;
+        padding:50px;
+        font-weight: bolder;
+        color: white;
+        letter-spacing: 2px;
+        text-shadow: 4px 3px black;
+        }
+        h3{
+            font-size:16px;
+            text-transform: capitalize;
+            font-weight: bolder;
+            color: white;
+            letter-spacing: 2px;
+            text-align: center;
+            text-shadow: 2px 2px navy;
+        }
+
+        .outer {
+            height:54%;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        .text_box1 {
+            width: 30%;
+            /* border: 2px solid white; */
+            float:left;
+            padding: 25px;
+            box-shadow: 0 0 10px 0px white;
+            border-radius: 20px;
+        }
+        .text_box2 {
+            /* border: 2px solid white; */
+            padding:0 30px 30px 30px;
+            box-shadow: 0 0 10px 0px white;
+            border-radius: 20px;
+        }
+        form{
+            width:30%;
+        }
+        .sendjson{
+            width:350px;
+            position: absolute;
+            bottom: 250px;
+            left: 20%;
+            padding:8px;
+            background:transparent;
+            border:2px solid white;
+            color:white;
+            transition:0.3s;
+            width:100px;
+            border-radius:10px;
+            cursor:pointer;
+        }
+        .sendjson:hover{
+            color:#2e3141;
+            font-weight: bolder;
+            background-color: rgba(255,255,255,0.3);
+        }
+        .confirm_domain{
+            width: 40%;
+            transform: translateX(50%);
+            cursor: pointer;
+            padding: 10px 15px;
+            border: 2px solid white;
+            outline: none;
+            background-color: transparent;
+            margin-bottom: 0px;
+            border-radius: 10px;
+            color: white;
+            transition: 0.3s;
+        }
+        .confirm_domain:hover{
+            color:#2e3141;
+            font-weight: bolder;
+            background-color: rgba(255,255,255,0.3);
+        }
+        textarea::placeholder {
+            color: white;
+        }
+
+        textarea {
+            padding: 10px;
+            /* color: #FFC300; */
+            font-size: 15px;
+            outline: none;
+            border: none;
+            background-color: transparent;
+            color: white;
+            /* padding:10px; */
+            margin:10px 0;
+        }
+
+        .file-upload {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+        }
+
+        .file-upload__input {
+            display: none;
+        }
+
+        .file-upload__button {
+            background: transparent;
+            border: 2px solid white;
+            border-radius: 10px;
+            outline: none;
+            padding: 0.5em 0.8em;
+            margin-right: 15px;
+            color: white;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.5s;
+        }
+
+        .file-upload__button:hover {
+            color: #2e3141;
+            background:rgba(255,255,255,0.3);
+        }
+
+        /* .file-upload__button:active {
+            color: #423735;
+            background: #FFC300;
+        } */
+
+        .file-upload__label {
+            max-width: 500px;
+            font-size: 0.8rem;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+            color: white;
+        }
+
+        @media screen and (max-width: 630px) {
+            .text_box {
+                width: 90%;
+            }
+        }
+
+
+        .mainbutton {
+            width: 40%;
+            cursor: pointer;
+            padding: 10px 15px;
+            border: 2px solid white;
+            outline: none;
+            background-color: transparent;
+            margin-bottom: 0px;
+            
+            border-radius: 10px;
+            color:white;
+            transition: 0.3s;
+        }
+        .mainbutton:hover{
+            color:#2e3141;
+            font-weight: bolder;
+            background-color: rgba(255,255,255,0.3);
+        }
+
+
+        .modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            transition: 200ms ease-in-out;
+            border: 1px solid black;
+            border-radius: 10px;
+            z-index: 10;
+            background-color: white;
+            width: 250px;
+            max-width: 80%;
+        }
+
+        .modal.active {
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .modal-header {
+            padding: 10px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid black;
+        }
+
+        .modal-header .title {
+            font-size: 1.25rem;
+            font-weight: bold;
+        }
+
+        .modal-header .close-button {
+            cursor: pointer;
+            border: none;
+            outline: none;
+            background: none;
+            font-size: 1.25rem;
+            font-weight: bold;
+        }
+
+        .modal-body {
+            padding: 10px 15px;
+        }
+
+        #overlay {
+            position: fixed;
+            opacity: 0;
+            transition: 200ms ease-in-out;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, .5);
+            pointer-events: none;
+        }
+
+        #overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        select {
+            cursor: pointer;
+            margin-left: 60px;
+            border: 1px solid lightgrey;
+            padding: 5px 10px;
+            outline: none;
+            border-radius: 8px;
+        }
+        .logout{
+            width:125px;
+            padding:8px;
+            position:absolute;
+            right:50px;
+            top:50px;
+            background-color: transparent;
+            border:2px solid white;
+            color:white;
+            border-radius:10px;
+            cursor:pointer;
+            transition:0.3s;
+        }
+        .logout:hover{
+            font-weight: bolder;
+            color:#2e3141;
+            background-color: rgba(255,255,255,0.3);
+        }
+
+        .removable {
+            background-color: rgba(255,255,255,0.3);
+            width: 40%;
+            height: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 10px 27%;
+            padding-left: 10px;
+            color: white;
+            font-weight: bolder;
+        }
+
+        .removable button {
+            cursor: pointer;
+            border: none;
+            outline: none;
+            margin-right: 10px;
+            background-color: transparent;
+        } 
+
+        .removable button:hover {
+            cursor:pointer;
+        }
+
+        #success{
+            color:greenyellow;
+            font-weight: bolder;
+        }
+        #further{
+            color:white;
+            text-transform: uppercase;
+            position: absolute;
+            bottom:30%;
+            right:15%;
+            text-align: center;
+            opacity: 0;
+        }
+        .proceed{
+            text-decoration: none;
+            text-transform: uppercase;
+            color:#95a2ff;;
+            margin-left:8px;
+            font-weight: bolder;
+            text-shadow: 4px 3px black;
+        }
+        .large{
+            margin-right: 5px;
+            font-size: large;
+        }
+    </style>
+</head>
+
+<body>
+    <%=message.message%>
+    <h4 class="username">hello <%= username %></h4>
+
+    <div class="modal" id="modal">
+        <div class="modal-header">
+            <div class="title">Choose a domain</div>
+            <button data-close-button class="close-button">&times;</button>
+        </div>
+        <div class="modal-body">
+            <select id="list" name="list" onchange="getSelectValue();">
+                <option value="JavaScript" name="JavaScript">JavaScript</option>
+                <option value="Python" name="Python">Python</option>
+                <option value="HTML" name="HTML">HTML</option>
+                <option value="CSS" name="CSS">CSS</option>
+                <option value="C++" name="C">C++</option>
+            </select>
+        </div>
+    </div>
+
+
+    <div id="overlay"></div>
+    <h3>Need Collaborators Of Domain :</h3>
+    <h3 id="success"></h3>
+    <div class="outer">
+        <div class="text_box1">
+            <button class="mainbutton" data-modal-target="#modal">Add Domain</button>
+            <button class="confirm_domain" onclick="sendJSON()">Confirm Domains</button>
+            <ul id="myDomain"></ul>
+
+        </div>
+    </div>
+    <div id="further">
+       your domains are confirmed,<br> to Mail click:<a class="proceed" href="/dashboard/domain/mail"><i class="fas fa-arrow-circle-right large"></i></a>
+    </div>
+    <form action="/dashboard/logout" method="GET">
+        <button class="logout" type="submit">LOG OUT</button>
+    </form>
+    <!-- <button class="sendjson" onclick="sendJSON();">Submit Domain</button> -->
+
+<script>
+    const openModalButtons = document.querySelectorAll('[data-modal-target]')
+    const closeModalButtons = document.querySelectorAll('[data-close-button]')
+    const overlay = document.getElementById('overlay')
+
+    openModalButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const modal = document.querySelector(button.dataset.modalTarget)
+            openModal(modal)
+        })
+    })
+
+        overlay.addEventListener('click', () => {
+            const modals = document.querySelectorAll('.modal.active')
+            modals.forEach(modal => {
+                closeModal(modal)
+            })
+        })
+
+        closeModalButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const modal = button.closest('.modal')
+                closeModal(modal)
+            })
+        })
+
+        function openModal(modal) {
+            if (modal == null) return
+            modal.classList.add('active')
+            overlay.classList.add('active')
+        }
+
+        function closeModal(modal) {
+            if (modal == null) return
+            modal.classList.remove('active')
+            overlay.classList.remove('active')
+        }
+
+        var obj = {
+            finalList: [],
+        }
+
+        var itemList;
+        function getSelectValue() {
+            var val = document.getElementById('list');
+            var items = document.getElementById("myDomain");
+            itemList = items.getElementsByTagName("li");
+            var selectValue = val.value;
+            var flag = 1;
+            for (var i = 0; i < itemList.length; i++) {
+                var text = itemList[i].innerHTML;
+                var len = itemList[i].innerHTML.length;
+                var finalText = text.substring(0, len - 33);
+                if (finalText == selectValue) {
+                    flag = 0;
+                    break;
+                }
+            }
+            if (flag == 1) {
+                var node = document.createElement("LI");
+                var textnode = document.createTextNode(selectValue);
+                obj.finalList.push(selectValue);
+                var button = document.createElement("button");
+                button.classList.add('closex');
+                button.innerHTML = "❌";
+                node.appendChild(textnode);
+                node.appendChild(button);
+                node.classList.add('removable');
+                items.appendChild(node);
+                button.addEventListener("click", function () {
+                    var l = button.parentElement.innerHTML.length;
+                    var val = button.parentElement.innerHTML.substring(0, l - 33);
+                    var index = obj.finalList.indexOf(val);
+                    if (index > -1) {
+                        obj.finalList.splice(index, 1);
+                    }
+                    items.removeChild(button.parentElement);
+                });
+            }
+            else
+                alert(finalText + " is Already Added");
+        }
+
+
+
+        function sendJSON() {
+            if(obj.finalList.length==0){
+                alert("No domains selected... please add the domain");
+            }
+            else{
+                console.log(obj);
+                var myJSON = JSON.stringify({ "finalList": obj.finalList});
+                console.log(myJSON);
+                let xhr = new XMLHttpRequest();
+                let url = "http://localhost:3000/dashboard/domain"; //jahan catch krna h
+
+                xhr.open("POST", url, true);
+
+                xhr.setRequestHeader("Content-Type", "application/json");
+
+                xhr.send(myJSON);
+
+                document.getElementById("further").style.opacity=1;
+                document.getElementById("myDomain").style.display="none";
+
+            }   
+        }
+        //to reload when it is accessed through back button of browser
+        var perfEntries = performance.getEntriesByType("navigation");
+
+            if (perfEntries[0].type === "back_forward") {
+                    location.reload(true);
+                }
+    </script>
+</body>
+</html>
