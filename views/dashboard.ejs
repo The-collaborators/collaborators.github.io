@@ -12,216 +12,145 @@
   <link rel="preconnect" href="https://fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <script src="https://kit.fontawesome.com/87390cb8ac.js" crossorigin="anonymous"></script>
+  <script src="https://code.iconify.design/1/1.0.7/iconify.min.js"></script>
   <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-  <style>
-    *{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family: 'Roboto Slab', serif;
-    }
-    body{
-        width:100vw;
-        height:100vh;
-        background-color:#2e3141;
-        background-image: linear-gradient(rgba(255,255,255,0.2),rgba(255,255,255,0));
-    }
-    .logout{
-      padding:8px;
-      position:absolute;
-      right:50px;
-      top:50px;
-    }
-    #resize{
-      width:150px;
-      height:150px;
-      border: 2px solid grey;
-      border-radius: 100%;
-      overflow: hidden;
-      margin:50px 50px 20px 50px;
-    }
-    .username{
-      height:20%;
-      width:100%;
-      font-size:30px;
-      text-transform: uppercase;
-      padding:50px;
-      font-weight: bolder;
-      color: white;
-      letter-spacing: 2px;
-    }
-    .menu{
-      height: 70%;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-    }
-    form{
-      width:30%;
-      text-align: center;
-    }
-    button,input[type=submit]{
-      width:100px;
-      padding:5px;
-      margin:5px;
-      cursor:pointer;
-      background-color:transparent;
-      border:2px solid white;
-      border-radius:8px;
-      color: white;
-      transition:0.3s;
-    }
-    input{
-      width:70%;
-      padding:5px;
-      margin:5px;
-      border: none;
-      outline:none;
-    }
-    input:focus{
-      outline:none;
-      border:none;
-    }
-    button:hover{
-      color:#2e3141;
-      font-weight: bolder;
-      background-color:rgba(255,255,255,0.3);
-    }
-    input[type=submit]:hover{
-      color:#2e3141;
-      font-weight: bolder;
-      background-color:rgba(255,255,255,0.3);
-    }
-    input[type=file]{
-      color:white;
-      cursor:pointer;
-      padding:5px;
-    }
-    span{
-      color:white;
-      text-transform: uppercase;
-      font-weight: bolder;
-    }
-    .bg{
-      position: absolute;
-    width: 50%;
-    height: 75%;
-    background-color: transparent;
-    z-index: -1;
-    box-shadow: 0 0 20px 0px white;
-    border-radius: 30px;
-  }
-  </style>
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans&display=swap" rel="stylesheet">
+  <%- include('partials/dashboard_css') %>
 </head>
 
 <body>
-    
-  
-    <form action="/dashboard/logout" method="GET">
-      <button class="logout" type="submit">LOG OUT</button>
-    </form>
-      <h4 class="username">hello <%= username %>
-      </h4>
-      <div class="menu">
-        <div class="bg"></div>
+  <%- include('partials/navbar') %>
+
+
+    <div class="menu">
+      <div class="side_content">
         <form action="/dashboard/search" method="POST" role="form">
           <input type="search" class="form-control" id="searchName" name="filtername" placeholder="Enter name"><br>
           <button type="submit" id="search">SEARCH</button>
         </form>
 
         <form onsubmit="checkextension()" method="post" role="form" enctype="multipart/form-data">
-            <img id="resize" src="/uploads/<%=img_name%>" alt="<%=img_name%>"><br>
-            <!-- <label for="file" >Upload File</label> -->
-            <% if(domain.length==0){%>
-              <span>No domain provided</span>
+          <img id="resize" src="/uploads/<%=img_name%>" alt="<%=img_name%>"><br>
+          <!-- <label for="file" >Upload File</label> -->
+          <% if(domain.length==0){%>
+            <span>No domain provided</span>
             <%}else{%>
               <span>Domain : </span>
               <%for(let i=0;i<domain.length;i++){%>
-                <span><%=domain[i]%> </span>
+                <span>
+                  <%=domain[i]%>
+                </span>
                 <%if(i!=domain.length-1){%>
                   <span> , </span>
-                <%}%>
-              <%}%>
+                  <%}%>
+                    <%}%>
 
-            <% } %> 
-            <p style="color: white; font-size: 0.8rem; margin:15px 0 5px 0;">* Valid file types are :.png, .jpeg, .jpg, .gif</p>
-            <input type="file" class="form-control" name="file" id="fUpload" required /><br>
-            <input type="submit" name="upload" value="Upload" id="shiftupload" class="btn1">
+                      <% } %>
+                        <p style="color: white; font-size: 0.8rem; margin:15px 0 5px 0;">* Valid file types are :.png,
+                          .jpeg, .jpg, .gif</p>
+                        <input type="file" class="form-control" name="file" id="fUpload" required /><br>
+                        <input type="submit" name="upload" value="Upload" id="shiftupload" class="btn1">
         </form>
 
         <form action="/dashboard/domain" method="GET">
-          <button type="submit">MAIL</button>
+          <button type="submit">Find Collaborator</button>
         </form>
         <form action="/dashboard/chat" method="GET">
-          <button  type="submit" >CHAT</button>
+          <button type="submit">CHAT</button>
         </form>
-
-        <h6>work done:</h6>
-
-        
+        <!-- <form action="/dashboard/logout" method="GET">
+          <button type="submit">LOG OUT</button>
+        </form> -->
       </div>
-      <%if(project.length>0)%>
-      <%{%>
+
+      <div class="content">
+        <h1 style="margin-bottom: 10px;" >Work done:</h1>
         
-        <%for(var i=0;i<project.length;i++){%>
-          <h1><%=project[i].title%></h1><br>
-          <h4>Domain need are : </h4>
-          <%for(var j=0;j<project[i].domain.length;j++){%>
-            <h5><%=project[i].domain[j]%></h5><br>
-          <%}%>
-          <p id="pp"><%=project[i].description.substring(0,30)%>...<a href="/dashboard/<%=username%>/<%=project[i].title%>">Read more..</a></p>
-          <br>
-        <%}%>
-      <%}%>
+          <%if(project.length>0){%>
+                <%for(var i=0;i<project.length;i++){%>
+                  <div class="project_content">
+                    <h2 style="text-transform: capitalize;">
+                      <%=project[i].title%>
+                    </h2><hr style="border-bottom: 2px solid black; margin-top: 5px;"><br>
+                    <h5>Domain needed are : </h5>
+                      <!-- <h4> -->
+                        <%for(var j=0;j<project[i].domain.length;j++){%>
+                          <%if(project[i].domain[j] === "Python"){%>
+                          <p style="display:inline-block; font-weight: bold; margin:8px 2px 0 0; padding:5px 10px; border-radius: 8px;color:black; background-color:tomato;">Python</p>
+                          <%}else if(project[i].domain[j]==="JavaScript"){%>
+                          <p style="display:inline-block; font-weight: bold; margin:8px 2px 0 0; padding:5px 10px; border-radius:  8px;color:black; background-color:gold;">JavaScript</p>
+                          <%}else if(project[i].domain[j]==="HTML"){%>
+                            <p style="display:inline-block; font-weight: bold; margin:8px 2px 0 0; padding:5px 10px; border-radius:  8px;color:black; background-color:hotpink;">HTML</p>
+                          <%}else if(project[i].domain[j]==="CSS"){%>
+                            <p style="display:inline-block; font-weight: bold; margin:8px 2px 0 0; padding:5px 10px; border-radius:  8px;color:black; background-color:orange;">CSS</p>
+                            <%}else if(project[i].domain[j]==="C++"){%>
+                              <p style="display:inline-block; font-weight: bold; margin:8px 2px 0 0; padding:5px 10px; border-radius:  8px;color:black; background-color:limegreen;">C++</p>
+                          <%}%>  
+                        <%}%>
+                      <!-- </h4> -->
+                        <p style="margin-top:15px; display: flex;" id="pp">
+                          <%=project[i].description.substring(0,30)%>...
+                          <a href="/dashboard/username/<%=project[i].title%>"><span class="iconify fa-arrow-alt-circle-right" data-icon="carbon:next-filled" data-inline="false"></span></a>
+                        </p>
+                    </div>
+                    <%}%>
+            <%}else{%>
+                <h1>None</h1>
+            <%}%>
+      </div>
+    </div>
 
 
 
-      <script>
-        function checkextension() {
-          var file = document.querySelector("#fUpload");
-          if (/\.(jpe?g|png|gif)$/i.test(file.files[0].name) === false) { alert("not an image!"); }
-          else {
-            fetch('localhost:3000/dashboard')
-              .then(response => response.json())
-              .then(data => console.log(data));
-          }
+
+
+    <script>
+      function checkextension() {
+        var file = document.querySelector("#fUpload");
+        if (/\.(jpe?g|png|gif)$/i.test(file.files[0].name) === false) { alert("not an image!"); }
+        else {
+          fetch('localhost:3000/dashboard')
+            .then(response => response.json())
+            .then(data => console.log(data));
         }
+      }
 
-      </script>
-      <script>
-        $(function () {
-          $('#searchName').autocomplete({
-            source: function (req, res) {
-              $.ajax({
-                url: "dashboard/search",
-                dataType: "jsonp",
-                type: "GET",
-                data: req,
-                success: function (data) {
-                  //console.log(data);
-                  res(data);
-                },
-                error: function (err) {
-                  console.log(err.status);
-                  alert("user doesn't exists");
-                }
-              });
-              //console.log(req);
-
-              //res(req);
-            },
-
-            minLength: 1,
-            select: function (event, ui) {
-              if (ui.item) {
-                $("#searchName").text(ui.item.label);
+    </script>
+    <script>
+      $(function () {
+        $('#searchName').autocomplete({
+          source: function (req, res) {
+            $.ajax({
+              url: "dashboard/search",
+              dataType: "jsonp",
+              type: "GET",
+              data: req,
+              success: function (data) {
+                //console.log(data);
+                res(data);
+              },
+              error: function (err) {
+                console.log(err.status);
+                alert("user doesn't exists");
               }
+            });
+            //console.log(req);
+
+            //res(req);
+          },
+
+          minLength: 1,
+          select: function (event, ui) {
+            if (ui.item) {
+              $("#searchName").text(ui.item.label);
             }
-          });
+          }
         });
-      </script>
+      });
+    </script>
 
 </body>
 

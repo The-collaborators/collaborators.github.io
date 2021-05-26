@@ -164,6 +164,8 @@ router.post("/domain/mail",[ensureAuthenticated, upload.array("file", 5)],
       }
     }
     
+    console.log("domain arr ",arr);
+
     let transporter = nodemailer.createTransport({
       service: "gmail",
 
@@ -211,6 +213,7 @@ router.post("/domain/mail",[ensureAuthenticated, upload.array("file", 5)],
               console.log("project created");
               var mailList = [];
               User.find({}, function (err, found) {
+                
                 for(var i=0;i<found.length;i++)
                 {
                   if(found[i].domain.some(item => arr.includes(item))===true)
@@ -241,7 +244,7 @@ router.post("/domain/mail",[ensureAuthenticated, upload.array("file", 5)],
                 username: req.session.username,
                 img_name: req.session.image,
                 domain: req.session.domain,
-                project:prj1,
+                project:prjNew.project,
               });
             }
           })
@@ -268,6 +271,7 @@ router.post("/domain/mail",[ensureAuthenticated, upload.array("file", 5)],
                   console.log("project created");
                   var mailList = [];
                   User.find({}, function (err, found) {
+                    console.log("arr ",arr);
                     for(var i=0;i<found.length;i++)
                     {
                       if(found[i].domain.some(item => arr.includes(item))===true)
@@ -309,7 +313,7 @@ router.post("/domain/mail",[ensureAuthenticated, upload.array("file", 5)],
   })
 });
 
-router.get("/:username/:title",(req,res)=>{
+router.get("/username/:title",(req,res)=>{
   prj.findOne({username:req.session.username},function(err,found){
     if(err)
     {
@@ -321,7 +325,7 @@ router.get("/:username/:title",(req,res)=>{
         if(found.project[i].title===req.params.title)
         {
           console.log("prj",found.project[i]);
-          res.render("project",{project:found.project[i],username:req.params.username});
+          res.render("project",{project:found.project[i],username:req.session.username});
         }
       }
     }
