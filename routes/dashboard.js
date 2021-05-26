@@ -169,6 +169,8 @@ router.post("/domain/mail",[ensureAuthenticated,(req,res,next)=>{
       }
     }
     
+    console.log("domain arr ",arr);
+
     let transporter = nodemailer.createTransport({
       service: "gmail",
 
@@ -219,6 +221,7 @@ router.post("/domain/mail",[ensureAuthenticated,(req,res,next)=>{
               console.log("project created");
               var mailList = [];
               User.find({}, function (err, found) {
+                
                 for(var i=0;i<found.length;i++)
                 {
                   if(found[i].domain.some(item => arr.includes(item))===true)
@@ -277,6 +280,7 @@ router.post("/domain/mail",[ensureAuthenticated,(req,res,next)=>{
                   console.log("project created");
                   var mailList = [];
                   User.find({}, function (err, found) {
+                    console.log("arr ",arr);
                     for(var i=0;i<found.length;i++)
                     {
                       if(found[i].domain.some(item => arr.includes(item))===true)

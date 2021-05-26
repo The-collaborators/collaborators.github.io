@@ -1,0 +1,318 @@
+<style>
+    *{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family: 'Roboto Slab', serif;
+    }
+
+    body{
+        background-color:#2e3141;
+        /* background-image: linear-gradient(rgba(255,255,255,0.2),rgba(255,255,255,0)); */
+    }
+
+    .logout{
+      padding:8px;
+      position:absolute;
+      right:100px;
+      top:100px;
+    }
+
+    #resize{
+      width:150px;
+      height:150px;
+      border: 2px solid grey;
+      border-radius: 100%;
+      overflow: hidden;
+      margin:50px 50px 20px 50px;
+    }
+
+    .username{
+      font-size:30px;
+      text-transform: uppercase;
+      font-weight: bolder;
+      color: white;
+      letter-spacing: 2px;
+    text-shadow: 4px 3px black;
+    }
+
+    .menu{
+      display:flex;
+    }
+
+    .side_content{
+        width:30%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        padding:50px 0;
+    }
+    .content{
+        color:white;
+        width:70%;
+        padding-top:30px;
+        height:92vh;
+        overflow: scroll;
+        overflow-x: hidden;
+        padding-bottom:50px;
+    }
+    .project_content{
+        color:#2e3141;
+        width:30%;
+        height:220px;
+        border:2px solid white;
+        margin:10px;
+        padding:8px 10px;
+        float: left;
+        overflow-wrap: break-word;
+        overflow-y:scroll;
+        background-color: #ddd;
+        box-shadow:0 0 10px 2px #ddd;
+    }
+
+    .fa-arrow-alt-circle-right{
+        font-size: 25px;
+        transition: 0.2s;
+        color:#4c5c96;
+    }
+    .fa-arrow-alt-circle-right:active{
+        transform: scale(0.9);
+    }
+    .fa-arrow-alt-circle-right:hover{
+        color:orange;
+    }
+
+    form{
+      text-align: center;
+    }
+    button,input[type=submit]{
+      width:100px;
+      padding:5px;
+      margin:5px;
+      cursor:pointer;
+      background-color:transparent;
+      border:2px solid white;
+      border-radius:8px;
+      color: white;
+      transition:0.3s;
+    }
+    input{
+      width:70%;
+      padding:5px;
+      margin:5px;
+      border: none;
+      outline:none;
+    }
+    input:focus{
+      outline:none;
+      border:none;
+    }
+    button:hover{
+      color:#2e3141;
+      font-weight: bolder;
+      background-color:rgba(255,255,255,0.3);
+    }
+
+    input[type=search]{
+        width:100%;
+    }
+
+    input[type=submit]:hover{
+      color:#2e3141;
+      font-weight: bolder;
+      background-color:rgba(255,255,255,0.3);
+    }
+    input[type=file]{
+      color:white;
+      cursor:pointer;
+      padding:5px;
+    }
+    span{
+      color:white;
+      text-transform: uppercase;
+      font-weight: bolder;
+    }
+    .bg{
+      position: absolute;
+    width: 50%;
+    height: 75%;
+    background-color: transparent;
+    z-index: -1;
+    box-shadow: 0 0 20px 0px white;
+    border-radius: 30px;
+  }
+
+ ::-webkit-scrollbar{
+     width:5px;
+ }
+
+  /* *************NAVBAR STYLE **************/
+
+  .navbar {
+  width:100%;
+  height:10%;
+  overflow: hidden;
+  background-color: #4c5c96;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding:10px 20px;
+}
+
+.navbar a {
+  float: left;
+  font-size: 16px;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+.dropdown {
+  float: left;
+  overflow: hidden;
+  margin-right: 100px;
+}
+
+.dropdown .dropbtn {
+  font-size: 16px;  
+  border: none;
+  outline: none;
+  color: white;
+  background-color: inherit;
+  font-family: inherit;
+  margin: 0;
+  display: flex;
+  align-items: center;
+}
+
+.dropdown .dropbtn svg{
+    margin-left:5px;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.dropdown-content a {
+  float: none;
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+}
+
+.dropdown-content a:hover {
+  background-color: #ddd;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+
+
+/********************RESPONSIVE DASHBOARD *************/
+
+@media screen and (max-width:990px) {
+    .project_content{
+        width:40%;
+    }
+    .side_content{
+        width:40%;
+    }
+    .content{
+        width:60%;
+        padding-left:5%;
+    }
+}
+@media screen and (max-width:728px) {
+    .project_content{
+        width:90%;
+    }
+    .side_content{
+        width:50%;
+    }
+    .content{
+        padding-left:0;
+        width:50%;
+    }
+    .username{
+        font-size: 20px;
+    }
+    .dropdown{
+        margin-right:50px;
+    }
+    h1{
+        font-size: 20px;
+    }
+}
+
+@media screen and (max-width:490px){
+    .navbar{
+        padding:10px 0px 10px 10px;
+    }
+    .username{
+        font-size: smaller;
+    }
+    input[type=search]{
+        width:95%;
+    }
+
+    .dropbtn{
+        font-size: 13px !important;
+    }
+
+    .dropdown-content{
+        min-width: 0;
+    }
+
+    .dropdown-content a {
+        font-size: 11px;
+        padding:10px 5px;
+    }
+
+    #resize{
+        width:100px;
+        height:100px;
+        margin:20px;
+    }
+
+    button,input[type=submit]{
+        width:80px;
+        font-size: 10px;
+    }
+    .dropdown{
+        margin-right:0px;
+    }
+    
+    .menu{
+        display: block;
+    }
+    .content{
+        width:90%;
+        padding-left:10%;
+    }
+    .side_content{
+        width: 100%;
+        padding-bottom: 70px;
+    }
+    .project_content{
+        width: 100%;
+    }
+    .content h2{
+        font-size: 20px;
+    }
+    .content p{
+        font-size: 13px;
+    }
+}
+  </style>
