@@ -7,13 +7,13 @@ const username=document.getElementById('username').innerHTML;
 
 if (messageForm != null) {
   console.log("hello");
-  appendMessage('You joined')
+  appendMessage('You joined',2)
   socket.emit('new-user', roomName, username)
 
   messageForm.addEventListener('submit', e => {
     e.preventDefault()
     const message = messageInput.value
-    appendMessage(`You: ${message}`)
+    appendMessage(`You: ${message}`,0)
     socket.emit('send-chat-message', roomName, message)
     messageInput.value = ''
   })
@@ -31,31 +31,41 @@ socket.on('room-created', room => {
 
 socket.on('chat-message', data => {
   console.log("username :",username.slice(1,));
-  console.log(" data.name : ",escape(data.name));
+  console.log(" data.name :",data.name.slice(1,));
   //console.log(" result : ",username.slice(0,-1)==data.name);
-  if(username.slice(1,)!=data.name)
+  if(username.slice(1,)!=data.name.slice(1,))
   {
-    appendMessage(`${data.name}: ${data.message}`)
+    appendMessage(`${data.name}: ${data.message}`,1)
   }
   else
   {
-    appendMessage(`You: ${data.message}`)
+    appendMessage(`You: ${data.message}`,0)
   }
   
 })
 
 socket.on('user-connected', name => {
-  appendMessage(`${name} connected`)
+  appendMessage(`${name} connected`,2)
 })
 
 socket.on('user-disconnected', name => {
-  appendMessage(`${name} disconnected`)
+  appendMessage(`${name} disconnected`,2)
 })
 
 
 
-function appendMessage(message) {
+function appendMessage(message,id) {
   const messageElement = document.createElement('div')
   messageElement.innerText = message
+  if(id===0)
+  {
+    messageElement.classList.add("right");
+  }
+  else if(id===1){
+    messageElement.classList.add("left");
+  }
+  else{
+    messageElement.classList.add("middle");
+  }
   messageContainer.append(messageElement)
 }

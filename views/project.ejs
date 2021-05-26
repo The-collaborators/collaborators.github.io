@@ -326,7 +326,7 @@
         <p id="pp"><%=project.description%></p>
         <br>
         <%for(var j=0;j<project.files.length;j++){%>
-            <h5><img src="/public/uploads/"<%=project.files[j]%>></h5><br>
+            <h5><a  href="/dashboard/download/<%= project.files[j].filename %>"  > click</a></h5><br>
         <%}%>
 
     
@@ -368,14 +368,19 @@
             }
         );
 
-        document.getElementById("f-submit").addEventListener("submit", function(event){
-            cb=document.getElementById("cb");
-            if(!cb.checked)
-            event.preventDefault();
-            else
-            sendJSON();
-        });
+        // document.getElementById("f-submit").addEventListener("submit", function(event){
+        //     cb=document.getElementById("cb");
+        //     if(!cb.checked)
+        //     event.preventDefault();
+        //     else
+        //     sendJSON();
+        // });
+        //to reload when it is accessed through back button of browser
+			var perfEntries = performance.getEntriesByType("navigation");
 
+        if (perfEntries[0].type === "back_forward") {
+            location.reload(true);
+        }
     </script>
 </body>
 </html>

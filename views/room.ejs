@@ -43,7 +43,8 @@
   </style>
 </head>
 <body>
-  hello<h4 id="username"> <%=username%></h4>
+  hello<h4 id="username"> <%=username%></h4><br>
+  <%= roomName %> 
   <div id="message-container"></div>
   <form action="/dashboard/logout" method="GET">
     <button class="logout" type="submit">LOG OUT</button>
@@ -54,4 +55,12 @@
   </form>
   
 </body>
+<script>
+  //to reload when it is accessed through back button of browser
+  var perfEntries = performance.getEntriesByType("navigation");
+
+  if (perfEntries[0].type === "back_forward") {
+      location.reload(true);
+  }
+</script>
 </html>

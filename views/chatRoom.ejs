@@ -13,15 +13,28 @@
   <div id="room-container">
     <%for(let i=0;i<rooms.length;i++){%>
       <div><%= rooms[i] %></div>
-      <a href="/dashboard/chat/<%= rooms[i] %>">Join</a>
+      <a href="/dashboard/chat/<%= rooms[i] %>"   >Join</a>
     <%}%>
   </div>
   <form action="/dashboard/chat/room" method="POST">
     <input name="room" type="text" required>
-    <button type="submit">New Room</button>
+    <button type="submit" name="newRoom" value="room">New Room</button>
   </form>
+  <%=message.message%>
   <form action="/dashboard/logout" method="GET">
     <button class="logout" type="submit">LOG OUT</button>
   </form>
+
+  <!-- try -->
+ 
+  
 </body>
+<script>
+  //to reload when it is accessed through back button of browser
+  var perfEntries = performance.getEntriesByType("navigation");
+
+  if (perfEntries[0].type === "back_forward") {
+      location.reload(true);
+  }
+</script>
 </html>

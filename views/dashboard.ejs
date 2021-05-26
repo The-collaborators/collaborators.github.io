@@ -171,7 +171,7 @@
           <%for(var j=0;j<project[i].domain.length;j++){%>
             <h5><%=project[i].domain[j]%></h5><br>
           <%}%>
-          <p id="pp"><%=project[i].description.substring(0,30)%>...<a href="/dashboard/<%=username%>/<%=project[i].title%>">Read more..</a></p>
+          <p id="pp"><%=project[i].description.substring(0,30)%>...<a href="/dashboard/username/<%=i%>">Read more..</a></p>
           <br>
         <%}%>
       <%}%>
@@ -188,7 +188,12 @@
               .then(data => console.log(data));
           }
         }
+        //to reload when it is accessed through back button of browser
+        var perfEntries = performance.getEntriesByType("navigation");
 
+        if (perfEntries[0].type === "back_forward") {
+            location.reload(true);
+        }
       </script>
       <script>
         $(function () {
