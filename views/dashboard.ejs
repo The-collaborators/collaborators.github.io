@@ -93,7 +93,7 @@
                       <!-- </h4> -->
                         <p style="margin-top:15px; display: flex;" id="pp">
                           <%=project[i].description.substring(0,30)%>...
-                          <a href="/dashboard/username/<%=project[i].title%>"><span class="iconify fa-arrow-alt-circle-right" data-icon="carbon:next-filled" data-inline="false"></span></a>
+                          <a href="/dashboard/username/<%=i%>"><span class="iconify fa-arrow-alt-circle-right" data-icon="carbon:next-filled" data-inline="false"></span></a>
                         </p>
                     </div>
                     <%}%>
@@ -101,19 +101,7 @@
                 <h1>None</h1>
             <%}%>
       </div>
-      <%if(project.length>0)%>
-      <%{%>
-        
-        <%for(var i=0;i<project.length;i++){%>
-          <h1><%=project[i].title%></h1><br>
-          <h4>Domain need are : </h4>
-          <%for(var j=0;j<project[i].domain.length;j++){%>
-            <h5><%=project[i].domain[j]%></h5><br>
-          <%}%>
-          <p id="pp"><%=project[i].description.substring(0,30)%>...<a href="/dashboard/username/<%=i%>">Read more..</a></p>
-          <br>
-        <%}%>
-      <%}%>
+
 
 
 
@@ -167,6 +155,15 @@
         });
     </script>
 
+<script>
+  //to reload when it is accessed through back button of browser
+  var perfEntries = performance.getEntriesByType("navigation");
+  
+  if (perfEntries[0].type === "back_forward") {
+    location.reload(true);
+  }
+      
+  </script>
 </body>
 
 

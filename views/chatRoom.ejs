@@ -3,31 +3,61 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Chat App</title>
+  <title>Chat Rooms</title>
+  <link rel="stylesheet" href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/filepond/dist/filepond.min.css">
+  <link rel="stylesheet" href="/public/css/dashcss.css">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <script src="https://kit.fontawesome.com/87390cb8ac.js" crossorigin="anonymous"></script>
+  <script src="https://code.iconify.design/1/1.0.7/iconify.min.js"></script>
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans&display=swap" rel="stylesheet">
   <script defer src="http://localhost:3000/socket.io/socket.io.js"></script>
   <script defer src="/javascript/script.js"></script>
+  <%- include('partials/chatRoom_css') %>
 </head>
-<body>
-  <h4 id="username">hello <%= username %></h4>
-  <div id="room-container">
-    <%for(let i=0;i<rooms.length;i++){%>
-      <div><%= rooms[i] %></div>
-      <a href="/dashboard/chat/<%= rooms[i] %>"   >Join</a>
-    <%}%>
-  </div>
-  <form action="/dashboard/chat/room" method="POST">
-    <input name="room" type="text" required>
-    <button type="submit" name="newRoom" value="room">New Room</button>
-  </form>
-  <%=message.message%>
-  <form action="/dashboard/logout" method="GET">
-    <button class="logout" type="submit">LOG OUT</button>
-  </form>
 
-  <!-- try -->
+<body>
+  <%- include('partials/navbar') %>
+  <div class="main">
+    <div id="room-container">
+          <div class="new_room">
+                    <h4 class="heading new">Create New Rooms:</h4>
+                    <form action="/dashboard/chat/room" method="POST">
+                      <input name="room" type="text" autocomplete="off" placeholder="Type Something.. " required >
+                      <button type="submit" name="newRoom" value="room">New Room</button>
+                    </form>
+                    <%=message.message%>
+          </div>
+          <h4 class="heading">Existing Rooms:</h4>
+          <div class="wrap">
+          <%if(rooms.length != 0){%>
+                      <%for(let i=0;i<rooms.length;i++){%>
+                        <div class="room_display">
+                          <h3><%= rooms[i] %></h3>
+                          <a class="join" href="/dashboard/chat/<%= rooms[i] %>">Join<span class="iconify" data-icon="el:group-alt" data-inline="false"></span></a>
+                        </div>
+                      <%}%>
+                    <%}else{%>
+                      <div class="room_display">No Rooms Available</div>
+                    <%}%>
+          </div>
+    </div>
+    <div class="info">
+          <div class="img">
+            <h1 class="opt1">THE</h1>
+            <h1 class="opt2">COLLABORATOR</h1>
+            <img src="https://images.idgesg.net/images/article/2017/08/group-chat-thinkstock-465520267-100732964-large.jpg" alt="" >
+          </div>
+          <h2>Welcome to "THE COLLABORATOR" Chat Rooms</h2>
+          <p>Chat app <span class="iconify" data-icon="bi:chat-dots-fill" data-inline="false"></span> to connect with friends.</p>
+    </div>
+  </div>
  
-  
 </body>
 <script>
   //to reload when it is accessed through back button of browser

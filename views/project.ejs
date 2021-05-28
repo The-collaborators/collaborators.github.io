@@ -16,7 +16,7 @@
     <div class="main">
         <div class="description">
             <h1>
-                <span>Project Title: </span> <%=project.title%>
+                <span>Project Title: </span><%=project.title%>
             </h1><br>
             <h3>
                 <span>Domain needed are : </span></h3>
@@ -54,7 +54,6 @@
 
     <script>
         var perfEntries = performance.getEntriesByType("navigation");
-
             if (perfEntries[0].type === "back_forward") {
                 location.reload(true);
             }
