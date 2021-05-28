@@ -43,22 +43,16 @@ app.get('/', (req, res) => {
 // adding routes 
 const authRoutes = require('./routes/auth');
 const dashboardRoutes = require('./routes/dashboard');
+const userDomainRoutes = require('./routes/userDomain');
 app.use('/auth', authRoutes);
 app.use('/dashboard', dashboardRoutes);
+app.use('/userDomain',userDomainRoutes);
 
-app.get("/download/:file",(req,res)=>{
-    const f2=`C:\\Users\\03ano\\collab\\collaborators.github.io\\public\\uploads\\${req.params.file}`
-    res.download(f2);
-})
 
 mongoose.connect(database, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => {
         console.log("database connected");
-        // const io = require('./socket').init(listen);
-        // io.on('connection', (socket) => {
-        //     console.log('a user connected');
-            
-        // })
+        
         
     }).catch(err => {
         console.err(err);

@@ -74,6 +74,9 @@
                   <div class="project_content">
                     <h2 style="text-transform: capitalize;">
                       <%=project[i].title%>
+                      <form action="/dashboard/project/delete/<%=i%>" method="POST">
+                        <button type="submit"> delete</button>
+                      </form>
                     </h2><hr style="border-bottom: 2px solid black; margin-top: 5px;"><br>
                     <h5>Domain needed are : </h5>
                       <!-- <h4> -->

@@ -8,7 +8,8 @@ const chatRoom=require("../models/room")
 const io = require('socket.io')(listen);
 const prj=require("../models/project");
 const fs=require("fs");
-
+const mongoose=require("mongoose");
+mongoose.Promise=require("bluebird");
 const rooms={};
 let username;
 var ans;
@@ -26,7 +27,7 @@ var storage = multer.diskStorage({
   filename: (req, file, cb) => {
     cb(
       null,
-       file.originalname 
+      Date.now()+"_"+file.originalname 
     );
   },
 });
@@ -96,7 +97,7 @@ router.post("/", [upload.single("file")], (req, res) => {
       }
     });
   }
-  prj.findOne({username:username},function(err,found){
+  prj.findOne({username:req.session.username},function(err,found){
     if(err)
     {
       throw err;
@@ -141,20 +142,12 @@ router.get("/domain/mail", [ensureAuthenticated], function (req, res, next) {
 
 
 
-router.post("/domain/mail",[ensureAuthenticated,(req,res,next)=>{
-  if (req.files != undefined) {
-    for (var i = 0; i < req.files.length; i++) {
-      req.files[i].originalname=Date.now()+"_"+req.files[i].originalname;
-      
-    }
-  }
-  next();
-}, upload.array("file", 5)],
+router.post("/domain/mail",[ensureAuthenticated, upload.array("file", 5)],
   function (req, res, next) {
 
 
     var arr=[];
-    console.log("domain",ans);
+    //console.log("domain",ans);
     for (var myKey in ans) {
       if (ans[myKey] === "JavaScript") {
         arr.push("JavaScript");
@@ -169,7 +162,7 @@ router.post("/domain/mail",[ensureAuthenticated,(req,res,next)=>{
       }
     }
     
-    console.log("domain arr ",arr);
+    //console.log("domain arr ",arr);
 
     let transporter = nodemailer.createTransport({
       service: "gmail",
@@ -182,14 +175,13 @@ router.post("/domain/mail",[ensureAuthenticated,(req,res,next)=>{
 
     // Step 2
     var fs = [];
-    date=Date.now();
-    console.log("files",req.files);
+
     if (req.files != undefined) {
       for (var i = 0; i < req.files.length; i++) {
         //req.files[i].originalname=Date.now()+"_"+req.files[i].originalname;
         fs.push({
-          filename: req.files[i].originalname,
-          path: "./public/uploads/" +req.files[i].originalname,
+          filename: req.files[i].filename,
+          path: "./public/uploads/" +req.files[i].filename,
         });
       }
     }
@@ -200,7 +192,8 @@ router.post("/domain/mail",[ensureAuthenticated,(req,res,next)=>{
       {
         throw err;
       }
-      else{
+      else
+      {
         if(found===null)
         {
           let prjNew=new prj({
@@ -220,16 +213,21 @@ router.post("/domain/mail",[ensureAuthenticated,(req,res,next)=>{
             else{
               console.log("project created");
               var mailList = [];
-              User.find({}, function (err, found) {
-                
+              User.find({}).then(function (found) {
+                console.log("arr ",arr);
                 for(var i=0;i<found.length;i++)
                 {
-                  if(found[i].domain.some(item => arr.includes(item))===true)
+                  if((found[i].domain.some(item => arr.includes(item))===true) && found[i].email!=req.session.email)
                   {
                     mailList.push(found[i].email);
+                    //console.log("email",found[i].email);
                   }
                 }
+                return Promise.all(mailList);
+              }).then(function(mailList){
+                console.log("mail",mailList);
                 if (req.body.mail === "mail it" && mailList.length>0) {
+
                   let mailOptions = {
                     from: "aksjain891999@gmail.com", // TODO: email sender
                     to: mailList, // TODO: email receiver
@@ -246,26 +244,26 @@ router.post("/domain/mail",[ensureAuthenticated,(req,res,next)=>{
                   console.log("Email sent!!!");
                   });
                 }
+              
+              //console.log("project",prj1);
+
+                res.redirect("/dashboard");
+              }).catch(function(err){
+              throw err;
               });
-              console.log("project",prj1);
-              // res.render("dashboard", {
-              //   username: req.session.username,
-              //   img_name: req.session.image,
-              //   domain: req.session.domain,
-              //   project:prjNew.project,
-              // });
-              res.redirect("/dashboard");
             }
           })
         }
-        else{
+        else
+        {
           prj1=found.project;
           prj.deleteOne({username:req.session.username},function(err,foundUser){
             if(err)
             {
               throw err;
             }
-            else{
+            else
+            {
               prj1.push({title:req.body.title,description:req.body.Write,files:fs,domain:arr});
               let prjNew=new prj({
                 username:req.session.username,
@@ -276,19 +274,24 @@ router.post("/domain/mail",[ensureAuthenticated,(req,res,next)=>{
                 {
                   throw err;
                 }
-                else{
+                else
+                {
                   console.log("project created");
                   var mailList = [];
-                  User.find({}, function (err, found) {
+                  User.find({}).then(function (found) {
                     console.log("arr ",arr);
                     for(var i=0;i<found.length;i++)
                     {
-                      if(found[i].domain.some(item => arr.includes(item))===true)
+                      if((found[i].domain.some(item => arr.includes(item))===true) && found[i].email!=req.session.email)
                       {
                         mailList.push(found[i].email);
+                        console.log("email",found[i].email);
                       }
                     }
-                    if (req.body.mail === "mail it") {
+                    return Promise.all(mailList);
+                  }).then(function(mailList){
+                    console.log("mail",mailList);
+                    if (req.body.mail === "mail it" && mailList.length>0) {
                       let mailOptions = {
                         from: "aksjain891999@gmail.com", // TODO: email sender
                         to: mailList, // TODO: email receiver
@@ -305,18 +308,27 @@ router.post("/domain/mail",[ensureAuthenticated,(req,res,next)=>{
                       console.log("Email sent!!!");
                       });
                     }
-                  });
-                  console.log("project",prj1);
+                  
+                  //console.log("project",prj1);
 
-                  res.redirect("/dashboard");
+                    res.redirect("/dashboard");
+                  }).catch(function(err){
+                  throw err;
+                  });
                 }
               })
             }
-          })
+          });
         }
       }
-  })
+    });
+    
 });
+
+
+
+
+
 
 router.get("/username/:index",(req,res)=>{
   prj.findOne({username:req.session.username},function(err,found){
@@ -375,11 +387,36 @@ router.post("/search", function (req, res, next) {
   } else {
     User.findOne({ username: name }, function (err, found) {
       if (found) {
-        res.render("searchUserDashboard", {
-          username: found.username,
-          img_name: found.image,
-          searchUserID: found._id,
-        });
+
+        prj.findOne({username:name},function(err,foundUser){
+          if(err)
+          {
+            throw err;
+          }
+          else{
+            console.log("foundUser",foundUser);
+            if(foundUser!=null)
+            {
+              res.render("searchUserDashboard", {
+                username: found.username,
+                img_name: found.image,
+                searchUserID: found._id,
+                domain:found.domain,
+                project:foundUser.project
+              });
+            }
+            else{
+                res.render("searchUserDashboard", {
+                username: found.username,
+                img_name: found.image,
+                searchUserID: found._id,
+                domain:found.domain,
+                project:[]
+              });
+            }
+          }
+        })
+        
       } else {
         req.flash("message", "user not found");
         res.redirect("/dashboard");
@@ -388,10 +425,18 @@ router.post("/search", function (req, res, next) {
   }
 });
 
+
+router.get("/searchUser/:username/:index",(req,res)=>{
+  prj.findOne({username:req.params.username},function(err,found){
+    res.render("searchUserProject",{project:found.project[req.params.index],username:req.session.username});
+  })
+})
+
+
 router.get("/chat/:room",ensureAuthenticated, (req,res)=>{
-  console.log("chat room hello");
+  //console.log("chat room hello");
 chatRoom.find({roomName:req.params.room },function(err,found){
-    console.log("foudn data",found," data end");
+    //console.log("foudn data",found," data end");
     if(found[0])
     {
       res.render("room",{roomName:req.params.room,username:req.session.username});
@@ -415,17 +460,18 @@ router.post("/chat/room",ensureAuthenticated, (req,res)=>{
     }
     else
     {
-      console.log("found",found);
+      //console.log("found",found);
       if(found.length)
       {
-        console.log("hi");
+        //console.log("hi");
         req.flash("message", "room already exists");
         return res.redirect('/dashboard/chat');
       }
  
       let nChat = new chatRoom({
         roomName:req.body.room,
-        conversation:[]
+        conversation:[],
+        owner:req.session.username
       });
       nChat.save(function(err){
         if(err)
@@ -452,32 +498,16 @@ router.post("/chat/room",ensureAuthenticated, (req,res)=>{
 router.get("/download/:file",ensureAuthenticated,(req,res)=>{
 
   const f2=path.join("C:\\Users\\03ano\\collab\\collaborators.github.io\\public\\uploads",req.params.file);
-  const f="C:\\Users\\03ano\\collab\\collaborators.github.io\\public\\uploads\\1622025519101_graph.png";
-  if(f===f2)
-  {
-    console.log("same");
-  }
-  console.log("f",decodeURI(req.params.file));
-  console.log("f2",decodeURI(f2));
-  console.log("diff",findDiff(f,f2));
-  //res.send({f2,f});
   res.download(f2);
 
 })
 
-function findDiff(str1, str2){ 
-  let diff= "";
-  str2.split('').forEach(function(val, i){
-    if (val != str1.charAt(i))
-      diff += val ;         
-  });
-  return diff;
-}
+
 
 router.get("/chat",ensureAuthenticated, (req,res)=>{
   
   
-      const t=[];
+    const t=[];
     chatRoom.find({ },function(err,found){
       if(err)
       {
@@ -488,10 +518,10 @@ router.get("/chat",ensureAuthenticated, (req,res)=>{
         {
           for(var i=0;i<found.length;i++)
           {
-            t.push(found[i].roomName);
+            t.push({roomName:found[i].roomName,owner:found[i].owner});
           }
         }
-        
+          console.log("rooms",t);
           res.render("chatRoom",{rooms:t,username:req.session.username,roomName:""});
         
         
@@ -501,6 +531,44 @@ router.get("/chat",ensureAuthenticated, (req,res)=>{
     })
 })
 
+router.get("/chat/delete/:roomName",(req,res)=>{
+  chatRoom.deleteOne({roomName:req.params.roomName},function(err,found){
+    if(err)
+    {
+      throw err;
+    }
+    else{
+      res.redirect("/dashboard/chat");
+    }
+  })
+})
+
+
+router.post("/project/delete/:index",(req,res)=>{
+  prj.findOne({username:req.session.username},function(err,found){
+    if(err)
+    {
+      throw err;
+    }
+    else{
+      
+      found.project.splice(req.params.index,1);
+      found.save(function(error){
+        if(error)
+        {
+          throw error;
+        }
+        else{
+          res.redirect("/dashboard");
+        }
+      })
+      //console.log(found,"delete");
+      
+    }
+    
+  })
+
+})
 
 
 router.get("/logout", function (req, res, next) {
@@ -513,6 +581,9 @@ router.get("/logout", function (req, res, next) {
   //res.redirect('/');
   res.render("index");
 });
+
+
+
 
 function ensureAuthenticated(req, res, next) {
   if (req.session.login === true) {

@@ -8,6 +8,9 @@ const roomSchema = mongoose.Schema({
     roomName:{
         type:String
     },
+    owner:{
+        type:String
+    },
     conversation:{
         type:Array,
         
