@@ -21,7 +21,7 @@ passport.use(new GithubStrategy({
       let nUser = await User.create({
           email: profile.emails[0].value,
           username: profile.username,
-          domain: ["CSS","C++"],
+          domain: [],
           image: "default-image-png.png"
       });
       nUser.save();

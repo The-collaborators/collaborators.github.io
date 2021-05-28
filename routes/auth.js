@@ -12,7 +12,14 @@ router.get('/github/callback', passport.authenticate('github', {scope: ['user:em
     req.session.userID=req.user._id;
     req.session.domain=req.user.domain;
     req.session.email=req.user.email;
-    res.redirect('/dashboard');
+    if(req.session.domain.length===0)
+    {
+        res.redirect("/userDomain");
+    }
+    else{
+        res.redirect('/dashboard');
+    }
+    
 })
 
 

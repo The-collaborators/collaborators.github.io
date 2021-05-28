@@ -12,8 +12,11 @@
   <h4 id="username">hello <%= username %></h4>
   <div id="room-container">
     <%for(let i=0;i<rooms.length;i++){%>
-      <div><%= rooms[i] %></div>
-      <a href="/dashboard/chat/<%= rooms[i] %>"   >Join</a>
+      <div><%= rooms[i].roomName %></div>
+      <a href="/dashboard/chat/<%= rooms[i].roomName %>"   >Join</a>
+      <%if(rooms[i].owner===username){%>
+        <a href="/dashboard/chat/delete/<%= rooms[i].roomName %>"   >Delete</a>
+      <%}%>
     <%}%>
   </div>
   <form action="/dashboard/chat/room" method="POST">

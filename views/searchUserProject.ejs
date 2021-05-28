@@ -13,6 +13,7 @@
 
 <body>
     <%- include('partials/navbar') %>
+    
     <div class="main">
         <div class="description">
             <h1>
@@ -35,17 +36,7 @@
                     <%}%> 
                 <%}%>
                       </h3><br>
-                      <h4 style="text-align:left; padding-left:10px; margin-top:20px;">
-                        <span>Files Sent are:</span><br>
-                        <%if(project.files.length!=0){%>
-                            <%for(var j=0;j<project.files.length;j++){%>
-                                <!-- <a class="files" href="/public/uploads/<%=project.files[j].filename%>"><%=(j+1)%>) <%= project.files[j].filename %><span class="iconify" data-icon="el:download-alt" data-inline="false"></span></span> </a> -->
-                                <a class="files" href="/dashboard/download/<%= project.files[j].filename %>"> <%=(j+1)%>) <%= project.files[j].filename.substring(14,) %><span class="iconify" data-icon="el:download-alt" data-inline="false"></span></span> </a>
-                            <%}%>
-                        <%}else{%>
-                            <span>None</span>
-                        <%}%>
-                    </h4>
+
                     <p id="pp">
                         <strong><span>Project Description: </span></strong> <br> <%=project.description%>
                     </p>
@@ -54,15 +45,6 @@
 
     <script>
 
-
-        // document.getElementById("f-submit").addEventListener("submit", function(event){
-        //     cb=document.getElementById("cb");
-        //     if(!cb.checked)
-        //     event.preventDefault();
-        //     else
-        //     sendJSON();
-        // });
-        //to reload when it is accessed through back button of browser
 		var perfEntries = performance.getEntriesByType("navigation");
 
         if (perfEntries[0].type === "back_forward") {
