@@ -97,6 +97,20 @@ router.post("/", [upload.single("file")], (req, res) => {
       }
     });
   }
+  else if(req.body.remove==="Remove")
+  {
+    req.session.image = "default-image-png.png";
+    User.findOne({ username: req.session.username }, function (err, found) {
+      if (found) {
+        found.image = req.session.image;
+        found.save(function (err) {
+          if (err) {
+            throw err;
+          }
+        });
+      }
+    });
+  }
   prj.findOne({username:req.session.username},function(err,found){
     if(err)
     {
@@ -386,7 +400,7 @@ router.post("/search", function (req, res, next) {
     });
   } else {
     User.findOne({ username: name }, function (err, found) {
-      if (found) {
+      if (found!=null) {
 
         prj.findOne({username:name},function(err,foundUser){
           if(err)
@@ -432,6 +446,38 @@ router.get("/searchUser/:username/:index",(req,res)=>{
   })
 })
 
+router.get("/searchUser/:username",(req,res)=>{
+  User.findOne({username:req.params.username},function(err,found){
+    prj.findOne({username:req.params.username},function(err,foundUser){
+      if(err)
+      {
+        throw err;
+      }
+      else{
+        //console.log("foundUser",foundUser);
+        if(foundUser!=null)
+        {
+          res.render("searchUserDashboard", {
+            username: found.username,
+            img_name: found.image,
+            searchUserID: found._id,
+            domain:found.domain,
+            project:foundUser.project
+          });
+        }
+        else{
+            res.render("searchUserDashboard", {
+            username: found.username,
+            img_name: found.image,
+            searchUserID: found._id,
+            domain:found.domain,
+            project:[]
+          });
+        }
+      }
+    })
+  })
+})
 
 router.get("/chat/:room",ensureAuthenticated, (req,res)=>{
   //console.log("chat room hello");
@@ -479,14 +525,15 @@ router.post("/chat/room",ensureAuthenticated, (req,res)=>{
           console.log("error chat");
         }
         else{
-          console.log("roomName saved");
+          console.log("roomName saved",nChat);
           rooms[req.body.room] = { users: {} }
-          var url="/dashboard/chat/"+req.body.room;
-          res.redirect(req.body.room)
-          
-          // Send message that new room was created
-          io.emit('room-created', req.body.room)
+          //var url="/dashboard/chat/"+req.body.room;
+
         }
+        res.redirect(req.body.room)
+          
+        // Send message that new room was created
+        io.emit('room-created', req.body.room)
       })
 
     }
@@ -497,7 +544,9 @@ router.post("/chat/room",ensureAuthenticated, (req,res)=>{
 
 router.get("/download/:file",ensureAuthenticated,(req,res)=>{
 
-  const f2=path.join("C:\\Users\\lenovo\\Desktop\\anu\\collaborators.github.io\\public\\uploads",req.params.file);
+
+  const f2=path.join(__basedir+"/public/uploads/",req.params.file);
+ 
   res.download(f2);
 
 })
@@ -508,27 +557,19 @@ router.get("/chat",ensureAuthenticated, (req,res)=>{
   
   
     const t=[];
-    chatRoom.find({ },function(err,found){
-      if(err)
+    chatRoom.find({}).then(function (found) {
+      for(var i=0;i<found.length;i++)
       {
-        throw err;
+        t.push({roomName:found[i].roomName,owner:found[i].owner});
+        console.log(found[i].owner);
       }
-      else{
-        if(found.length)
-        {
-          for(var i=0;i<found.length;i++)
-          {
-            t.push({roomName:found[i].roomName,owner:found[i].owner});
-          }
-        }
-          console.log("rooms",t);
-          res.render("chatRoom",{rooms:t,username:req.session.username,roomName:""});
-        
-        
-        
-      }
-
-    })
+      return Promise.all(t);
+    }).then(function(t){
+      console.log("rooms",t);
+      res.render("chatRoom",{rooms:t,username:req.session.username,roomName:""});
+    }).catch(function(err){
+    throw err;
+    });
 })
 
 router.get("/chat/delete/:roomName",(req,res)=>{
@@ -624,9 +665,10 @@ io.on('connection', socket => {
 })
   socket.on('send-chat-message', (room, message) => {
     
-    chatRoom.find({roomName:room },function(err,found){
+    chatRoom.findOne({roomName:room },function(err,found){
       let chat=[];
-      chat=found[0].conversation;
+      chat=found.conversation;
+      let owner=found.owner;
       chat.push({from:rooms[room].users[socket.id],talk:message});
       chatRoom.deleteOne({roomName:room},function(err,foundUser){
         if(err)
@@ -636,7 +678,8 @@ io.on('connection', socket => {
         else{
           let nChat1 = new chatRoom({
             roomName:room,
-            conversation:chat
+            conversation:chat,
+            owner:owner
           });
           nChat1.save(function(err){
             if(err)

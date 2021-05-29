@@ -54,8 +54,11 @@
                           .jpeg, .jpg, .gif</p>
                         <input type="file" class="form-control" name="file" id="fUpload" required /><br>
                         <input type="submit" name="upload" value="Upload" id="shiftupload" class="btn1">
+                        
         </form>
-
+        <form action="/dashboard" method="POST">
+          <input type="submit" name="remove" value="Remove" id="shiftupload" class="btn1">
+        </form>
         <form action="/dashboard/domain" method="GET">
           <button type="submit">Find Collaborator</button>
         </form>
@@ -141,7 +144,7 @@
                 },
                 error: function (err) {
                   console.log(err.status);
-                  // alert("user doesn't exists");
+                  //alert("user doesn't exists");
                 }
               });
               //console.log(req);
