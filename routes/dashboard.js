@@ -412,20 +412,22 @@ router.post("/search", function (req, res, next) {
             if(foundUser!=null)
             {
               res.render("searchUserDashboard", {
-                username: found.username,
+                username: req.session.username,
                 img_name: found.image,
                 searchUserID: found._id,
                 domain:found.domain,
-                project:foundUser.project
+                project:foundUser.project,
+                searchUser:name
               });
             }
             else{
                 res.render("searchUserDashboard", {
-                username: found.username,
+                username: req.session.username,
                 img_name: found.image,
                 searchUserID: found._id,
                 domain:found.domain,
-                project:[]
+                project:[],
+                searchUser:name
               });
             }
           }
@@ -442,7 +444,7 @@ router.post("/search", function (req, res, next) {
 
 router.get("/searchUser/:username/:index",(req,res)=>{
   prj.findOne({username:req.params.username},function(err,found){
-    res.render("searchUserProject",{project:found.project[req.params.index],username:req.session.username});
+    res.render("searchUserProject",{project:found.project[req.params.index],username:req.session.username,searchUser:req.params.username});
   })
 })
 
@@ -458,20 +460,22 @@ router.get("/searchUser/:username",(req,res)=>{
         if(foundUser!=null)
         {
           res.render("searchUserDashboard", {
-            username: found.username,
+            username: req.session.username,
             img_name: found.image,
             searchUserID: found._id,
             domain:found.domain,
-            project:foundUser.project
+            project:foundUser.project,
+            searchUser:req.params.username
           });
         }
         else{
             res.render("searchUserDashboard", {
-            username: found.username,
+            username: req.session.username,
             img_name: found.image,
             searchUserID: found._id,
             domain:found.domain,
-            project:[]
+            project:[],
+            searchUser:req.params.username
           });
         }
       }
