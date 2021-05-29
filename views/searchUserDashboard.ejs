@@ -22,7 +22,17 @@
 </head>
 
 <body>
-  <%- include('partials/navbar') %>
+      <div class="navbar">
+        <%=message.message%>
+        <h4 id="username" class="username">User: <%= username %></h4>
+        <div class="dropdown">
+          <button class="dropbtn">Options<span class="iconify" data-icon="ant-design:caret-down-filled" data-inline="false"></span></button>
+          <div class="dropdown-content">
+            <a href="/dashboard">Dashboard</a>
+            <a href="/dashboard/logout">Logout</a>
+          </div>
+        </div> 
+      </div>
 
 
     <div class="menu">
@@ -32,10 +42,11 @@
         
           <img id="resize" src="/uploads/<%=img_name%>" alt="<%=img_name%>"><br>
           <!-- <label for="file" >Upload File</label> -->
+          <h3 style="color:#ddd; margin-bottom: 10px;">Username: <%=username%></h3>
           <% if(domain.length==0){%>
             <span>No domain provided</span>
             <%}else{%>
-              <span>Domain : </span>
+              <span style="color:#ddd">Domain :
               <%for(let i=0;i<domain.length;i++){%>
                 <span>
                   <%=domain[i]%>
@@ -46,6 +57,7 @@
                     <%}%>
 
                       <% } %>
+                </span>
                         
         
 
@@ -57,16 +69,16 @@
       </div>
 
       <div class="content">
-        <h1 style="margin-bottom: 10px;" >Work done:</h1>
         
           <%if(project.length>0){%>
+            <h1 style="margin-bottom: 10px;" >Their Work done:</h1>
                 <%for(var i=0;i<project.length;i++){%>
                   <div class="project_content">
                     <h2 style="text-transform: capitalize;">
                       <%=project[i].title%>
                       
                     </h2><hr style="border-bottom: 2px solid black; margin-top: 5px;"><br>
-                    <h5>Domain needed are : </h5>
+                    <h5>Domain needed were : </h5>
                       <!-- <h4> -->
                         <%for(var j=0;j<project[i].domain.length;j++){%>
                           <%if(project[i].domain[j] === "Python"){%>
@@ -89,7 +101,7 @@
                     </div>
                     <%}%>
             <%}else{%>
-                <h1>None</h1>
+                <h3>No Projects are done by <%=username%></h3>
             <%}%>
       </div>
 

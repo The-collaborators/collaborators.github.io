@@ -86,6 +86,7 @@
 
     form{
       text-align: center;
+      width:80%;
     }
     button,input[type=submit]{
       width:100px;
@@ -116,7 +117,11 @@
     }
 
     input[type=search]{
-        width:100%;
+        width:96%;
+    }
+
+    .project_content form{
+      width:25%;
     }
 
     input[type=submit]:hover{
@@ -218,6 +223,25 @@
   display: block;
 }
 
+.project_content h2{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.deletebtn{
+  border:none;
+  font-size: 25px;
+  width:50px;
+  color:black;
+  background-color: transparent;
+  margin:0;
+}
+.deletebtn:hover{
+  background-color: transparent;
+}
+.deletebtn:hover svg{
+    color: red;
+}
 
 
 /********************RESPONSIVE DASHBOARD *************/
@@ -247,6 +271,7 @@
     }
     .username{
         font-size: 20px;
+        text-shadow: 2px 2px black;
     }
     .dropdown{
         margin-right:50px;
@@ -262,6 +287,7 @@
     }
     .username{
         font-size: smaller;
+        text-shadow: 2px 2px black;
     }
     input[type=search]{
         width:95%;
@@ -290,6 +316,7 @@
         width:80px;
         font-size: 10px;
     }
+
     .dropdown{
         margin-right:0px;
     }

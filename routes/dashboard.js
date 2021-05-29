@@ -497,7 +497,7 @@ router.post("/chat/room",ensureAuthenticated, (req,res)=>{
 
 router.get("/download/:file",ensureAuthenticated,(req,res)=>{
 
-  const f2=path.join("C:\\Users\\03ano\\collab\\collaborators.github.io\\public\\uploads",req.params.file);
+  const f2=path.join("C:\\Users\\lenovo\\Desktop\\anu\\collaborators.github.io\\public\\uploads",req.params.file);
   res.download(f2);
 
 })

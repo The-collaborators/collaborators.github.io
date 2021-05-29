@@ -126,7 +126,7 @@
 form{
     width:60%;
     background-color: #1e2428;
-    height:10vh;
+    height:71px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -222,12 +222,17 @@ button[type=submit]:active{
     font-size:13px;
     font-weight: bolder;
     letter-spacing: 0.7px;
+    /* padding-bottom: 0.5px; */
 }
 
 .right .msgname{
     margin:0px;
 }
 
+
+.left .msgname:hover{
+   border-bottom: 1px solid #6bcbef;
+}
 
 /***********RESPONSIVE*******/
 
@@ -288,7 +293,13 @@ button[type=submit]:active{
         height:8vh;
     }
     .chatbox{
-        height:82vh;
+        height:83vh;
+    }
+}
+
+@media  screen and (max-width:330px) {
+    .username{
+        font-size: 16px;
     }
 }
 
