@@ -60,7 +60,7 @@ function appendMessage(name,message,id) {
   if(id===1)
   {
     link.href="/dashboard/searchUser/"+name;
-    //link.target="_blank";
+
     link.appendChild(msgname);
     link.style.textDecoration='none';
   }

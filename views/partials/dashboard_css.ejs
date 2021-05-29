@@ -106,10 +106,10 @@
       border: none;
       outline:none;
     }
-    input:focus{
+    /* input:focus{
       outline:none;
       border:none;
-    }
+    } */
     button:hover{
       color:#2e3141;
       font-weight: bolder;
@@ -134,6 +134,18 @@
       cursor:pointer;
       padding:5px;
     }
+
+    input[type=submit]:focus{
+      transform:scale(0.95);
+    }
+    input[type=file]:focus{
+      transform:scale(0.95);
+    }
+
+    button:active{
+      transform: scale(0.95);
+    }
+
     span{
       color:white;
       text-transform: uppercase;
