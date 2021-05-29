@@ -627,8 +627,8 @@ router.get("/logout", function (req, res, next) {
   req.session = null;
   
   // redirect to homepage
-  //res.redirect('/');
-  res.render("index");
+  res.redirect('/');
+  //res.render("/");
 });
 
 
