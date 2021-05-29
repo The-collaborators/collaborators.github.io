@@ -10,6 +10,7 @@ const prj=require("../models/project");
 const fs=require("fs");
 const mongoose=require("mongoose");
 mongoose.Promise=require("bluebird");
+const isImage=require("is-image")
 const rooms={};
 let username;
 var ans;
@@ -47,7 +48,7 @@ router.get("/", ensureAuthenticated, (req, res) => {
         throw err;
       }
       else{
-        //console.log("prj ",found);
+        
         if(found===null)
         {
           res.render("dashboard", {
@@ -59,7 +60,7 @@ router.get("/", ensureAuthenticated, (req, res) => {
           });
         }
         else{
-          console.log("found project",found.project);
+          
           res.render("dashboard", {
             username: req.session.username,
             img_name: req.session.image,
@@ -85,7 +86,10 @@ router.post("/", [upload.single("file")], (req, res) => {
     flag = 1;
   }
   if (req.body.upload === "Upload" && flag === 1) {
-    req.session.image = img;
+    if(isImage(img))
+    {
+      req.session.image = img;
+    }
     User.findOne({ username: req.session.username }, function (err, found) {
       if (found) {
         found.image = req.session.image;
@@ -146,7 +150,7 @@ router.post("/domain", [ensureAuthenticated], function (req, res, next){
     ans = JSON.stringify(req.body);
     ans = JSON.parse(ans);
     ans=ans.finalList;
-    console.log(ans, " yeah");
+    
 });
 
 
@@ -161,7 +165,7 @@ router.post("/domain/mail",[ensureAuthenticated, upload.array("file", 5)],
 
 
     var arr=[];
-    //console.log("domain",ans);
+    
     for (var myKey in ans) {
       if (ans[myKey] === "JavaScript") {
         arr.push("JavaScript");
@@ -176,7 +180,7 @@ router.post("/domain/mail",[ensureAuthenticated, upload.array("file", 5)],
       }
     }
     
-    //console.log("domain arr ",arr);
+    
 
     let transporter = nodemailer.createTransport({
       service: "gmail",
@@ -225,25 +229,25 @@ router.post("/domain/mail",[ensureAuthenticated, upload.array("file", 5)],
               throw err;
             }
             else{
-              console.log("project created");
+              
               var mailList = [];
               User.find({}).then(function (found) {
-                console.log("arr ",arr);
+                
                 for(var i=0;i<found.length;i++)
                 {
                   if((found[i].domain.some(item => arr.includes(item))===true) && found[i].email!=req.session.email)
                   {
                     mailList.push(found[i].email);
-                    //console.log("email",found[i].email);
+                    
                   }
                 }
                 return Promise.all(mailList);
               }).then(function(mailList){
-                console.log("mail",mailList);
+                
                 if (req.body.mail === "mail it" && mailList.length>0) {
 
                   let mailOptions = {
-                    from: "aksjain891999@gmail.com", // TODO: email sender
+                    from: "palviaanoushka@gmail.com", // TODO: email sender
                     to: mailList, // TODO: email receiver
                     subject:" Need you as a collaborator for the project : "+req.body.title,
                     text: "User: "+req.session.username + "\nProject Description: "+req.body.Write,
@@ -252,14 +256,14 @@ router.post("/domain/mail",[ensureAuthenticated, upload.array("file", 5)],
                   };
                   transporter.sendMail(mailOptions, (err, data) => {
                     if (err) {
-                      console.log(err);
+                      throw err;
                       
                     }
-                  console.log("Email sent!!!");
+                  
                   });
                 }
               
-              //console.log("project",prj1);
+              
 
                 res.redirect("/dashboard");
               }).catch(function(err){
@@ -290,24 +294,24 @@ router.post("/domain/mail",[ensureAuthenticated, upload.array("file", 5)],
                 }
                 else
                 {
-                  console.log("project created");
+                  
                   var mailList = [];
                   User.find({}).then(function (found) {
-                    console.log("arr ",arr);
+                    
                     for(var i=0;i<found.length;i++)
                     {
                       if((found[i].domain.some(item => arr.includes(item))===true) && found[i].email!=req.session.email)
                       {
                         mailList.push(found[i].email);
-                        console.log("email",found[i].email);
+                        
                       }
                     }
                     return Promise.all(mailList);
                   }).then(function(mailList){
-                    console.log("mail",mailList);
+                    
                     if (req.body.mail === "mail it" && mailList.length>0) {
                       let mailOptions = {
-                        from: "aksjain891999@gmail.com", // TODO: email sender
+                        from: "palviaanoushka@gmail.com", // TODO: email sender
                         to: mailList, // TODO: email receiver
                         subject:" Need a collaborator for the project : "+req.body.title,
                         text: "username : "+req.session.username + "\n "+req.body.Write,
@@ -316,14 +320,14 @@ router.post("/domain/mail",[ensureAuthenticated, upload.array("file", 5)],
                       };
                       transporter.sendMail(mailOptions, (err, data) => {
                         if (err) {
-                          console.log(err);
+                          throw err;
                           
                         }
-                      console.log("Email sent!!!");
+                      
                       });
                     }
                   
-                  //console.log("project",prj1);
+                  
 
                     res.redirect("/dashboard");
                   }).catch(function(err){
@@ -384,7 +388,7 @@ router.get("/search", function (req, res, next) {
         }
         res.jsonp(result);
       } else {
-        console.log(err);
+        throw err;
       }
     });
   }
@@ -408,7 +412,7 @@ router.post("/search", function (req, res, next) {
             throw err;
           }
           else{
-            console.log("foundUser",foundUser);
+            
             if(foundUser!=null)
             {
               res.render("searchUserDashboard", {
@@ -456,7 +460,7 @@ router.get("/searchUser/:username",(req,res)=>{
         throw err;
       }
       else{
-        //console.log("foundUser",foundUser);
+        
         if(foundUser!=null)
         {
           res.render("searchUserDashboard", {
@@ -484,9 +488,9 @@ router.get("/searchUser/:username",(req,res)=>{
 })
 
 router.get("/chat/:room",ensureAuthenticated, (req,res)=>{
-  //console.log("chat room hello");
+
 chatRoom.find({roomName:req.params.room },function(err,found){
-    //console.log("foudn data",found," data end");
+    
     if(found[0])
     {
       res.render("room",{roomName:req.params.room,username:req.session.username});
@@ -506,14 +510,14 @@ router.post("/chat/room",ensureAuthenticated, (req,res)=>{
   chatRoom.find({roomName:req.body.room},function(err,found){
     if(err)
     {
-      console.log("err");
+      throw err;
     }
     else
     {
-      //console.log("found",found);
+      
       if(found.length)
       {
-        //console.log("hi");
+        
         req.flash("message", "room already exists");
         return res.redirect('/dashboard/chat');
       }
@@ -526,10 +530,10 @@ router.post("/chat/room",ensureAuthenticated, (req,res)=>{
       nChat.save(function(err){
         if(err)
         {
-          console.log("error chat");
+          throw err;
         }
         else{
-          console.log("roomName saved",nChat);
+          
           rooms[req.body.room] = { users: {} }
           //var url="/dashboard/chat/"+req.body.room;
 
@@ -565,11 +569,11 @@ router.get("/chat",ensureAuthenticated, (req,res)=>{
       for(var i=0;i<found.length;i++)
       {
         t.push({roomName:found[i].roomName,owner:found[i].owner});
-        console.log(found[i].owner);
+        
       }
       return Promise.all(t);
     }).then(function(t){
-      console.log("rooms",t);
+      
       res.render("chatRoom",{rooms:t,username:req.session.username,roomName:""});
     }).catch(function(err){
     throw err;
@@ -607,7 +611,7 @@ router.post("/project/delete/:index",(req,res)=>{
           res.redirect("/dashboard");
         }
       })
-      //console.log(found,"delete");
+      
       
     }
     
@@ -621,7 +625,7 @@ router.get("/logout", function (req, res, next) {
 
   // destroy session data
   req.session = null;
-  console.log("session",req.session);
+  
   // redirect to homepage
   //res.redirect('/');
   res.render("index");
@@ -632,7 +636,7 @@ router.get("/logout", function (req, res, next) {
 
 function ensureAuthenticated(req, res, next) {
   if (req.session.login === true) {
-    console.log(req.session.username);
+    
     return next();
   } else {
     res.redirect("/");
@@ -651,7 +655,7 @@ io.on('connection', socket => {
     rooms[room].users[socket.id] = name
     socket.to(room).broadcast.emit('user-connected', name)
     chatRoom.find({roomName:room },function(err,found){
-      console.log(found[0]);
+      
       if(found[0])
       {
         const chats=found[0].conversation;
@@ -688,10 +692,10 @@ io.on('connection', socket => {
           nChat1.save(function(err){
             if(err)
             {
-              console.log("error ");
+              throw err;
             }
             else{
-              console.log(" saved");
+              
             }
           })
         }

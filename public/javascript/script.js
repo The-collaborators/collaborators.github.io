@@ -59,8 +59,8 @@ function appendMessage(name,message,id) {
   const link = document.createElement('a');
   if(id===1)
   {
-    link.href="https://www.google.com"
-    link.target="_blank";
+    link.href="/dashboard/searchUser/"+name;
+    //link.target="_blank";
     link.appendChild(msgname);
     link.style.textDecoration='none';
   }

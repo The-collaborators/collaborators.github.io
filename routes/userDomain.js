@@ -24,7 +24,7 @@ router.post("/",(req,res)=>{
                     throw err;
                 }
                 else{
-                    console.log(ans, " yeah");
+                    
                     res.redirect("/dashboard");
                 }
             })

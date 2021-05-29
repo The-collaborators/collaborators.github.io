@@ -37,7 +37,7 @@ app.use(cookieSession({keys: ['secret'],name:"sid"}));
 
 //app.set('server',server);
 app.get('/', (req, res) => {
-    // console.log(req.sessionID);
+   
     res.render('index');
 })
 
