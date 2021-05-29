@@ -514,7 +514,7 @@ router.post("/chat/room",ensureAuthenticated, (req,res)=>{
       if(found.length)
       {
         //console.log("hi");
-        req.flash("message", "room already exists");
+        req.flash("message", "This room is already existing");
         return res.redirect('/dashboard/chat');
       }
  

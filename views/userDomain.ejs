@@ -28,6 +28,7 @@
         </div>
         <div class="modal-body">
             <select id="list" name="list" onchange="getSelectValue();">
+                <option value="">Domains:</option>
                 <option value="JavaScript" name="JavaScript">JavaScript</option>
                 <option value="Python" name="Python">Python</option>
                 <option value="HTML" name="HTML">HTML</option>
@@ -110,7 +111,7 @@
                     break;
                 }
             }
-            if (flag == 1) {
+            if (flag == 1 && selectValue!="") {
                 var node = document.createElement("LI");
                 var textnode = document.createTextNode(selectValue);
                 obj.finalList.push(selectValue);
@@ -131,7 +132,7 @@
                     items.removeChild(button.parentElement);
                 });
             }
-            else
+            else if(selectValue!="")
                 alert(finalText + " is Already Added");
         }
 

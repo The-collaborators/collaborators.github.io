@@ -28,7 +28,7 @@
     <div class="menu">
       <div class="side_content">
         <form action="/dashboard/search" method="POST" role="form">
-          <input type="search" class="form-control" id="searchName" name="filtername" placeholder="Enter name"><br>
+          <input type="search" class="form-control" id="searchName" name="filtername" placeholder="Enter name" required><br>
           <button type="submit" id="search">SEARCH</button>
            <h4 style="color:white;"><%=message.message%></h4>
         </form>
@@ -57,7 +57,7 @@
                         
         </form>
         <form action="/dashboard" method="POST">
-          <input type="submit" name="remove" value="Remove" id="shiftupload" class="btn1">
+          <input type="submit" name="remove" value="Remove" class="btn1">
         </form>
         <form action="/dashboard/domain" method="GET">
           <button type="submit">Find Collaborator</button>

@@ -164,9 +164,24 @@
   display: block;
 }
 
+
+input[type=submit]:focus{
+      transform:scale(0.95);
+    }
+    input[type=file]:focus{
+      transform:scale(0.95);
+    }
+
+    button:active{
+      transform: scale(0.95);
+    }
+
 /**************RESPONSIVE*****************/
 
 @media screen and (max-width:1120px) {
+    .shift{
+      left:5% !important;
+    }
     .description{
         width:90%;
     }
@@ -179,6 +194,12 @@
 }
 
 @media screen and (max-width:600px){
+
+    .shift{
+      top:10% !important;
+      color:navy !important;
+      font-size: 16px !important;
+    }
     body{
       background-color:#ddd !important;
     }
