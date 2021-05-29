@@ -245,8 +245,8 @@ router.post("/domain/mail",[ensureAuthenticated, upload.array("file", 5)],
                   let mailOptions = {
                     from: "aksjain891999@gmail.com", // TODO: email sender
                     to: mailList, // TODO: email receiver
-                    subject:" Need a collaborator for the project : "+req.body.title,
-                    text: "username : "+req.session.username + "\n "+req.body.Write,
+                    subject:" Need you as a collaborator for the project : "+req.body.title,
+                    text: "User: "+req.session.username + "\nProject Description: "+req.body.Write,
                     attachments: fs,
           
                   };

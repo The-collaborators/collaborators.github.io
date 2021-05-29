@@ -1,66 +1,107 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
+<html lang="en" onload="scrollToBottom()">
+  <head>
+    <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Chat App</title>
-  <script>
-    const roomName = "<%= roomName %>"
-  </script>
+  <title><%=roomName %></title>
+  <link rel="stylesheet" href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/filepond/dist/filepond.min.css">
+  <link rel="stylesheet" href="/public/css/dashcss.css">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <script src="https://kit.fontawesome.com/87390cb8ac.js" crossorigin="anonymous"></script>
+  <script src="https://code.iconify.design/1/1.0.7/iconify.min.js"></script>
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans&display=swap" rel="stylesheet">
   <script defer src="http://localhost:3000/socket.io/socket.io.js"></script>
   <script defer src="/javascript/script.js"></script>
-  <style>
-    body {
-      padding: 0;
-      margin: 0;
-      display: flex;
-      justify-content: center;
-    }
-    #message-container {
-      width: 80%;
-      max-width: 1200px;
-    }
-    #message-container div {
-      background-color: #CCC;
-      padding: 5px;
-    }
-    #message-container div:nth-child(2n) {
-      background-color: #FFF;
-    }
-    #send-container {
-      position: fixed;
-      padding-bottom: 30px;
-      bottom: 0;
-      background-color: white;
-      max-width: 1200px;
-      width: 80%;
-      display: flex;
-    }
-    #message-input {
-      flex-grow: 1;
-    }
-  </style>
-</head>
-<body>
-  hello<h4 id="username"> <%=username%></h4><br>
-  <%= roomName %> 
-  <div id="message-container"></div>
-  <form action="/dashboard/logout" method="GET">
-    <button class="logout" type="submit">LOG OUT</button>
-  </form>
-  <form id="send-container">
-    <input type="text" id="message-input">
-    <button type="submit" id="send-button">Send</button>
-  </form>
-  
-</body>
-<script>
-  //to reload when it is accessed through back button of browser
-  var perfEntries = performance.getEntriesByType("navigation");
+    <script>
+      const roomName = "<%= roomName %>";
+    </script>
+    <script defer src="http://localhost:3000/socket.io/socket.io.js"></script>
+    <script defer src="/javascript/script.js"></script>
+    <%- include('partials/room_css') %>
+  </head>
+  <body >
+    <!-- hello
+    <h4 id="username"><%=username%></h4>
+    <br /> -->
 
-  if (perfEntries[0].type === "back_forward") {
-      location.reload(true);
-  }
-</script>
+    <div class="navbar">
+      <%=message.message%>
+      <h4 id="username" class="username"><%= username %></h4>
+      <div class="dropdown">
+        <button class="dropbtn">Options<span class="iconify" data-icon="ant-design:caret-down-filled" data-inline="false"></span></button>
+        <div class="dropdown-content">
+          <a href="/dashboard">Dashboard</a>
+          <a href="/dashboard/logout">Logout</a>
+        </div>
+      </div> 
+    </div>
+    <div class="main">
+        <h2> <%= roomName %> </h2>
+        <div id="chatbox" class="chatbox" >
+          <div id="message-container"></div>
+        </div>
+        <form id="send-container">
+          <input type="checkbox" name="allow_scroll" id="allow_scroll">
+          <input type="text" id="message-input" autocomplete="off"  placeholder="Type a message.." required/>
+          <button type="submit" id="send-button"><span class="iconify" data-icon="fluent:send-28-filled" data-inline="false"></span></button>
+        </form>
+    </div>
+    <script>
+      //to reload when it is accessed through back button of browser
+      var perfEntries = performance.getEntriesByType("navigation");
+
+      if (perfEntries[0].type === "back_forward") {
+        location.reload(true);
+      }
+    </script>
+
+    <script>
+
+      document.getElementById("allow_scroll").checked=false;
+
+      document.getElementById('message-container').addEventListener("scroll",() =>{
+        document.getElementById("allow_scroll").checked = true;
+      })
+
+      document.getElementById('message-input').addEventListener("input",() =>{
+        document.getElementById("allow_scroll").checked = false;
+      })
+
+      document.getElementById('message-container').addEventListener("resize",()=>{
+        console.log("Change happened");
+        document.getElementById("allow_scroll").checked = false;
+      })
+
+      window.setInterval(function() {
+        if(document.getElementById("allow_scroll").checked == false){
+          var chat = document.getElementById("message-container");
+          chat.scrollTop = chat.scrollHeight;
+        }
+      }, 0);
+
+
+
+      $(function() {
+        // Initializes and creates emoji set from sprite sheet
+        window.emojiPicker = new EmojiPicker({
+          emojiable_selector: '[data-emojiable=true]',
+          assetsPath: 'http://onesignal.github.io/emoji-picker/lib/img/',
+          popupButtonClasses: 'fa fa-smile-o'
+        });
+        // Finds all elements with `emojiable_selector` and converts them to rich emoji input fields
+        // You may want to delay this step if you have dynamically created input fields that appear later in the loading process
+        // It can be called as many times as necessary; previously converted input fields will not be converted again
+        window.emojiPicker.discover();
+      });
+
+
+    </script>
+    </body>
 </html>

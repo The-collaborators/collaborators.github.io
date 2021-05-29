@@ -30,7 +30,7 @@
         <form action="/dashboard/search" method="POST" role="form">
           <input type="search" class="form-control" id="searchName" name="filtername" placeholder="Enter name"><br>
           <button type="submit" id="search">SEARCH</button>
-          <%= message.message %> 
+           <h4 style="color:white;"><%=message.message%></h4>
         </form>
 
         <form onsubmit="checkextension()" method="post" role="form" enctype="multipart/form-data">
@@ -39,7 +39,7 @@
           <% if(domain.length==0){%>
             <span>No domain provided</span>
             <%}else{%>
-              <span>Domain : </span>
+              <span style="color:#ddd">Domain: </span>
               <%for(let i=0;i<domain.length;i++){%>
                 <span>
                   <%=domain[i]%>
@@ -79,7 +79,7 @@
                     <h2 style="text-transform: capitalize;">
                       <%=project[i].title%>
                       <form action="/dashboard/project/delete/<%=i%>" method="POST">
-                        <button type="submit"> delete</button>
+                        <button class="deletebtn" type="submit"><span class="iconify" data-icon="fluent:delete-24-filled" data-inline="false"></span></button>
                       </form>
                     </h2><hr style="border-bottom: 2px solid black; margin-top: 5px;"><br>
                     <h5>Domain needed are : </h5>
@@ -162,6 +162,15 @@
         });
     </script>
 
+<script>
+  //to reload when it is accessed through back button of browser
+  var perfEntries = performance.getEntriesByType("navigation");
+  
+  if (perfEntries[0].type === "back_forward") {
+    location.reload(true);
+  }
+      
+  </script>
 </body>
 
 

@@ -1,175 +1,323 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html>
-	<head>
-		<title>The Collaborator</title>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<link rel="stylesheet" href="/assets/css/main.css" />
-		<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin="anonymous" /> -->
-		<noscript><link rel="stylesheet" href="/assets/css/noscript.css" /></noscript>
-	</head>
-	
-	<body class="is-preload">
-		<!-- Page Wrapper -->
-			<div id="page-wrapper">
+  <head>
+    <title>The Collaborator</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, user-scalable=no"
+    />
+    <link rel="shortcut icon" href="../favicon.png">
+    <link rel="stylesheet" href="/assets/css/main.css" />
+    <noscript
+      ><link rel="stylesheet" href="/assets/css/noscript.css"
+    /></noscript>
 
-				<!-- Header -->
-					<header id="header" class="alt">
-						<!-- <h1><a href="/">Solid State</a></h1> -->
-						<nav>
-							<a href="/auth/github">Sign Up with<i class="fa fa-github large" aria-hidden="true"></i></a>
-						</nav>
-					</header>
+    <style>
+      html{
+        scroll-behavior: smooth;
+      }
+      .fixed-side-navbar {
+        position: fixed;
+        top: 50%;
+        right: 0;
+        z-index: 99999;
+        margin-top: -100px;
+        text-align: right;
+        padding: 30px 0;
+        -webkit-transition: all 0.3s;
+        transition: 0.3s;
+      }
+      .fixed-side-navbar:hover {
+        background: transparent;
+      }
+      .fixed-side-navbar:hover .nav > li > a > span {
+        color: rgb(100, 100, 100);
+    	  font-weight: bold;
+        display: block;
+        background-color: #ddd;
+        text-align: center;
+        text-transform: uppercase;
+        font-size: 14px;
+        padding: 2px 12px;
+        border-radius: 15px;
+      }
 
-				<!-- Menu -->
+      .fixed-side-navbar:hover .nav > li > a > span:hover{
+        color:black;
+        font-weight: bold !important;
+      }
+      .fixed-side-navbar .nav > li a.active {
+        background-color: transparent;
+        color: black;
+      }
+      .fixed-side-navbar .nav > li a.active:after {
+        -webkit-transform: scale(0.9);
+        transform: scale(0.9);
+      }
+      .fixed-side-navbar .nav > li a.active:before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        right: 17px;
+        margin-top: -8px;
+        width: 16px;
+        height: 16px;
+        background: transparent;
+        border: 2px solid #fff;
+        border-radius: 10px;
+      }
+      .nav > li {
+        position: relative;
+        display: block;
+      }
+      .fixed-side-navbar .nav > li a {
+        color: #fff;
+        min-height: 32px;
+        background: transparent;
+        padding: 5px 38px 4px 40px;
+        border-right: none;
+      }
+      .fixed-side-navbar .nav > li a span {
+        display: none;
+        -webkit-transition: all 0.2s;
+        transition: all 0.2s;
+      }
+      .fixed-side-navbar .nav > li a:after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        right: 20px;
+        margin-top: -5px;
+        width: 10px;
+        height: 10px;
+        border-radius: 10px;
+        background: rgba(250, 250, 250, 0.75);
+        -webkit-transition: all 0.3s;
+        transition: all 0.3s;
+        -webkit-transform: scale(0.6);
+        transform: scale(0.6);
+      }
+      .fixed-side-navbar .nav > li a:hover > span {
+        color: black;
+        display: block;
+      }
+	  .nav {
+		display: flex;
+		flex-wrap: wrap;
+		padding-left: 0;
+		margin-bottom: 0;
+		list-style: none;
+	}
+	.flex-column {
+		flex-direction: column!important;
+	}
+	dl, ol, ul {
+		margin-top: 0;
+		margin-bottom: 1rem;
+	}
+	.nav>li {
+		position: relative;
+		display: block;
+	}
+	.nav-link {
+		display: block;
+    background-color: none;
+    border-bottom: 0;
+		padding: .5rem 0;
+  }
+  .nav-item{
+    height: 35px;
+  }
+    </style>
+  </head>
 
-				<!-- Banner -->
-					<section id="banner">
-						<div class="inner">
-							<div class="logo"><span class="icon fa-gem"></span></div>
-							<h2>Welcome to THE COLLABORATOR</h2>
-							<p>Web app to find collaborators for your project</p>
-						</div>
-					</section>
+  <body class="is-preload">
+    <!-- NAVIGATION SIDEBAR -->
+    <div class="fixed-side-navbar">
+      <ul id="ulCategory" class="nav flex-column">
+        <li class="nav-item">
+          <a id="intro" class="nav-link active" href="#page-wrapper"><span>Intro</span></a>
+        </li>
+        <li class="nav-item">
+          <a id="aboutus" class="nav-link" href="#about"><span>About Us</span></a>
+        </li>
+        <li class="nav-item">
+          <a id="chatty" class="nav-link" href="#chat"><span>Chat System</span></a>
+        </li>
+        <li class="nav-item">
+          <a id="cont" class="nav-link" href="#footer"><span>Contact Us</span></a>
+        </li>
+      </ul>
+    </div>
 
-				<!-- Wrapper -->
-					<section id="wrapper">
+    <!-- Page Wrapper -->
+    <div id="page-wrapper">
+      <!-- Header -->
+      <header id="header" class="alt">
+        <!-- <h1><a href="/">Solid State</a></h1> -->
+        <nav>
+          <a id="auth" href="/auth/github"
+            >Sign Up with<i class="fa fa-github large" aria-hidden="true"></i
+          ></a>
+        </nav>
+      </header>
 
-						<!-- One -->
-							<section id="one" class="wrapper spotlight style1">
-								<div class="inner">
-									<a href="#" class="image"><img src="images/pic01.jpg" alt="" /></a>
-									<div class="content">
-										<h2 class="major">Magna arcu feugiat</h2>
-										<p>Lorem ipsum dolor sit amet, etiam lorem adipiscing elit. Cras turpis ante, nullam sit amet turpis non, sollicitudin posuere urna. Mauris id tellus arcu. Nunc vehicula id nulla dignissim dapibus. Nullam ultrices, neque et faucibus viverra, ex nulla cursus.</p>
-										<a href="#" class="special">Learn more</a>
-									</div>
-								</div>
-							</section>
+      <!-- Menu -->
 
-						<!-- Two -->
-							<section id="two" class="wrapper alt spotlight style2">
-								<div class="inner">
-									<a href="#" class="image"><img src="images/pic02.jpg" alt="" /></a>
-									<div class="content">
-										<h2 class="major">Tempus adipiscing</h2>
-										<p>Lorem ipsum dolor sit amet, etiam lorem adipiscing elit. Cras turpis ante, nullam sit amet turpis non, sollicitudin posuere urna. Mauris id tellus arcu. Nunc vehicula id nulla dignissim dapibus. Nullam ultrices, neque et faucibus viverra, ex nulla cursus.</p>
-										<a href="#" class="special">Learn more</a>
-									</div>
-								</div>
-							</section>
+      <!-- Banner -->
+      <section id="banner">
+        <div class="inner">
+          <div class="logo"><span class="icon fa-user"></span></div>
+          <h2 id="upar">Welcome to THE COLLABORATOR</h2>
+          <p>Web app to find collaborators for your project</p>
+        </div>
+      </section>
+      <div id="about"></div>
+      <!-- Wrapper -->
+      <section id="wrapper">
+        <!-- One -->
+        <section class="wrapper spotlight style1">
+          <div class="inner">
+            <a href="#" class="image"><img src="images/collaborator.png" alt="" /></a>
+            <div class="content">
+              <h2 class="major">About Us</h2>
+              <p>
+                Lorem ipsum dolor sit amet, etiam lorem adipiscing elit. Cras
+                turpis ante, nullam sit amet turpis non, sollicitudin posuere
+                urna. Mauris id tellus arcu. Nunc vehicula id nulla dignissim
+                dapibus. Nullam ultrices, neque et faucibus viverra, ex nulla
+                cursus.
+              </p>
+              <a href="/auth/github" class="special">Proceed to Sign UP/SIGN IN</a>
+              <div id="chat"></div>
+            </div>
+          </div>
+        </section>
+        <!-- Two -->
+        <section id="two" class="wrapper alt spotlight style2">
+          <div class="inner">
+            <a href="#" class="image"><img src="images/chat.jpeg" alt="" /></a>
+            <div class="content">
+              <h2 class="major">Chat Room Feature</h2>
+              <p>
+                Lorem ipsum dolor sit amet, etiam lorem adipiscing elit. Cras
+                turpis ante, nullam sit amet turpis non, sollicitudin posuere
+                urna. Mauris id tellus arcu. Nunc vehicula id nulla dignissim
+                dapibus. Nullam ultrices, neque et faucibus viverra, ex nulla
+                cursus.
+              </p>
+              <a href="/auth/github" class="special">Proceed to Sign UP/SIGN IN</a>
+            </div>
+          </div>
+        </section>
+      </section>
 
-						<!-- Three -->
-							<section id="three" class="wrapper spotlight style3">
-								<div class="inner">
-									<a href="#" class="image"><img src="images/pic03.jpg" alt="" /></a>
-									<div class="content">
-										<h2 class="major">Nullam dignissim</h2>
-										<p>Lorem ipsum dolor sit amet, etiam lorem adipiscing elit. Cras turpis ante, nullam sit amet turpis non, sollicitudin posuere urna. Mauris id tellus arcu. Nunc vehicula id nulla dignissim dapibus. Nullam ultrices, neque et faucibus viverra, ex nulla cursus.</p>
-										<a href="#" class="special">Learn more</a>
-									</div>
-								</div>
-							</section>
+      <!-- Footer -->
+      <section id="footer">
+        <div class="inner">
+          <h2 class="major">Get in touch</h2>
+          <form method="post" action="#">
+            <div class="fields">
+              <div class="field">
+                <label for="name">Name</label>
+                <input type="text" name="name" id="name" />
+              </div>
+              <div class="field">
+                <label for="email">Email</label>
+                <input type="email" name="email" id="email" />
+              </div>
+              <div class="field">
+                <label for="message">Message</label>
+                <textarea name="message" id="message" rows="4"></textarea>
+              </div>
+            </div>
+            <ul class="actions">
+              <li><input type="submit" value="Send Message" /></li>
+            </ul>
+          </form>
+          <ul class="contact">
+            <li class="icon solid fa-home">
+              Chandigarh University<br />
+              Mohali, Punjab<br />
+              India.
+            </li>
+            <li class="icon solid fa-phone">(+91) 9453316894 , 7678602279</li>
+            <li class="icon solid fa-envelope">
+              <a href="mailto:aksjain891999@gmail.com" target="_blank">aksjain891999@gmail.com</a>
+            </li>
+            <li class="icon brands fa-github">
+              <a style="margin-right: 8px;" href="https://github.com/Akshat-Jain-1999">Akshat Jain</a> &
+              <a style="margin-left: 8px;" href="https://github.com/Anoushka03">Anoushka Palvia</a>
+            </li>
+            <li class="icon brands fa-linkedin">
+              <a style="margin-right: 8px;" href="https://www.linkedin.com/in/akshat-jain-446696188/">Akshat Jain</a> & 
+              <a style="margin-left: 8px;" href="https://www.linkedin.com/in/anoushka-palvia-ba7719186/">Anoushka Palvia</a>
+            </li>
+          </ul>
+          <ul class="copyright">
+            <li>&copy; Copyright 2021 All rights reserved.</li>
+            <li>
+              Design:
+              <a href="https://www.linkedin.com/in/akshat-jain-446696188/"
+                >Akshat Jain</a
+              >
+            </li>
+          </ul>
+        </div>
+      </section>
+    </div>
 
-						<!-- Four -->
-							<section id="four" class="wrapper alt style1">
-								<div class="inner">
-									<h2 class="major">Vitae phasellus</h2>
-									<p>Cras mattis ante fermentum, malesuada neque vitae, eleifend erat. Phasellus non pulvinar erat. Fusce tincidunt, nisl eget mattis egestas, purus ipsum consequat orci, sit amet lobortis lorem lacus in tellus. Sed ac elementum arcu. Quisque placerat auctor laoreet.</p>
-									<section class="features">
-										<article>
-											<a href="#" class="image"><img src="images/pic04.jpg" alt="" /></a>
-											<h3 class="major">Sed feugiat lorem</h3>
-											<p>Lorem ipsum dolor sit amet, consectetur adipiscing vehicula id nulla dignissim dapibus ultrices.</p>
-											<a href="#" class="special">Learn more</a>
-										</article>
-										<article>
-											<a href="#" class="image"><img src="images/pic05.jpg" alt="" /></a>
-											<h3 class="major">Nisl placerat</h3>
-											<p>Lorem ipsum dolor sit amet, consectetur adipiscing vehicula id nulla dignissim dapibus ultrices.</p>
-											<a href="#" class="special">Learn more</a>
-										</article>
-										<article>
-											<a href="#" class="image"><img src="images/pic06.jpg" alt="" /></a>
-											<h3 class="major">Ante fermentum</h3>
-											<p>Lorem ipsum dolor sit amet, consectetur adipiscing vehicula id nulla dignissim dapibus ultrices.</p>
-											<a href="#" class="special">Learn more</a>
-										</article>
-										<article>
-											<a href="#" class="image"><img src="images/pic07.jpg" alt="" /></a>
-											<h3 class="major">Fusce consequat</h3>
-											<p>Lorem ipsum dolor sit amet, consectetur adipiscing vehicula id nulla dignissim dapibus ultrices.</p>
-											<a href="#" class="special">Learn more</a>
-										</article>
-									</section>
-									<ul class="actions">
-										<li><a href="#" class="button">Browse All</a></li>
-									</ul>
-								</div>
-							</section>
+    <!-- Scripts -->
+    <script>
+      //to reload when it is accessed through back button of browser
+      var perfEntries = performance.getEntriesByType("navigation");
 
-					</section>
+      if (perfEntries[0].type === "back_forward") {
+        location.reload(true);
+      }
+    </script>
+    <script src="/assets/js/jquery.min.js"></script>
+    <script src="/assets/js/jquery.scrollex.min.js"></script>
+    <script src="/assets/js/browser.min.js"></script>
+    <script src="/assets/js/breakpoints.min.js"></script>
+    <script src="/assets/js/util.js"></script>
+    <script src="/assets/js/main.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/waypoints/4.0.1/jquery.waypoints.min.js" integrity="sha512-CEiA+78TpP9KAIPzqBvxUv8hy41jyI3f2uHi7DGp/Y/Ka973qgSdybNegWFciqh6GrN2UePx2KkflnQUbUhNIA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script
+      src="https://kit.fontawesome.com/87390cb8ac.js"
+      crossorigin="anonymous"
+    ></script>
 
-				<!-- Footer -->
-					<section id="footer">
-						<div class="inner">
-							<h2 class="major">Get in touch</h2>
-							<p>Cras mattis ante fermentum, malesuada neque vitae, eleifend erat. Phasellus non pulvinar erat. Fusce tincidunt, nisl eget mattis egestas, purus ipsum consequat orci, sit amet lobortis lorem lacus in tellus. Sed ac elementum arcu. Quisque placerat auctor laoreet.</p>
-							<form method="post" action="#">
-								<div class="fields">
-									<div class="field">
-										<label for="name">Name</label>
-										<input type="text" name="name" id="name" />
-									</div>
-									<div class="field">
-										<label for="email">Email</label>
-										<input type="email" name="email" id="email" />
-									</div>
-									<div class="field">
-										<label for="message">Message</label>
-										<textarea name="message" id="message" rows="4"></textarea>
-									</div>
-								</div>
-								<ul class="actions">
-									<li><input type="submit" value="Send Message" /></li>
-								</ul>
-							</form>
-							<ul class="contact">
-								<li class="icon solid fa-home">
-									Chandigarh University<br />
-									Mohali, Punjab<br />
-									India.
-								</li>
-								<li class="icon solid fa-phone">(000) 000-0000</li>
-								<li class="icon solid fa-envelope"><a href="#">information@untitled.tld</a></li>
-								<li class="icon brands fa-twitter"><a href="#">twitter.com/untitled-tld</a></li>
-								<li class="icon brands fa-facebook-f"><a href="#">facebook.com/untitled-tld</a></li>
-								<li class="icon brands fa-instagram"><a href="#">instagram.com/untitled-tld</a></li>
-							</ul>
-							<ul class="copyright">
-								<li>&copy; Untitled Inc. All rights reserved.</li><li>Design: <a href="https://www.linkedin.com/in/akshat-jain-446696188/">Akshat Jain</a></li>
-							</ul>
-						</div>
-					</section>
+    <script>
+      $('#upar').waypoint(function() {
+          for(var i=0;i<$("#intro").parent().siblings().length;i++){
+              $("#intro").parent().siblings()[i].children[0].classList.remove("active");
+          }
+          $('#intro').addClass("active");
+      }, { offset: '10%'});
 
-			</div>
+      $('#about').waypoint(function() {
+          for(var i=0;i<$("#aboutus").parent().siblings().length;i++){
+              $("#aboutus").parent().siblings()[i].children[0].classList.remove("active");
+          }
+          $('#aboutus').addClass("active");
+      }, { offset: '5%'});
 
-		<!-- Scripts -->
-		<script>
-			//to reload when it is accessed through back button of browser
-			var perfEntries = performance.getEntriesByType("navigation");
+      $('#chat').waypoint(function() {
+          for(var i=0;i<$("#chatty").parent().siblings().length;i++){
+              $("#chatty").parent().siblings()[i].children[0].classList.remove("active");
+          }
+          $('#chatty').addClass("active");
+      }, { offset: '5%'});
 
-			if (perfEntries[0].type === "back_forward") {
-				location.reload(true);
-			}
-		</script>
-			<script src="/assets/js/jquery.min.js"></script>
-			<script src="/assets/js/jquery.scrollex.min.js"></script>
-			<script src="/assets/js/browser.min.js"></script>
-			<script src="/assets/js/breakpoints.min.js"></script>
-			<script src="/assets/js/util.js"></script>
-			<script src="/assets/js/main.js"></script>
-			<script src="https://kit.fontawesome.com/87390cb8ac.js" crossorigin="anonymous"></script>
-
-	</body>
+      $('#footer').waypoint(function() {
+          for(var i=0;i<$("#cont").parent().siblings().length;i++){
+              $("#cont").parent().siblings()[i].children[0].classList.remove("active");
+          }
+          $('#cont').addClass("active");
+      }, { offset: '50%'});
+    </script>
+  </body>
 </html>
