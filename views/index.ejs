@@ -7,6 +7,7 @@
       name="viewport"
       content="width=device-width, initial-scale=1, user-scalable=no"
     />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css" />
     <link rel="shortcut icon" href="../favicon.png">
     <link rel="stylesheet" href="/assets/css/main.css" />
     <noscript
@@ -153,10 +154,10 @@
           <a id="intro" class="nav-link active" href="#page-wrapper"><span>Intro</span></a>
         </li>
         <li class="nav-item">
-          <a id="aboutus" class="nav-link" href="#about"><span>About Us</span></a>
+          <a id="aboutus" class="nav-link" href="#abouttk"><span>About Us</span></a>
         </li>
         <li class="nav-item">
-          <a id="chatty" class="nav-link" href="#chat"><span>Chat System</span></a>
+          <a id="chatty" class="nav-link" href="#chattty"><span>Chat System</span></a>
         </li>
         <li class="nav-item">
           <a id="cont" class="nav-link" href="#footer"><span>Contact Us</span></a>
@@ -168,7 +169,6 @@
     <div id="page-wrapper">
       <!-- Header -->
       <header id="header" class="alt">
-        <!-- <h1><a href="/">Solid State</a></h1> -->
         <nav>
           <a id="auth" href="/auth/github"
             >Sign Up with<i class="fa fa-github large" aria-hidden="true"></i
@@ -186,30 +186,35 @@
           <p>Web app to find collaborators for your project</p>
         </div>
       </section>
-      <div id="about"></div>
+      <div id="abouttk"></div>
       <!-- Wrapper -->
       <section id="wrapper">
         <!-- One -->
         <section class="wrapper spotlight style1">
           <div class="inner">
-            <a href="#" class="image"><img src="images/collaborator.png" alt="" /></a>
-            <div class="content">
+            <div id="about"></div>
+            <!-- <a href="#" class="image"><img src="https://media.giphy.com/media/Y13eeSX3fTKMKqC0Vi/giphy.gif" alt="" /></a> -->
+            <video class="image eff4" src="images/intro.mp4" loop muted autoplay></video>
+            <div class="content eff3">
               <h2 class="major">About Us</h2>
+                  
               <p>
                 It will help you in finding the best collaborators for your project.
                 Just enter the domains that you want your collaborator to have and give
-                a description about your   
+                a description about your project.  
               </p>
               <a href="/auth/github" class="special">Proceed to Sign UP/SIGN IN</a>
-              <div id="chat"></div>
+              <div id="chattty"></div>
             </div>
           </div>
         </section>
         <!-- Two -->
         <section id="two" class="wrapper alt spotlight style2">
           <div class="inner">
-            <a href="#" class="image"><img src="images/chat.jpeg" alt="" /></a>
-            <div class="content">
+            <!-- <a href="#" class="image"><img src="images/chat.gif" alt="" /></a> -->
+            <video id="vid" class="image eff1" src="images/chatty.mp4" autoplay muted loop></video>
+            <div class="content eff2">
+              <div id="chat"></div>
               <h2 class="major">Chat Room Feature</h2>
               <p>
                 When great minds are together great projects are made.<br>
@@ -259,7 +264,6 @@
 
     <!-- Scripts -->
     <script>
-      //to reload when it is accessed through back button of browser
       var perfEntries = performance.getEntriesByType("navigation");
 
       if (perfEntries[0].type === "back_forward") {
@@ -287,19 +291,19 @@
           $('#intro').addClass("active");
       }, { offset: '10%'});
 
-      $('#about').waypoint(function() {
+      $('#abouttk').waypoint(function() {
           for(var i=0;i<$("#aboutus").parent().siblings().length;i++){
               $("#aboutus").parent().siblings()[i].children[0].classList.remove("active");
           }
           $('#aboutus').addClass("active");
-      }, { offset: '5%'});
+      }, { offset: '8%'});
 
-      $('#chat').waypoint(function() {
+      $('#vid').waypoint(function() {
           for(var i=0;i<$("#chatty").parent().siblings().length;i++){
               $("#chatty").parent().siblings()[i].children[0].classList.remove("active");
           }
           $('#chatty').addClass("active");
-      }, { offset: '5%'});
+      }, { offset: '40%'});
 
       $('#footer').waypoint(function() {
           for(var i=0;i<$("#cont").parent().siblings().length;i++){
@@ -307,6 +311,50 @@
           }
           $('#cont').addClass("active");
       }, { offset: '50%'});
+
+
+
+      // $(document).ready(function () {
+      //       $(".fixed-side-navbar a, .primary-button a").on('click', function (event) {
+      //           if (this.hash !== "") {
+      //               event.preventDefault();
+      //               var hash = this.hash;
+      //               $('html, body').animate({
+      //                   scrollTop: $(hash).offset().top
+      //               }, 800, function () {
+      //                   window.location.hash = hash;
+      //               });
+      //           }
+      //       });
+      //   });
+
+      //   $(document).ready(function () {
+
+      //       $('.eff1').waypoint(function (direction) {
+      //           $('.eff1').addClass('animated slideInLeft')
+      //       }, {
+      //           offset: '50%'
+      //       });
+
+      //       $('.eff2').waypoint(function (direction) {
+      //           $('.eff2').addClass('animated slideInRight')
+      //       }, {
+      //           offset: '55%'
+      //       });
+
+      //       $('.eff3').waypoint(function (direction) {
+      //           $('.eff3').addClass('animated slideInLeft')
+      //       }, {
+      //           offset: '55%'
+      //       });
+
+      //       $('.eff4').waypoint(function (direction) {
+      //           $('.eff4').addClass('animated slideInRight')
+      //       }, {
+      //           offset: '50%'
+      //       }); 
+      //   });
     </script>
+    <script src="js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
   </body>
 </html>
