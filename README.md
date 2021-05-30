@@ -18,7 +18,7 @@ node server.js
 ## Tested :clap:
 This project has been tested in Google Chrome Browser and Microsoft Edge.
 
-## Facing any problem or nedd any help :thought_balloon:
+## Facing any problem or need any help :thought_balloon:
 Write us in the [issues](https://github.com/The-collaborators/collaborators.github.io/issues). We will try to resolve it.
 
 *** Keep collaborating and developing :smile: ***
