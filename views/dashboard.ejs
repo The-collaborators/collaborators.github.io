@@ -35,7 +35,6 @@
 
         <form onsubmit="checkextension()" method="post" role="form" enctype="multipart/form-data">
           <img id="resize" src="/uploads/<%=img_name%>" alt="<%=img_name%>"><br>
-          <!-- <label for="file" >Upload File</label> -->
           <% if(domain.length==0){%>
             <span>No domain provided</span>
             <%}else{%>
@@ -65,9 +64,6 @@
         <form action="/dashboard/chat" method="GET">
           <button type="submit">CHAT</button>
         </form>
-        <!-- <form action="/dashboard/logout" method="GET">
-          <button type="submit">LOG OUT</button>
-        </form> -->
       </div>
 
       <div class="content">
@@ -83,7 +79,6 @@
                       </form>
                     </h2><hr style="border-bottom: 2px solid black; margin-top: 5px;"><br>
                     <h5>Domain needed are : </h5>
-                      <!-- <h4> -->
                         <%for(var j=0;j<project[i].domain.length;j++){%>
                           <%if(project[i].domain[j] === "Python"){%>
                           <p style="display:inline-block; font-weight: bold; margin:8px 2px 0 0; padding:5px 10px; border-radius: 8px;color:black; background-color:tomato;">Python</p>
@@ -97,7 +92,6 @@
                               <p style="display:inline-block; font-weight: bold; margin:8px 2px 0 0; padding:5px 10px; border-radius:  8px;color:black; background-color:limegreen;">C++</p>
                           <%}%>  
                         <%}%>
-                      <!-- </h4> -->
                         <p style="margin-top:15px; display: flex;" id="pp">
                           <%=project[i].description.substring(0,30)%>...
                           <a href="/dashboard/username/<%=i%>"><span class="iconify fa-arrow-alt-circle-right" data-icon="carbon:next-filled" data-inline="false"></span></a>
@@ -122,7 +116,6 @@
               .then(data => console.log(data));
           }
         }
-        //to reload when it is accessed through back button of browser
         var perfEntries = performance.getEntriesByType("navigation");
 
         if (perfEntries[0].type === "back_forward") {
@@ -139,17 +132,12 @@
                 type: "GET",
                 data: req,
                 success: function (data) {
-                  //console.log(data);
                   res(data);
                 },
                 error: function (err) {
-                  console.log(err.status);
-                  //alert("user doesn't exists");
+                  // console.log(err.status);
                 }
               });
-              //console.log(req);
-
-              //res(req);
             },
 
             minLength: 1,
@@ -163,7 +151,6 @@
     </script>
 
 <script>
-  //to reload when it is accessed through back button of browser
   var perfEntries = performance.getEntriesByType("navigation");
   
   if (perfEntries[0].type === "back_forward") {

@@ -143,9 +143,9 @@
                 alert("No domains selected... please add the domain");
             }
             else{
-                console.log(obj);
+                // console.log(obj);
                 var myJSON = JSON.stringify({ "finalList": obj.finalList});
-                console.log(myJSON);
+                // console.log(myJSON);
                 let xhr = new XMLHttpRequest();
                 let url = "http://localhost:3000/dashboard/domain"; //jahan catch krna h
 

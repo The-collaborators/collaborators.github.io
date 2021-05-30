@@ -1,11 +1,6 @@
 @import url(fontawesome-all.min.css);
 @import url("https://fonts.googleapis.com/css?family=Raleway:200,700|Source+Sans+Pro:300,600,300italic,600italic");
 
-/*
-	Solid State by HTML5 UP
-	html5up.net | @ajlkn
-	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
-*/
 
 html, body, div, span, applet, object,
 iframe, h1, h2, h3, h4, h5, h6, p, blockquote,
@@ -3839,11 +3834,9 @@ input, select, textarea {
 				overflow: hidden;
 				-ms-flex: 1;
 				box-shadow: 1px 1px 24px -7px white;
-				/* box-shadow: 0 0 0 1px rgb(53 72 91 / 10%), 0 2px 2px rgb(0 0 0 / 3%), 0 4px 4px rgb(0 0 0 / 4%), 0 10px 8px rgb(0 0 0 / 5%), 0 15px 15px rgb(0 0 0 / 6%), 0 30px 30px rgb(0 0 0 / 7%), 0 70px 65px rgb(0 0 0 / 9%); */
-			}
+				}
 
 				.wrapper.spotlight .image img {
-					/* border-radius: 100%; */
 					width: 100%;
 				}
 
@@ -3863,7 +3856,6 @@ input, select, textarea {
 			.wrapper.spotlight:nth-child(2n - 1) .image {
 				margin: 0 0 0em 2em;
 				box-shadow: 1px 1px 24px -7px white;
-				/* box-shadow: 0 0 0 1px rgb(53 72 91 / 10%), 0 2px 2px rgb(0 0 0 / 3%), 0 4px 4px rgb(0 0 0 / 4%), 0 10px 8px rgb(0 0 0 / 5%), 0 15px 15px rgb(0 0 0 / 6%), 0 30px 30px rgb(0 0 0 / 7%), 0 70px 65px rgb(0 0 0 / 9%); */
 			}
 
 			.wrapper.spotlight.style2 {

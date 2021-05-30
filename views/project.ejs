@@ -39,7 +39,6 @@
                         <span>Files Sent are:</span><br>
                         <%if(project.files.length!=0){%>
                             <%for(var j=0;j<project.files.length;j++){%>
-                                <!-- <a class="files" href="/public/uploads/<%=project.files[j].filename%>"><%=(j+1)%>) <%= project.files[j].filename %><span class="iconify" data-icon="el:download-alt" data-inline="false"></span></span> </a> -->
                                 <a class="files" href="/dashboard/download/<%= project.files[j].filename %>"> <%=(j+1)%>) <%= project.files[j].filename.substring(14,) %><span class="iconify" data-icon="el:download-alt" data-inline="false"></span></span> </a>
                             <%}%>
                         <%}else{%>
@@ -53,15 +52,6 @@
     </div>
 
     <script>
-
-
-        // document.getElementById("f-submit").addEventListener("submit", function(event){
-        //     cb=document.getElementById("cb");
-        //     if(!cb.checked)
-        //     event.preventDefault();
-        //     else
-        //     sendJSON();
-        // });
         //to reload when it is accessed through back button of browser
 		var perfEntries = performance.getEntriesByType("navigation");
 

@@ -49,7 +49,6 @@ socket.on('user-disconnected', name => {
   appendMessage(`${name}`," offline",2)
 })
 
-// const cb = document.getElementById('allow_scroll');
 
 
 function appendMessage(name,message,id) {
@@ -60,7 +59,6 @@ function appendMessage(name,message,id) {
   if(id===1)
   {
     link.href="/dashboard/searchUser/"+name;
-
     link.appendChild(msgname);
     link.style.textDecoration='none';
   }
@@ -90,7 +88,6 @@ function appendMessage(name,message,id) {
   messageElement.appendChild(msgname);
   messageElement.appendChild(msg);
 
-  // messageElement.innerText = message
   if(id===0)
   {
     messageElement.classList.add("right");

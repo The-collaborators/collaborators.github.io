@@ -196,7 +196,6 @@ router.post("/domain/mail",[ensureAuthenticated, upload.array("file", 5)],
 
     if (req.files != undefined) {
       for (var i = 0; i < req.files.length; i++) {
-        //req.files[i].originalname=Date.now()+"_"+req.files[i].originalname;
         fs.push({
           filename: req.files[i].filename,
           path: "./public/uploads/" +req.files[i].filename,
