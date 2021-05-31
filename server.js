@@ -15,7 +15,6 @@ const User = require('./models/user');
 const cors=require('cors');
 const path = require('path');
 global.__basedir = __dirname+'/';
-const favicon = require('serve-favicon');
 const staticPath=path.join(__dirname,'/public');
 
 app.use(cors());

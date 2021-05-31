@@ -1,4 +1,4 @@
 module.exports={
-    database:"mongodb://localhost:27017/collab",
+    database:"mongodb+srv://anoushka:Test123@cluster0.zfakb.mongodb.net/collab",
     secret:"secret"
 };
