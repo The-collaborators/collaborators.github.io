@@ -28,7 +28,7 @@ app.use(express.static("public"));
 app.use(cookieParser());
 app.use(express.static(staticPath));
 
-const port=process.env.PORT|| 3000;
+const port=process.env.PORT||3000;
 global.listen=app.listen(port, () => {
     console.log("server started at port ");
 })
