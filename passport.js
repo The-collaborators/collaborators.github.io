@@ -6,6 +6,7 @@ passport.use(new GithubStrategy({
     clientID: process.env.CLIENT_ID,
     clientSecret: process.env.CLIENT_Secret,
     callbackURL: 'https://the-collab.herokuapp.com/auth/github/callback',
+    proxy:true,
     scope: [ 'user:email' ]
 
 }, async(access_token, refreshToken, profile, done) => {
