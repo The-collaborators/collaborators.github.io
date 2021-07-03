@@ -10,7 +10,7 @@ passport.use(new GithubStrategy({
     scope: [ 'user:email' ]
 
 }, async(access_token, refreshToken, profile, done) => {
-  //let username = profile.username
+  let username = profile.username
 
   try {
     let username = profile.username
@@ -29,7 +29,7 @@ passport.use(new GithubStrategy({
       return done(null,nUser);
 
   } catch (error) {
-      console.log(error);
+      //console.log(error);
       done(error);
   }
     
