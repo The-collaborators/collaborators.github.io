@@ -9,13 +9,13 @@ passport.use(new GithubStrategy({
     scope: [ 'user:email' ]
 
 }, async(access_token, refreshToken, profile, done) => {
-  let username = profile.username
+  //let username = profile.username
 
   try {
+    let username = profile.username
       let user = await User.findOne({username: username});
       if(user){
-          
-          return done(null, user);
+        return done(null, user);
       }
       
       let nUser = await User.create({
@@ -28,6 +28,7 @@ passport.use(new GithubStrategy({
       return done(null,nUser);
 
   } catch (error) {
+      console.log(error);
       done(error);
   }
     
