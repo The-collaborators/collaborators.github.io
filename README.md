@@ -1,6 +1,5 @@
 # The Collaborators 
-![Website link](https://navy-lily-place.glitch.me/)
-### A website which will help you in finding the best collaborators for your project and will help in interacting with the great minds.
+### A [website](https://navy-lily-place.glitch.me/) which will help you in finding the best collaborators for your project and will help in interacting with the great minds.
 ## Technology Used:
 ![Node js](https://img.shields.io/badge/Node%20js-%20-red)
 ![Mongo DB](https://img.shields.io/badge/Mongo%20DB-%20-blue)
